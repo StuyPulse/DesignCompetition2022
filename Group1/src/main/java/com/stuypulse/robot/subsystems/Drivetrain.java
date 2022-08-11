@@ -72,6 +72,7 @@ public class Drivetrain extends SubsystemBase {
     private final Field2d field;
 
     public Drivetrain() {
+        setSubsystem("Drivetrain");
         /** CONTROL */
         leftController = new PIDController(kP, kI, kD).add(new Feedforward.Drivetrain(kS, kV, kA).velocity());
         rightController = new PIDController(kP, kI, kD).add(new Feedforward.Drivetrain(kS, kV, kA).velocity());
@@ -87,24 +88,24 @@ public class Drivetrain extends SubsystemBase {
         CANSparkMax leftBottom = new CANSparkMax(Ports.Drivetrain.LEFT_BOTTOM, MotorType.kBrushless);
         Motors.Drivetrain.left.configure(leftFront, leftMiddle, leftBottom);
         left = new MotorControllerGroup(leftFront, leftMiddle, leftBottom);
-        addChild("Drivetrain/Left Motor Controller Group", left);
+        addChild("Left Motor Controller Group", left);
 
         CANSparkMax rightFront = new CANSparkMax(Ports.Drivetrain.RIGHT_FRONT, MotorType.kBrushless);
         CANSparkMax rightMiddle = new CANSparkMax(Ports.Drivetrain.RIGHT_MIDDLE, MotorType.kBrushless);
         CANSparkMax rightBottom = new CANSparkMax(Ports.Drivetrain.RIGHT_BOTTOM, MotorType.kBrushless);
         Motors.Drivetrain.right.configure(rightFront, rightMiddle, rightBottom);
         right = new MotorControllerGroup(rightFront, rightMiddle, rightBottom);
-        addChild("Drivetrain/Right Motor Controller Group", right);
+        addChild("Right Motor Controller Group", right);
 
         /** ENCODERS */
         leftGrayhill = new Encoder(LEFT_A, LEFT_B);
         rightGrayhill = new Encoder(RIGHT_A, RIGHT_B);
-        addChild("Drivetrain/Left Encoder", leftGrayhill);
-        addChild("Drivetrain/Right Encoder", rightGrayhill);
+        addChild("Left Encoder", leftGrayhill);
+        addChild("Right Encoder", rightGrayhill);
 
         /** GYRO */
         navx = new AHRS(SPI.Port.kMXP);
-        addChild("Drivetrain/Gyroscope", navx);
+        addChild("Gyroscope", navx);
 
         /** ODOMETRY */
         odometry = new DifferentialDriveOdometry(navx.getRotation2d());
