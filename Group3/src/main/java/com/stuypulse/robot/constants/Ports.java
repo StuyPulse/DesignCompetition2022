@@ -12,4 +12,13 @@ public interface Ports {
         int OPERATOR = 1;
         int DEBUGGER = 2;
     }
+
+    public interface Elevator {
+        int LEADER = 20;
+        int FIRSTFOLLOWER = 21;
+        int SECONDFOLLOWER = 22;
+
+        int LOWERSWITCH = 23;
+        int UPPERSWITCH = 24;
+    }
 }
