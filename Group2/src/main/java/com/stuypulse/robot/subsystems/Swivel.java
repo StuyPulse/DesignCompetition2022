@@ -16,13 +16,37 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+/**
+ * Swivel (swerve) subsytem
+ * 
+ * Fields:
+ * - Modules
+ * - Gyro
+ * - Kinematics
+ * - Odometry 
+ * - Field2d
+ * 
+ * Methods:
+ * - setStates(ChassisSpeeds)
+ * - setStates(SwerveModuleState[])
+ * - getPosition()
+ * - getRotation()
+ * - getGyroAngle()
+ * 
+ * @author Tracey Lin
+ * @author Marc Jiang
+ * @author Ben Goldfisher
+ */
 public class Swivel extends SubsystemBase {
 
     private Module[] modules;
 
+    // keep track of robot angle
     private AHRS gyro;
 
+    // converts from drivetrain state to module state
     private SwerveDriveKinematics kinematics;
+    // uses kinematics to keep track of robot position
     private SwerveDriveOdometry odometry;
 
     private Field2d field;
