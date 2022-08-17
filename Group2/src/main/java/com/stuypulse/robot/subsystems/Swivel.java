@@ -1,19 +1,25 @@
 package com.stuypulse.robot.subsystems;
 
-import com.stuypulse.robot.subsystems.swivel.Module;
+import com.stuypulse.robot.constants.Modules;
+import com.stuypulse.robot.constants.Settings.Swivel.Drive;
+import com.stuypulse.robot.subsystems.swivel.CANModule;
+import com.stuypulse.robot.subsystems.swivel.SimModule;
+import com.stuypulse.robot.subsystems.swivel.SwivelModule;
+
+import java.util.Arrays;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -29,6 +35,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * Methods:
  * - setStates(ChassisSpeeds)
  * - setStates(SwerveModuleState[])
+ * - getModulePositions()
  * - getPosition()
  * - getRotation()
  * - getGyroAngle()
@@ -39,7 +46,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Swivel extends SubsystemBase {
 
-    private Module[] modules;
+    private SwivelModule[] modules;
 
     // keep track of robot angle
     private AHRS gyro;
@@ -52,26 +59,49 @@ public class Swivel extends SubsystemBase {
     private Field2d field;
 
     public Swivel() {
-        modules = new Module[4];
+        // modules = new CANModule[] {
+        //     new CANModule(Modules.FRONT_LEFT),
+        //     new CANModule(Modules.FRONT_RIGHT),
+        //     new CANModule(Modules.BACK_LEFT),
+        //     new CANModule(Modules.BACK_RIGHT),
+        // };
+        modules = new SimModule[] {
+            new SimModule(Modules.FRONT_LEFT),
+            new SimModule(Modules.FRONT_RIGHT),
+            new SimModule(Modules.BACK_LEFT),
+            new SimModule(Modules.BACK_RIGHT),
+        };
         
         // fix: get the port
-        gyro = new AHRS();
+        gyro = new AHRS(SPI.Port.kMXP);
 
         // init kinematics
         odometry = new SwerveDriveOdometry(kinematics, getGyroAngle());
-        kinematics = new SwerveDriveKinematics();
+        kinematics = new SwerveDriveKinematics(getModulePositions());
+
+        field = new Field2d();
+        
+        SmartDashboard.putData(field);
     }
 
     public void setStates(ChassisSpeeds speed) {
-
+        setStates(kinematics.toSwerveModuleStates(speed));
     }
 
     public void setStates(SwerveModuleState[] states) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(states, ZOOM);
+        SwerveDriveKinematics.desaturateWheelSpeeds(states, Drive.MAX_SPEED);
     
         for (int i = 0; i < 4; i++) {
             modules[i].setState(states[i]);
         }
+    }
+
+    public SwerveModuleState[] getStates() {
+        return (SwerveModuleState[])Arrays.stream(modules).map(m -> m.getState()).toArray();
+    }
+
+    private Translation2d[] getModulePositions() {
+        return (Translation2d[])Arrays.stream(modules).map(m -> m.position.getTranslation2d()).toArray();
     }
     
     public Pose2d getPosition() {
@@ -84,5 +114,12 @@ public class Swivel extends SubsystemBase {
 
     public Rotation2d getGyroAngle() {
         return gyro.getRotation2d();
+    }
+
+    @Override
+    public void periodic() {
+        odometry.update(getGyroAngle(), getStates());
+
+        field.setRobotPose(getPosition());
     }
 }
