@@ -28,4 +28,14 @@ public interface Ports {
             int RIGHT_B = -1;
         }
     }
+
+    public interface Intake {
+        int LEFT_DRIVER = -1;
+        int RIGHT_DRIVER = -1;
+
+        int DEPLOYER_A = -1;
+        int DEPLOYER_B = -1;
+
+        int DEPLOY = -1;
+    }
 }
