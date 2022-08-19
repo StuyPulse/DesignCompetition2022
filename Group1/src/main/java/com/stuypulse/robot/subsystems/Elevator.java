@@ -81,24 +81,24 @@ public class Elevator extends SubsystemBase {
         
     }
 
-    public void setPosition(double distance) {
+    private void setPosition(double distance) {
         targetDistance.set(distance);
     }
 
     public void setBox() {
-        targetDistance.set(Settings.Elevator.BOX);
+        setPosition(Settings.Elevator.BOX);
     }
 
     public void setScale() {
-        targetDistance.set(Settings.Elevator.SCALE);
+        setPosition(Settings.Elevator.SCALE);
     }
 
     public void setSwitch() {
-        targetDistance.set(Settings.Elevator.SWITCH);
+        setPosition(Settings.Elevator.SWITCH);
     }
 
     public void setClimb() {
-        targetDistance.set(Settings.Elevator.RUNG);
+        setPosition(Settings.Elevator.RUNG);
     }
 
     @Override
