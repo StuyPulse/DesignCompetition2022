@@ -39,5 +39,10 @@ public interface Settings {
             SmartNumber kV = new SmartNumber("Drivetrain/kV", 0);
             SmartNumber kA = new SmartNumber("Drivetrain/kA", 0);
         }
+
+        interface RAMSETE {
+            SmartNumber b = new SmartNumber("Drivetrain/b", 0);
+            SmartNumber zeta = new SmartNumber("Drivetrain/zeta", 0);
+        }
     }
 }
