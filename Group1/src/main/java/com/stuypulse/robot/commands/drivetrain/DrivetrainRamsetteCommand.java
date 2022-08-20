@@ -27,17 +27,16 @@ public class DrivetrainRamsetteCommand extends RamseteCommand {
     private Drivetrain drivetrain;
 
     public DrivetrainRamsetteCommand(Drivetrain drivetrain, Trajectory trajectory) {
-        super(trajectory, 
-            drivetrain::getPose, 
-            new RamseteController(b.get(), zeta.get()), 
-            new SimpleMotorFeedforward(kS.get(), kV.get(), kA.get()), 
-            new DifferentialDriveKinematics(TRACK_WIDTH), 
-            drivetrain::getSpeed, 
-            new PIDController(kP.get(), kI.get(), kD.get()),
-            new PIDController(kP.get(), kI.get(), kD.get()),
-            drivetrain::setVoltage,
-            drivetrain
-            );
+        super(trajectory,
+                drivetrain::getPose,
+                new RamseteController(b.get(), zeta.get()),
+                new SimpleMotorFeedforward(kS.get(), kV.get(), kA.get()),
+                new DifferentialDriveKinematics(TRACK_WIDTH),
+                drivetrain::getSpeed,
+                new PIDController(kP.get(), kI.get(), kD.get()),
+                new PIDController(kP.get(), kI.get(), kD.get()),
+                drivetrain::setVoltage,
+                drivetrain);
         this.drivetrain = drivetrain;
         this.trajectory = trajectory;
         this.resetPosition = true;
