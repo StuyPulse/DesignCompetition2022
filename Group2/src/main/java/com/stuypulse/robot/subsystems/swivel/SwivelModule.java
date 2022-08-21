@@ -10,6 +10,7 @@ import com.stuypulse.stuylib.math.Vector2D;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public abstract class SwivelModule extends SubsystemBase {
@@ -19,7 +20,7 @@ public abstract class SwivelModule extends SubsystemBase {
     private final PIDController driveFeedback;
     private final AngleController turnFeedback;
 
-    private SwerveModuleState state;
+    private SwerveModuleState targetState;
 
     public final Vector2D position;
 
@@ -27,7 +28,7 @@ public abstract class SwivelModule extends SubsystemBase {
 
 
     public SwivelModule(ModuleConfig config) {
-        state = new SwerveModuleState(0, new Rotation2d(0));
+        targetState = new SwerveModuleState(0, new Rotation2d(0));
 
         this.position = config.position;
         this.id = config.id;
@@ -48,7 +49,7 @@ public abstract class SwivelModule extends SubsystemBase {
 
 
     public void setState(SwerveModuleState state) {
-        this.state = SwerveModuleState.optimize(state, getAngle());
+        this.targetState = SwerveModuleState.optimize(state, getAngle());
     }
 
     public SwerveModuleState getState() {
@@ -65,15 +66,15 @@ public abstract class SwivelModule extends SubsystemBase {
         double accel = speed - prevSpeed;
 
         setDriveVolts(
-            driveFeedforward.calculate(state.speedMetersPerSecond, accel) +
-            driveFeedback.update(state.speedMetersPerSecond, speed));
+            driveFeedforward.calculate(targetState.speedMetersPerSecond, accel) +
+            driveFeedback.update(targetState.speedMetersPerSecond, speed));
 
         prevSpeed = speed;
 
         // turn control
         setTurnVolts(
             turnFeedback.update(
-                Angle.fromRotation2d(state.angle),
+                Angle.fromRotation2d(targetState.angle),
                 Angle.fromRotation2d(getAngle())));
     }
 

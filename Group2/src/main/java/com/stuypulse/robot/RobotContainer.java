@@ -6,6 +6,7 @@
 package com.stuypulse.robot;
 
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
+import com.stuypulse.robot.commands.swivel.SwivelDrive;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.subsystems.Swivel;
 import com.stuypulse.stuylib.input.Gamepad;
@@ -39,7 +40,9 @@ public class RobotContainer {
   /*** DEFAULTS ***/
   /****************/
 
-  private void configureDefaultCommands() {}
+  private void configureDefaultCommands() {
+    swivel.setDefaultCommand(new SwivelDrive(swivel, driver));
+  }
 
   /***************/
   /*** BUTTONS ***/

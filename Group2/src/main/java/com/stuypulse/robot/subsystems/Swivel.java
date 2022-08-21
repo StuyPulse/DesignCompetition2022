@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * - Field2d
  * 
  * Methods:
+ * - setStates(Vector2D, double, boolean)
  * - setStates(ChassisSpeeds)
  * - setStates(SwerveModuleState[])
  * - getModulePositions()
@@ -73,20 +74,23 @@ public class Swivel extends SubsystemBase {
             new SimModule(Modules.BACK_RIGHT),
         };
         
-            gyro = new AHRS(SPI.Port.kMXP);
+        gyro = new AHRS(SPI.Port.kMXP);
 
         // init kinematics
-        odometry = new SwerveDriveOdometry(kinematics, getGyroAngle());
         kinematics = new SwerveDriveKinematics(getModulePositions());
+        odometry = new SwerveDriveOdometry(kinematics, getGyroAngle());
 
         field = new Field2d();
-        
         SmartDashboard.putData(field);
+
+        reset();
     }
 
-    public void setState(Vector2D translation, double angularVelocity, boolean fieldRelative) {
+    // Module State Methods //
+
+    public void setStates(Vector2D translation, double angularVelocity, boolean fieldRelative) {
         if (fieldRelative) {
-            ChassisSpeeds.fromFieldRelativeSpeeds(translation.y, -translation.x, -angularVelocity, getRotation());
+            setStates(ChassisSpeeds.fromFieldRelativeSpeeds(translation.y, -translation.x, -angularVelocity, getRotation()));
         } else {
             setStates(new ChassisSpeeds(translation.y, -translation.x, -angularVelocity));
         }
@@ -105,11 +109,21 @@ public class Swivel extends SubsystemBase {
     }
 
     public SwerveModuleState[] getStates() {
-        return (SwerveModuleState[])Arrays.stream(modules).map(m -> m.getState()).toArray();
+        return Arrays.stream(modules)
+            .map(m -> m.getState())
+            .toArray(SwerveModuleState[]::new);
     }
 
     private Translation2d[] getModulePositions() {
-        return (Translation2d[])Arrays.stream(modules).map(m -> m.position.getTranslation2d()).toArray();
+        return Arrays.stream(modules)
+            .map(m -> m.position.getTranslation2d())
+            .toArray(Translation2d[]::new);
+    }
+
+    // Odometry //
+
+    public void setPosition(Pose2d pos) {
+        odometry.resetPosition(pos, getGyroAngle());
     }
     
     public Pose2d getPosition() {
@@ -120,8 +134,16 @@ public class Swivel extends SubsystemBase {
         return getPosition().getRotation();
     }
 
+    // Gyro //
+
     public Rotation2d getGyroAngle() {
         return gyro.getRotation2d();
+    }
+
+    // Reset //
+    public void reset() {
+        setPosition(new Pose2d());
+        setStates(new ChassisSpeeds());
     }
 
     @Override

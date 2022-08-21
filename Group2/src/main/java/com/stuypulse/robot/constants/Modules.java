@@ -19,7 +19,7 @@ public interface Modules {
     }
 
     ModuleConfig FRONT_LEFT =  new ModuleConfig(new Vector2D(+0.5, +0.5), "Front Left");
-    ModuleConfig FRONT_RIGHT = new ModuleConfig(new Vector2D(+0.5, -0.5), "Front Left");
+    ModuleConfig FRONT_RIGHT = new ModuleConfig(new Vector2D(+0.5, -0.5), "Front Right");
     ModuleConfig BACK_LEFT =   new ModuleConfig(new Vector2D(-0.5, +0.5), "Back Left");
-    ModuleConfig BACK_RIGHT =  new ModuleConfig(new Vector2D(-0.5, -0.5), "Back Left");
+    ModuleConfig BACK_RIGHT =  new ModuleConfig(new Vector2D(-0.5, -0.5), "Back Right");
 }

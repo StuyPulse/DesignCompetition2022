@@ -30,7 +30,7 @@ public class SwivelDrive extends CommandBase {
 
     @Override
     public void execute() {
-        swivel.setState(speed.get(), turn.get(), true);
+        swivel.setStates(speed.get(), turn.get(), true);
     }
 
     @Override
