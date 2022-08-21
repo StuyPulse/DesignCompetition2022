@@ -7,8 +7,14 @@ package com.stuypulse.robot.constants;
 
 import com.stuypulse.stuylib.control.PIDController;
 import com.stuypulse.stuylib.control.angle.AngleController;
+import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.network.SmartBoolean;
 import com.stuypulse.stuylib.network.SmartNumber;
+import com.stuypulse.stuylib.streams.filters.IFilter;
+import com.stuypulse.stuylib.streams.filters.LowPassFilter;
+import com.stuypulse.stuylib.streams.vectors.filters.VDeadZone;
+import com.stuypulse.stuylib.streams.vectors.filters.VFilter;
+import com.stuypulse.stuylib.streams.vectors.filters.VLowPassFilter;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
@@ -27,7 +33,6 @@ public interface Settings {
         double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
 
         public interface Drive {
-            double MAX_SPEED = 10;
 
             public interface Feedforward {
                 double kS = 0.1;
@@ -58,6 +63,32 @@ public interface Settings {
     
                 public static AngleController getFeedback() {
                     return new AngleController(new PIDController(kP, kI, kD));
+                }
+            }
+        }
+
+        public interface Filtering {
+            public interface Drive {
+                SmartNumber DEADZONE = new SmartNumber("Filtering/Drive/Deadzone", 0.05);
+                SmartNumber RC = new SmartNumber("Filtering/Drive/RC", 0.2);
+                SmartNumber MAX_SPEED = new SmartNumber("Filtering/Drive/Max Speed", 10);
+
+                public static VFilter getFilter() {
+                    return new VDeadZone(DEADZONE)
+                        .then(new VLowPassFilter(RC))
+                        .then(x -> x.mul(MAX_SPEED.get()));
+                }
+            }
+
+            public interface Turn {
+                SmartNumber DEADZONE = new SmartNumber("Filtering/Turn/Deadzone", 0.05);
+                SmartNumber RC = new SmartNumber("Filtering/Turn/RC", 0.2);
+                SmartNumber MAX_TURN = new SmartNumber("Filtering/Turn/Max Turn", 10);
+                
+                public static IFilter getFilter() {
+                    return IFilter.create(x -> SLMath.deadband(x, DEADZONE.get()))
+                        .then(new LowPassFilter(RC))
+                        .then(x -> x * MAX_TURN.get());
                 }
             }
         }

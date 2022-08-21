@@ -1,10 +1,11 @@
 package com.stuypulse.robot.subsystems;
 
 import com.stuypulse.robot.constants.Modules;
-import com.stuypulse.robot.constants.Settings.Swivel.Drive;
+import com.stuypulse.robot.constants.Settings.Swivel.Filtering.Drive;
 import com.stuypulse.robot.subsystems.swivel.CANModule;
 import com.stuypulse.robot.subsystems.swivel.SimModule;
 import com.stuypulse.robot.subsystems.swivel.SwivelModule;
+import com.stuypulse.stuylib.math.Vector2D;
 
 import java.util.Arrays;
 
@@ -72,8 +73,7 @@ public class Swivel extends SubsystemBase {
             new SimModule(Modules.BACK_RIGHT),
         };
         
-        // fix: get the port
-        gyro = new AHRS(SPI.Port.kMXP);
+            gyro = new AHRS(SPI.Port.kMXP);
 
         // init kinematics
         odometry = new SwerveDriveOdometry(kinematics, getGyroAngle());
@@ -84,12 +84,20 @@ public class Swivel extends SubsystemBase {
         SmartDashboard.putData(field);
     }
 
+    public void setState(Vector2D translation, double angularVelocity, boolean fieldRelative) {
+        if (fieldRelative) {
+            ChassisSpeeds.fromFieldRelativeSpeeds(translation.y, -translation.x, -angularVelocity, getRotation());
+        } else {
+            setStates(new ChassisSpeeds(translation.y, -translation.x, -angularVelocity));
+        }
+    }
+
     public void setStates(ChassisSpeeds speed) {
         setStates(kinematics.toSwerveModuleStates(speed));
     }
 
     public void setStates(SwerveModuleState[] states) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(states, Drive.MAX_SPEED);
+        SwerveDriveKinematics.desaturateWheelSpeeds(states, Drive.MAX_SPEED.get());
     
         for (int i = 0; i < 4; i++) {
             modules[i].setState(states[i]);
