@@ -5,8 +5,9 @@
 
 package com.stuypulse.robot.constants;
 
-import com.stuypulse.stuylib.control.PIDController;
 import com.stuypulse.stuylib.control.angle.AngleController;
+import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
+import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.network.SmartBoolean;
 import com.stuypulse.stuylib.network.SmartNumber;
@@ -62,7 +63,7 @@ public interface Settings {
                 double kD = 0.2;
     
                 public static AngleController getFeedback() {
-                    return new AngleController(new PIDController(kP, kI, kD));
+                    return new AnglePIDController(kP, kI, kD);
                 }
             }
         }

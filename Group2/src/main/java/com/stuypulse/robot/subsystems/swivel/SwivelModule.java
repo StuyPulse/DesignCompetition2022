@@ -2,8 +2,9 @@ package com.stuypulse.robot.subsystems.swivel;
 
 import com.stuypulse.robot.constants.Modules.ModuleConfig;
 import com.stuypulse.robot.constants.Settings.Swivel;
-import com.stuypulse.stuylib.control.PIDController;
 import com.stuypulse.stuylib.control.angle.AngleController;
+import com.stuypulse.stuylib.control.feedback.PIDController;
+import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.Vector2D;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -71,7 +72,9 @@ public abstract class SwivelModule extends SubsystemBase {
 
         // turn control
         setTurnVolts(
-            turnFeedback.update(state.angle, getAngle()));
+            turnFeedback.update(
+                Angle.fromRotation2d(state.angle),
+                Angle.fromRotation2d(getAngle())));
     }
 
 }
