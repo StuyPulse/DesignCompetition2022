@@ -46,9 +46,9 @@ public class MotorSim {
         sim.setInput(voltage);
     }
 
-    public void update(double dt) {
-        sim.update(dt);
-        encoder.update(dt, getRadPerSecond());
+    public void update(double dtSeconds) {
+        sim.update(dtSeconds);
+        encoder.update(dtSeconds, getRadPerSecond());
     }
 
     // returns motor's angular velocity

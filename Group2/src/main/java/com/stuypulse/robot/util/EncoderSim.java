@@ -1,7 +1,9 @@
 package com.stuypulse.robot.util;
 
-public class EncoderSim {
-    
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+
+public class EncoderSim implements Sendable {
     private double position;
 
     private double positionConversion;
@@ -12,8 +14,8 @@ public class EncoderSim {
         this.position = 0;
     }
 
-    protected void update(double dt, double vel) {
-        position += dt * vel;
+    protected void update(double dtSeconds, double vel) {
+        position += dtSeconds * vel;
     }
 
     public double getDistance() {
@@ -34,6 +36,14 @@ public class EncoderSim {
     // distance is by default in radians
     public void setPositionConversion(double conversion) {
         this.positionConversion = conversion;
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("Encoder");
+
+        builder.addDoubleProperty("Distance", this::getDistance, null);
+        builder.addDoubleProperty("Position Conversion", this::getPositionConversion, this::setPositionConversion);
     }
 
 }
