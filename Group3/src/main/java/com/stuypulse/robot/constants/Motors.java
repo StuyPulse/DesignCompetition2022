@@ -19,6 +19,12 @@ import com.revrobotics.CANSparkMax.IdleMode;
  */
 public interface Motors {
 
+    public interface Elevator {
+        Config LEADER_CONFIG = new Config(false, IdleMode.kBrake, 40, 1 / 8);
+        Config FIRST_FOLLOWER_CONFIG = new Config(false, IdleMode.kBrake, 40, 1 / 8);
+        Config SECOND_FOLLOWER_CONFIG = new Config(false, IdleMode.kBrake, 40, 1 / 8);
+    }
+
     public static class Config {
         public final boolean INVERTED;
         public final IdleMode IDLE_MODE;

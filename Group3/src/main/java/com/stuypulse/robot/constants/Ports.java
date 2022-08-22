@@ -15,10 +15,10 @@ public interface Ports {
 
     public interface Elevator {
         int LEADER = 20;
-        int FIRSTFOLLOWER = 21;
-        int SECONDFOLLOWER = 22;
+        int FIRST_FOLLOWER = 21;
+        int SECOND_FOLLOWER = 22;
 
-        int LOWERSWITCH = 23;
-        int UPPERSWITCH = 24;
+        int LOWER_SWITCH = 23;
+        int UPPER_SWITCH = 24;
     }
 }

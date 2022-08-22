@@ -3,19 +3,16 @@ package com.stuypulse.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.stuypulse.robot.constants.Ports.Gamepad;
 import static com.stuypulse.robot.constants.Ports.Elevator.*;
 import static com.stuypulse.robot.constants.Settings.Elevator.*;
+
 import com.stuypulse.stuylib.control.Controller;
-import com.stuypulse.stuylib.control.PIDController;
-import com.stuypulse.stuylib.math.SLMath;
-import com.stuypulse.stuylib.streams.IStream;
-import com.stuypulse.stuylib.streams.booleans.BStream;
 
 import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 /** 
  * Fields
@@ -38,61 +35,102 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Elevator extends SubsystemBase {
 
-    private CANSparkMax leader;
-    private CANSparkMax firstFollower;
-    private CANSparkMax secondFollower;
+    // Components
+    private final CANSparkMax leader;
+    private final CANSparkMax followerOne;
+    private final CANSparkMax followerTwo;
 
-    private RelativeEncoder encoder;
-    
-    private DigitalInput upperSwitch;
-    private DigitalInput lowerSwitch;
-    
-    private Controller feedback, velocityFeedback;
-    private ElevatorFeedforward feedforward;
+    private final RelativeEncoder encoder;
+
+    private final DigitalInput lowerLimit;
+    private final DigitalInput upperLimit;
+
+    // Controllers
+    private final ElevatorFeedforward elevatorFeedforward;
+    private final Controller positionFeedback, velocityFeedback;
+
     private State targetState;
-    
-    private IStream controls;
-    private BStream stalling;
 
-    public Elevator(Gamepad operator) {
+    public Elevator() {
         leader = new CANSparkMax(LEADER, MotorType.kBrushless);
-        firstFollower = new CANSparkMax(FIRSTFOLLOWER, MotorType.kBrushless);
-        secondFollower = new CANSparkMax(SECONDFOLLOWER, MotorType.kBrushless);
+        followerOne = new CANSparkMax(FIRST_FOLLOWER, MotorType.kBrushless);
+        followerTwo = new CANSparkMax(SECOND_FOLLOWER, MotorType.kBrushless);
         
         encoder = leader.getEncoder();
-        encoder.setPositionConversionFactor(POSITION_MULTIPLIER);
+        encoder.setPositionConversionFactor(ENCODER_MULTIPLIER);
+        encoder.setVelocityConversionFactor(ENCODER_MULTIPLIER);
 
-        upperSwitch = new DigitalInput(UPPERSWITCH);
-        lowerSwitch = new DigitalInput(LOWERSWITCH);
+        lowerLimit = new DigitalInput(LOWER_SWITCH);
+        upperLimit = new DigitalInput(UPPER_SWITCH);
 
-        feedback = new PIDController(0.005, 0.0, 0.0);
-        velocityFeedback = new PIDController(0.005, 0.0, 0.0);
-        feedforward = new ElevatorFeedforward(0.0, 0.0, 0.0, 0.0);
-        targetState = new State(0.0, 0.0);
+        elevatorFeedforward = Feedforward.getFeedForward();
+        positionFeedback = PositionFeedback.getController();
+        velocityFeedback = VelocityFeedback.getController();
+
+        targetState = new State(0, 0);
     }
 
-    public void internship() {
-        leader.setVoltage(calculate());
-        firstFollower.setVoltage(calculate());
-        secondFollower.setVoltage(calculate());
+    public double getVelocity() {
+        return encoder.getVelocity();
     }
-    
-    public double calculate() { 
-        return MAX_VOLTAGE.get() * controls.get();
+
+    public double getPosition() {
+        return encoder.getPosition();
     }
 
     public boolean atTop() {
-        return !upperSwitch.get();
+        return !upperLimit.get();
+    }
+ 
+    public boolean atBottom() {
+        return !lowerLimit.get();
     }
 
-    public boolean atBottom() {
-        return !lowerSwitch.get();
+    public void setState(State state) {
+        targetState = state;
     }
-    
+
+    public void reset() {
+        setState(new State(0, 0));
+        encoder.setPosition(0);
+    }
+
+    public void set(double voltage) {
+        if (atBottom() && voltage < 0) {
+            voltage = 0;
+            DriverStation.reportWarning("Trying to lower elevator below bottom", false);
+        }
+        if (atTop() && voltage > 0) {
+            voltage = 0;
+            DriverStation.reportWarning("Trying to raise elevator above top", false);
+        }
+
+        System.out.println("Output: " + voltage);
+        
+        leader.set(voltage);
+        followerOne.set(voltage);
+        followerTwo.set(voltage);
+    }
+
     @Override
     public void periodic() {
-        internship();
 
-        // logging
+        double feedforward = elevatorFeedforward.calculate(targetState.velocity);
+        double position = positionFeedback.update(targetState.position, getPosition());
+        double velocity = velocityFeedback.update(targetState.velocity, getVelocity());
+
+        set(feedforward + position + velocity);
+
+        SmartDashboard.putNumber("Elevator/Position", getPosition());
+        SmartDashboard.putNumber("Elevator/Velocity", getVelocity());
+
+        SmartDashboard.putNumber("Elevator/Target Position", targetState.position);
+        SmartDashboard.putNumber("Elevator/Target Velocity", targetState.velocity);
+
+        SmartDashboard.putNumber("Elevator/Position Error", targetState.position - getPosition());
+        SmartDashboard.putNumber("Elevator/Velocity Error", targetState.velocity - getVelocity());
+
+        SmartDashboard.putBoolean("Elevator/AtBottom", atBottom());
+        SmartDashboard.putBoolean("Elevator/AtTop", atTop());
     }
 }
