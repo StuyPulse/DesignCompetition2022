@@ -49,7 +49,7 @@ public abstract class SwivelModule extends SubsystemBase {
 
 
     public void setState(SwerveModuleState state) {
-        this.targetState = SwerveModuleState.optimize(state, getAngle());
+        targetState = SwerveModuleState.optimize(state, getAngle());
     }
 
     public SwerveModuleState getState() {

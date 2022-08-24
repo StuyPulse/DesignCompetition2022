@@ -1,6 +1,7 @@
 package com.stuypulse.robot.subsystems;
 
 import com.stuypulse.robot.constants.Modules;
+import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Swivel.Filtering.Drive;
 import com.stuypulse.robot.subsystems.swivel.CANModule;
 import com.stuypulse.robot.subsystems.swivel.SimModule;
@@ -151,5 +152,12 @@ public class Swivel extends SubsystemBase {
         odometry.update(getGyroAngle(), getStates());
 
         field.setRobotPose(getPosition());
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        ChassisSpeeds speeds = kinematics.toChassisSpeeds(getStates());
+
+        gyro.setAngleAdjustment(gyro.getAngle() + Math.toDegrees(speeds.omegaRadiansPerSecond * Settings.DT));
     }
 }

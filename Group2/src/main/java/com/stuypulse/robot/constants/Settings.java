@@ -58,7 +58,7 @@ public interface Settings {
 
         public interface Turn {
             public interface Feedback {
-                double kP = 1;
+                double kP = 8;
                 double kI = 0;
                 double kD = 0.2;
     

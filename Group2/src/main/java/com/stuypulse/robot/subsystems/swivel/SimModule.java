@@ -30,12 +30,12 @@ public class SimModule extends SwivelModule {
 
     @Override
     protected void setDriveVolts(double volts) {
-        driveMotor.set(volts);
+        driveMotor.setVoltage(volts);
     }
 
     @Override
     protected void setTurnVolts(double volts) {
-        turnMotor.set(volts);
+        turnMotor.setVoltage(volts);
     }
 
     @Override
@@ -53,5 +53,5 @@ public class SimModule extends SwivelModule {
         driveMotor.update(Settings.DT);
         turnMotor.update(Settings.DT);
     }
-    
+
 }
