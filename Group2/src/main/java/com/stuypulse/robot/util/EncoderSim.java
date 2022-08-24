@@ -11,7 +11,8 @@ public class EncoderSim implements Sendable {
     private boolean inverted;
 
     public EncoderSim() {
-        this.position = 0;
+        position = 0;
+        positionConversion = 1;
     }
 
     protected void update(double dtSeconds, double vel) {
