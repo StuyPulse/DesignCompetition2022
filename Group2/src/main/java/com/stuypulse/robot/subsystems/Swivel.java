@@ -91,9 +91,9 @@ public class Swivel extends SubsystemBase {
 
     public void setStates(Vector2D translation, double angularVelocity, boolean fieldRelative) {
         if (fieldRelative) {
-            setStates(ChassisSpeeds.fromFieldRelativeSpeeds(translation.y, -translation.x, -angularVelocity, getRotation()));
+            setStates(ChassisSpeeds.fromFieldRelativeSpeeds(translation.y, -translation.x, angularVelocity, getRotation()));
         } else {
-            setStates(new ChassisSpeeds(translation.y, -translation.x, -angularVelocity));
+            setStates(new ChassisSpeeds(translation.y, -translation.x, angularVelocity));
         }
     }
 
