@@ -58,9 +58,9 @@ public interface Settings {
 
         public interface Turn {
             public interface Feedback {
-                double kP = 8;
+                double kP = 6;
                 double kI = 0;
-                double kD = 0.2;
+                double kD = 1;
     
                 public static AngleController getFeedback() {
                     return new AnglePIDController(kP, kI, kD);
