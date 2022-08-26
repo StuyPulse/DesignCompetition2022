@@ -76,6 +76,11 @@ public abstract class SwivelModule extends SubsystemBase {
             turnFeedback.update(
                 Angle.fromRotation2d(targetState.angle),
                 Angle.fromRotation2d(getAngle())));
+
+        SmartDashboard.putNumber("Swivel/" + id + "/Speed", getSpeed());
+        SmartDashboard.putNumber("Swivel/" + id + "/Angle", getAngle().getDegrees());
+        SmartDashboard.putNumber("Swivel/" + id + "/Target Angle", targetState.angle.getDegrees());
+        SmartDashboard.putNumber("Swivel/" + id + "/Target Speed", targetState.speedMetersPerSecond);
     }
 
 }

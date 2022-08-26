@@ -152,6 +152,11 @@ public class Swivel extends SubsystemBase {
         odometry.update(getGyroAngle(), getStates());
 
         field.setRobotPose(getPosition());
+
+        SmartDashboard.putNumber("Swivel/X Position", getPosition().getX());
+        SmartDashboard.putNumber("Swivel/Y Position", getPosition().getY());
+        SmartDashboard.putNumber("Swivel/Gyro Angle", getGyroAngle().getDegrees());
+        SmartDashboard.putNumber("Swivel/Rotation", getRotation().getDegrees());
     }
 
     @Override
