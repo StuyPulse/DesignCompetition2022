@@ -87,6 +87,10 @@ public class Swivel extends SubsystemBase {
         reset();
     }
 
+    public SwerveDriveKinematics getKinematics() {
+        return kinematics;
+    }
+
     // Module State Methods //
 
     public void setStates(Vector2D translation, double angularVelocity, boolean fieldRelative) {
