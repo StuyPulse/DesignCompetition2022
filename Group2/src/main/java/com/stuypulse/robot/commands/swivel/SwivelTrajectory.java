@@ -2,7 +2,6 @@ package com.stuypulse.robot.commands.swivel;
 
 import com.stuypulse.robot.constants.Settings.Swivel.Motion;
 import com.stuypulse.robot.subsystems.Swivel;
-import com.stuypulse.robot.util.TrajectoryLoader;
 
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
