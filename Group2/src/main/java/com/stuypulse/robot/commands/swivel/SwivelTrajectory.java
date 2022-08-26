@@ -33,10 +33,6 @@ public class SwivelTrajectory extends SwerveControllerCommand {
         fieldRelative = true;
     }
 
-    public SwivelTrajectory(Swivel swivel, String path) {
-        this(swivel, TrajectoryLoader.getTrajectory(path));
-    }
-
     public SwivelTrajectory fieldRelative() {
         fieldRelative = true;
 

@@ -5,8 +5,6 @@
 
 package com.stuypulse.robot.constants;
 
-import java.nio.file.Path;
-
 import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.angle.AngleController;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
