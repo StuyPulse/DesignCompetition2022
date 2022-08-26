@@ -5,9 +5,11 @@
 
 package com.stuypulse.robot.constants;
 
+import java.nio.file.Path;
+
+import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.angle.AngleController;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
-import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.network.SmartBoolean;
 import com.stuypulse.stuylib.network.SmartNumber;
@@ -17,7 +19,10 @@ import com.stuypulse.stuylib.streams.vectors.filters.VDeadZone;
 import com.stuypulse.stuylib.streams.vectors.filters.VFilter;
 import com.stuypulse.stuylib.streams.vectors.filters.VLowPassFilter;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 
 /*-
@@ -50,8 +55,8 @@ public interface Settings {
                 double kI = 0;
                 double kD = 0.2;
     
-                public static PIDController getFeedback() {
-                    return new PIDController(kP, kI, kD);
+                public static com.stuypulse.stuylib.control.feedback.PIDController getFeedback() {
+                    return new com.stuypulse.stuylib.control.feedback.PIDController(kP, kI, kD);
                 }
             }
         }
@@ -90,6 +95,42 @@ public interface Settings {
                     return IFilter.create(x -> SLMath.deadband(x, DEADZONE.get()))
                         .then(new LowPassFilter(RC))
                         .then(x -> x * MAX_TURN.get());
+                }
+            }
+        }
+
+        public interface Motion {
+            public interface X {
+                double kP = 4;
+                double kI = 0;
+                double kD = 1;
+
+                public static PIDController getController() {
+                    return new PIDController(kP, kI, kD);
+                }
+            }
+
+            public interface Y {
+                double kP = 4;
+                double kI = 0;
+                double kD = 1;
+
+                public static PIDController getController() {
+                    return new PIDController(kP, kI, kD);
+                }
+            }
+            
+            public interface Theta {
+                double kP = 4;
+                double kI = 0;
+                double kD = 1;
+                double MAX_ACCEL = 10;
+                double MAX_VEL = 10;
+
+                public static ProfiledPIDController getController() {
+                    return new ProfiledPIDController(
+                        kP,kI, kD,
+                        new Constraints(MAX_VEL, MAX_ACCEL));
                 }
             }
         }
