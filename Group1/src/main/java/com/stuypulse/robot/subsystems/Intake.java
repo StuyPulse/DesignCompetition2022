@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static com.stuypulse.robot.constants.Settings.Intake.PID.*;
 import static com.stuypulse.robot.constants.Settings.Intake.FF.*;
 
+import com.stuypulse.robot.constants.Motors;
+
 /**
  * Intake Fields:
  * MotorControllerGroup driver
@@ -45,10 +47,13 @@ public class Intake extends SubsystemBase {
         setSubsystem("Intake");
         CANSparkMax left = new CANSparkMax(Ports.Intake.LEFT_DRIVER, MotorType.kBrushless);
         CANSparkMax right = new CANSparkMax(Ports.Intake.RIGHT_DRIVER, MotorType.kBrushless);
+        Motors.Intake.left.configure(left);
+        Motors.Intake.right.configure(right);
         driver = new MotorControllerGroup(left, right);
         addChild("Driver Motors", driver);
         
         deploy = new CANSparkMax(Ports.Intake.DEPLOY, MotorType.kBrushless);
+        Motors.Intake.deploy.configure(deploy);
         encoder = new Encoder(Ports.Intake.DEPLOYER_A, Ports.Intake.DEPLOYER_B);
         addChild("Deploy Encoder", encoder);
         controller = new PIDController(kP, kI, kD).add(new Feedforward.Motor(kS, kV, kA).position());
@@ -78,6 +83,6 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        deploy.set(controller.update(targetAngle.get().toDegrees(), encoder.getDistance()));
+        deploy.setVoltage(controller.update(targetAngle.get().toDegrees(), encoder.getDistance()));
     }
 } 

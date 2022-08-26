@@ -23,6 +23,12 @@ public interface Motors {
         CANSparkMaxConfig right = new CANSparkMaxConfig(false, IdleMode.kBrake, 60, 0);
     }
 
+    public interface Intake{
+        CANSparkMaxConfig left = new CANSparkMaxConfig(true, IdleMode.kCoast, 40, 0);
+        CANSparkMaxConfig right = new CANSparkMaxConfig(false, IdleMode.kCoast, 40, 0);
+        CANSparkMaxConfig deploy = new CANSparkMaxConfig(false, IdleMode.kCoast, 40, 0);
+    }
+
     public static class CANSparkMaxConfig {
         boolean inverted;
         IdleMode idleMode;
