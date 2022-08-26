@@ -5,9 +5,9 @@ import com.stuypulse.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
-    *@author Amber (ambers7)
+  * @author Amber Shen
  */
-
+ 
 public class IntakeAcquireCommand extends CommandBase {
     private final Intake intake;
 

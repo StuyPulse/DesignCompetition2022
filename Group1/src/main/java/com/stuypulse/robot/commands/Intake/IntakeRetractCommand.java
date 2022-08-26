@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import com.stuypulse.robot.subsystems.Intake;
 
 /**
-    *@author Amber (ambers7)
+  * @author Amber Shen
  */
 
 public class IntakeRetractCommand extends CommandBase {
