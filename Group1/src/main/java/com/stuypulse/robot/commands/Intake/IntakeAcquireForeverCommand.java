@@ -4,6 +4,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import com.stuypulse.robot.subsystems.Intake;
 
+/**
+    *@author Amber (ambers7)
+ */
+
 public class IntakeAcquireForeverCommand extends InstantCommand {
     private final Intake intake;
 
