@@ -33,6 +33,7 @@ import com.stuypulse.robot.constants.Motors;
  * extend()
  * acquire()
  * deacquire()
+ * stop()
  */
 public class Intake extends SubsystemBase {
     private final MotorControllerGroup driver;
@@ -78,6 +79,10 @@ public class Intake extends SubsystemBase {
     }
 
     public void deacquire() {
+        driver.set(-1);
+    }
+
+    public void stop() {
         driver.set(0);
     }
 
