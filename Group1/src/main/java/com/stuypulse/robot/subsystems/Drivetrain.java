@@ -67,7 +67,7 @@ public class Drivetrain extends SubsystemBase {
     private final AHRS navx;
 
     /** ODOMETRY */
-    private final DifferentialDriveOdometry odometry;
+    public final DifferentialDriveOdometry odometry;
 
     private final Field2d field;
 
@@ -118,6 +118,10 @@ public class Drivetrain extends SubsystemBase {
         return navx.getRotation2d();
     }
 
+    public Pose2d getPose() {
+        return odometry.getPoseMeters();
+    }
+
     public void reset(Pose2d location) {
         leftGrayhill.reset();
         rightGrayhill.reset();
@@ -136,6 +140,11 @@ public class Drivetrain extends SubsystemBase {
         rightTargetSpeed.set(speeds.rightMetersPerSecond);
     }
 
+    public DifferentialDriveWheelSpeeds getSpeed() {
+        return new DifferentialDriveWheelSpeeds(leftGrayhill.getRate(), 
+                                                rightGrayhill.getRate());
+    }
+
     public void tankDrive(double left, double right) {
         setSpeed(left, right);
     }
@@ -143,6 +152,11 @@ public class Drivetrain extends SubsystemBase {
     public void arcadeDrive(double speed, double angle) {
         setSpeed(driveKinematics.toWheelSpeeds(
                 new ChassisSpeeds(speed, 0, angle)));
+    }
+    
+    public void setVoltage(double leftVoltage, double rightVoltage) {
+        left.setVoltage(leftVoltage);
+        right.setVoltage(rightVoltage);
     }
 
     @Override
