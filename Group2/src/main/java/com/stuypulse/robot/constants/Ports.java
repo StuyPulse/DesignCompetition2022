@@ -11,5 +11,12 @@ public interface Ports {
         int DRIVER = 0;
         int OPERATOR = 1;
         int DEBUGGER = 2;
+    } 
+
+    public interface Elevator {
+        int FIRST_MOTOR = -1;
+        int SECOND_MOTOR = -1;
+        int THIRD_MOTOR = -1;
+        int FOURTH_MOTOR = -1;
     }
 }
