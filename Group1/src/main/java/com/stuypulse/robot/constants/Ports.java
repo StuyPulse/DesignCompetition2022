@@ -28,16 +28,4 @@ public interface Ports {
             int RIGHT_B = -1;
         }
     }
-
-    public interface Elevator {
-        int FIRST = -1;
-        int SECOND = -1;
-        int THIRD = -1;
-
-        int LOWER = -1;
-        int UPPER = -1;
-
-        int A = -1;
-        int B = -1;
-    }
 }
