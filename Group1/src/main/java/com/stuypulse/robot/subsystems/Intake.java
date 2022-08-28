@@ -48,8 +48,7 @@ public class Intake extends SubsystemBase {
         setSubsystem("Intake");
         CANSparkMax left = new CANSparkMax(Ports.Intake.LEFT_DRIVER, MotorType.kBrushless);
         CANSparkMax right = new CANSparkMax(Ports.Intake.RIGHT_DRIVER, MotorType.kBrushless);
-        Motors.Intake.left.configure(left);
-        Motors.Intake.right.configure(right);
+        Motors.Intake.driver.configure(left, right);
         driver = new MotorControllerGroup(left, right);
         addChild("Driver Motors", driver);
         

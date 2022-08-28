@@ -24,8 +24,7 @@ public interface Motors {
     }
 
     public interface Intake{
-        CANSparkMaxConfig left = new CANSparkMaxConfig(true, IdleMode.kCoast, 40, 0);
-        CANSparkMaxConfig right = new CANSparkMaxConfig(false, IdleMode.kCoast, 40, 0);
+        CANSparkMaxConfig driver = new CANSparkMaxConfig(true, IdleMode.kCoast, 40, 0);
         CANSparkMaxConfig deploy = new CANSparkMaxConfig(false, IdleMode.kCoast, 40, 0);
     }
 
