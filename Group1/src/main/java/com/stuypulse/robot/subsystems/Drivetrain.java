@@ -89,16 +89,16 @@ public class Drivetrain extends SubsystemBase {
         /** MOTORS */
         CANSparkMax leftFront = new CANSparkMax(Ports.Drivetrain.LEFT_FRONT, MotorType.kBrushed);
         CANSparkMax leftMiddle = new CANSparkMax(Ports.Drivetrain.LEFT_MIDDLE, MotorType.kBrushless);
-        CANSparkMax leftBottom = new CANSparkMax(Ports.Drivetrain.LEFT_BOTTOM, MotorType.kBrushless);
-        Motors.Drivetrain.left.configure(leftFront, leftMiddle, leftBottom);
-        left = new MotorControllerGroup(leftFront, leftMiddle, leftBottom);
+        CANSparkMax leftBack = new CANSparkMax(Ports.Drivetrain.LEFT_BACK, MotorType.kBrushless);
+        Motors.Drivetrain.left.configure(leftFront, leftMiddle, leftBack);
+        left = new MotorControllerGroup(leftFront, leftMiddle, leftBack);
         addChild("Left Motor Controller Group", left);
 
         CANSparkMax rightFront = new CANSparkMax(Ports.Drivetrain.RIGHT_FRONT, MotorType.kBrushless);
         CANSparkMax rightMiddle = new CANSparkMax(Ports.Drivetrain.RIGHT_MIDDLE, MotorType.kBrushless);
-        CANSparkMax rightBottom = new CANSparkMax(Ports.Drivetrain.RIGHT_BOTTOM, MotorType.kBrushless);
-        Motors.Drivetrain.right.configure(rightFront, rightMiddle, rightBottom);
-        right = new MotorControllerGroup(rightFront, rightMiddle, rightBottom);
+        CANSparkMax rightBack = new CANSparkMax(Ports.Drivetrain.RIGHT_BACK, MotorType.kBrushless);
+        Motors.Drivetrain.right.configure(rightFront, rightMiddle, rightBack);
+        right = new MotorControllerGroup(rightFront, rightMiddle, rightBack);
         addChild("Right Motor Controller Group", right);
 
         /** ENCODERS */
