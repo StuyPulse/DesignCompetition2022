@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 
@@ -21,6 +22,12 @@ import static com.stuypulse.robot.constants.Settings.Elevator.FF.*;
 import static com.stuypulse.robot.constants.Settings.Elevator.SIMULATION.*;
 
 /**
+ * @author Kelvin Zhao
+ * @author Amber Shen
+ * @author Samuel Chen
+ * @author Vincent Wang
+ * @author Carmin Vong
+ * 
  * Elevator fields:
  * - Motor Controller Group
  * - Controller
@@ -59,6 +66,7 @@ public class Elevator extends SubsystemBase {
         WPI_TalonSRX firstMotor = new WPI_TalonSRX(Ports.Elevator.FIRST);
         WPI_TalonSRX secondMotor = new WPI_TalonSRX(Ports.Elevator.SECOND);
         WPI_TalonSRX thirdMotor = new WPI_TalonSRX(Ports.Elevator.THIRD);
+        Motors.Elevator.elevator.configure(firstMotor, secondMotor, thirdMotor);
         motors = new MotorControllerGroup(firstMotor, secondMotor, thirdMotor);
         addChild("Motor Controller", motors);
 
@@ -103,7 +111,7 @@ public class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
-        motors.set(controller.update(targetDistance.get(), 
+        motors.setVoltage(controller.update(targetDistance.get(), 
                         grayhill.getDistance()));
 
     }
