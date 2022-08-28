@@ -14,6 +14,10 @@ import java.io.IOException;
 
 import static com.stuypulse.robot.constants.Settings.Drivetrain.*;
 
+ /*
+  * @author Kelvin Zhao, Vincent Wang, Samuel Chen, Amber Shen, Carmin Vuong
+  */
+  
 public class DrivetrainRamsetteCommand extends RamseteCommand {
 
     private boolean resetPosition;

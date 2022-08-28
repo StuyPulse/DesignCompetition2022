@@ -48,6 +48,10 @@ import static com.stuypulse.robot.constants.Settings.Drivetrain.FF.*;
  * - getAngle()
  */
 
+ /*
+  * @author Kelvin Zhao, Vincent Wang, Samuel Chen, Amber Shen, Carmin Vuong
+  */
+
 public class Drivetrain extends SubsystemBase {
     /** CONTROLS */
     private final DifferentialDriveKinematics driveKinematics;
