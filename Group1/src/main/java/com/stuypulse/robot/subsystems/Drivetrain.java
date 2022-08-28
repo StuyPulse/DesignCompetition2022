@@ -141,8 +141,8 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public DifferentialDriveWheelSpeeds getSpeed() {
-        return new DifferentialDriveWheelSpeeds(leftGrayhill.getRate(), 
-                                                rightGrayhill.getRate());
+        return new DifferentialDriveWheelSpeeds(leftGrayhill.getRate(),
+                rightGrayhill.getRate());
     }
 
     public void tankDrive(double left, double right) {
@@ -153,10 +153,10 @@ public class Drivetrain extends SubsystemBase {
         setSpeed(driveKinematics.toWheelSpeeds(
                 new ChassisSpeeds(speed, 0, angle)));
     }
-    
-    public void setSpeeds(double leftVoltage, double rightVoltage) {
-        left.setVoltage(leftController.update(leftVoltage, leftGrayhill.getRate()));
-        right.setVoltage(rightController.update(rightVoltage, rightGrayhill.getRate()));
+
+    public void setSpeeds(double leftSpeed, double rightSpeed) {
+        left.setVoltage(leftController.update(leftSpeed, leftGrayhill.getRate()));
+        right.setVoltage(rightController.update(rightSpeed, rightGrayhill.getRate()));
     }
 
     @Override
