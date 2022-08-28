@@ -9,10 +9,13 @@ import com.stuypulse.stuylib.streams.IStream;
 import com.stuypulse.stuylib.streams.filters.LowPassFilter;
 import com.stuypulse.robot.constants.Settings;
 
- /*
-  * @author Kelvin Zhao, Vincent Wang, Samuel Chen, Amber Shen, Carmin Vuong
-  */
-
+/*
+ * @author Kelvin Zhao
+ * @author Vincent Wang
+ * @author Samuel Chen
+ * @author Amber Shen
+ * @author Carmin Vuong
+ */
 public class DrivetrainDriveCommand extends CommandBase {
     private final Drivetrain drivetrain;
 

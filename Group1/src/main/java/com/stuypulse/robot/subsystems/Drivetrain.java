@@ -46,11 +46,14 @@ import static com.stuypulse.robot.constants.Settings.Drivetrain.FF.*;
  * - tankDrive()
  * - reset()
  * - getAngle()
+ * 
+ * 
+ * @author Kelvin Zhao
+ * @author Vincent Wang
+ * @author Samuel Chen
+ * @author Amber Shen
+ * @author Carmin Vuong
  */
-
- /*
-  * @author Kelvin Zhao, Vincent Wang, Samuel Chen, Amber Shen, Carmin Vuong
-  */
 
 public class Drivetrain extends SubsystemBase {
     /** CONTROLS */
