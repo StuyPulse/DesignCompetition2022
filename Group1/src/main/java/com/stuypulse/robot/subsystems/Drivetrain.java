@@ -154,9 +154,9 @@ public class Drivetrain extends SubsystemBase {
                 new ChassisSpeeds(speed, 0, angle)));
     }
     
-    public void setVoltage(double leftVoltage, double rightVoltage) {
-        left.setVoltage(leftVoltage);
-        right.setVoltage(rightVoltage);
+    public void setSpeeds(double leftVoltage, double rightVoltage) {
+        left.setVoltage(leftController.update(leftVoltage, leftGrayhill.getRate()));
+        right.setVoltage(rightController.update(rightVoltage, rightGrayhill.getRate()));
     }
 
     @Override
