@@ -23,7 +23,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * @author Maximillian Zeng
  * @author Yuchen Pan
  * @author Zixi Feng
- * @author Tracey Lin
+ * @author Tdog Lin
+ * @author Genjamin Boldfisher
  * @author Maximillian Zeng
 */
 
