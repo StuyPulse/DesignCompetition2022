@@ -5,6 +5,8 @@
 
 package com.stuypulse.robot.constants;
 
+import java.nio.file.Path;
+
 import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.angle.AngleController;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
@@ -22,6 +24,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Filesystem;
 
 /*-
  * File containing tunable settings for every subsystem on the robot.
@@ -30,6 +33,7 @@ import edu.wpi.first.math.util.Units;
  * values that we can edit on Shuffleboard.
  */
 public interface Settings {
+    Path DEPLOY_DIRECTORY = Filesystem.getDeployDirectory().toPath();
     double DT = 0.02;
 
     public interface Swivel {

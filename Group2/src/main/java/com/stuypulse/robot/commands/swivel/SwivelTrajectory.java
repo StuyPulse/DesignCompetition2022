@@ -1,9 +1,14 @@
 package com.stuypulse.robot.commands.swivel;
 
+import java.io.IOException;
+
+import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Swivel.Motion;
 import com.stuypulse.robot.subsystems.Swivel;
 
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 public class SwivelTrajectory extends SwerveControllerCommand {
@@ -30,6 +35,24 @@ public class SwivelTrajectory extends SwerveControllerCommand {
         this.trajectory = trajectory;
 
         fieldRelative = true;
+    }
+
+    public SwivelTrajectory(Swivel swivel, String path) {
+        this(swivel, loadTrajectory(path));
+    }
+
+    private static Trajectory loadTrajectory(String path) {
+        try {
+            return TrajectoryUtil.fromPathweaverJson(Settings.DEPLOY_DIRECTORY.resolve(path));
+        } catch (IOException e) {
+            DriverStation.reportError("Error Opening \"" + path + "\"!", e.getStackTrace());
+
+            System.err.println("Error Opening \"" + path + "\"!");
+            System.out.println(e.getStackTrace());
+            System.exit(694);
+
+            return null;
+        }
     }
 
     public SwivelTrajectory fieldRelative() {
