@@ -4,20 +4,28 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.RobotContainer;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.feedback.PIDController;
@@ -26,6 +34,9 @@ import com.stuypulse.stuylib.network.SmartNumber;
 
 import static com.stuypulse.robot.constants.Ports.Drivetrain.Grayhill.*;
 import static com.stuypulse.robot.constants.Settings.Drivetrain.PID.*;
+
+import org.ejml.equation.MatrixConstructor;
+
 import static com.stuypulse.robot.constants.Settings.Drivetrain.FF.*;
 
 /**
@@ -78,6 +89,11 @@ public class Drivetrain extends SubsystemBase {
 
     private final Field2d field;
 
+    /** SIMULATION */
+    private final DifferentialDrivetrainSim drivetrainSim;
+    private final EncoderSim leftEncoderSim;
+    private final EncoderSim rightEncoderSim;
+
     public Drivetrain() {
         setSubsystem("Drivetrain");
         /** CONTROL */
@@ -119,6 +135,13 @@ public class Drivetrain extends SubsystemBase {
 
         field = new Field2d();
         addChild("Field", field);
+
+        /** SIMULATION */
+        drivetrainSim = new DifferentialDrivetrainSim(LinearSystemId.createDrivetrainVelocitySystem(motor, massKg, rMeters, rbMeters, JKgMetersSquared, G),
+                                DCMotor.getNEO(3), 5, 5, 5, 
+                                null);
+        leftEncoderSim = new EncoderSim(leftGrayhill);
+        rightEncoderSim = new EncoderSim(rightGrayhill);
     }
 
     public Rotation2d getAngle() {
@@ -176,5 +199,17 @@ public class Drivetrain extends SubsystemBase {
                 rightGrayhill.getRate()));
 
         field.setRobotPose(odometry.getPoseMeters());
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        drivetrainSim.setInputs(left.get() * RobotController.getInputVoltage(), 
+                                right.get() * RobotController.getInputVoltage());
+        drivetrainSim.update(0.02);
+
+        leftEncoderSim.setDistance(drivetrainSim.getLeftPositionMeters());
+        leftEncoderSim.setRate(drivetrainSim.getLeftVelocityMetersPerSecond());
+        rightEncoderSim.setDistance(drivetrainSim.getRightPositionMeters());
+        rightEncoderSim.setRate(drivetrainSim.getRightVelocityMetersPerSecond());
     }
 }
