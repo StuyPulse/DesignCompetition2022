@@ -6,6 +6,7 @@
 package com.stuypulse.robot;
 
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
+import com.stuypulse.robot.commands.auton.TestAuton;
 import com.stuypulse.robot.commands.swivel.SwivelDrive;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.subsystems.Swivel;
@@ -19,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
 
   // Subsystem
-  private final Swivel swivel = new Swivel();
+  public final Swivel swivel = new Swivel();
 
   // Gamepads
   public final Gamepad driver = new AutoGamepad(Ports.Gamepad.DRIVER);
@@ -56,6 +57,7 @@ public class RobotContainer {
 
   public void configureAutons() {
     autonChooser.setDefaultOption("Do Nothing", new DoNothingAuton());
+    autonChooser.addOption("Test Auton", new TestAuton(this));
 
     SmartDashboard.putData("Autonomous", autonChooser);
   }
