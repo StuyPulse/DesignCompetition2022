@@ -6,6 +6,10 @@
 package com.stuypulse.robot;
 
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
+import com.stuypulse.robot.commands.intake.IntakeAcquire;
+import com.stuypulse.robot.commands.intake.IntakeDeacquire;
+import com.stuypulse.robot.commands.intake.IntakeExtend;
+import com.stuypulse.robot.commands.intake.IntakeRetract;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.subsystems.Intake;
 import com.stuypulse.stuylib.input.Gamepad;
@@ -45,7 +49,13 @@ public class RobotContainer {
     /*** BUTTONS ***/
     /***************/
 
-    private void configureButtonBindings() {}
+    private void configureButtonBindings() {
+      /** INTAKE */
+      operator.getLeftTriggerButton().whileHeld(new IntakeDeacquire(intake));
+      operator.getRightTriggerButton().whileHeld(new IntakeAcquire(intake));
+      operator.getLeftBumper().whenPressed(new IntakeRetract(intake));
+      operator.getRightBumper().whenPressed(new IntakeExtend(intake));
+    }
 
     /**************/
     /*** AUTONS ***/
