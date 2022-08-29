@@ -6,10 +6,17 @@ import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.control.feedforward.Feedforward;
 import com.stuypulse.stuylib.network.SmartNumber;
 
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.simulation.BatterySim;
+import edu.wpi.first.wpilibj.simulation.ElevatorSim;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
+import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -28,28 +35,28 @@ import static com.stuypulse.robot.constants.Settings.Elevator.SIMULATION.*;
  * @author Vincent Wang
  * @author Carmin Vong
  * 
- * Elevator fields:
- * - Motor Controller Group
- * - Controller
- * - Digital Input (Limit Switches)?
- * - Encoder?
- * - Target Distance
+ *         Elevator fields:
+ *         - Motor Controller Group
+ *         - Controller
+ *         - Digital Input (Limit Switches)?
+ *         - Encoder?
+ *         - Target Distance
  * 
- * Elevator methods:
- * - setPosition()
- * - setBox()
- * - setScale()
- * - setSwitch()
- * - setClimb()
+ *         Elevator methods:
+ *         - setPosition()
+ *         - setBox()
+ *         - setScale()
+ *         - setSwitch()
+ *         - setClimb()
  *
- * Heights:
- * rung 7ft
- * scale 6ft 4in
- * switch 15 in
+ *         Heights:
+ *         rung 7ft
+ *         scale 6ft 4in
+ *         switch 15 in
  */
 
 public class Elevator extends SubsystemBase {
-    
+
     private final MotorControllerGroup motors;
     private final Controller controller;
     private final DigitalInput lowerLimitSwitch;
@@ -59,10 +66,14 @@ public class Elevator extends SubsystemBase {
 
     private SmartNumber targetDistance;
 
-    private Mechanism2d elevator;
+    private ElevatorSim elevatorSim;
+    public MechanismLigament2d elevatorSimArm;
+    public EncoderSim encoderSim;
 
     public Elevator() {
         setSubsystem("Elevator");
+
+        /** HARDWARE */
         WPI_TalonSRX firstMotor = new WPI_TalonSRX(Ports.Elevator.FIRST);
         WPI_TalonSRX secondMotor = new WPI_TalonSRX(Ports.Elevator.SECOND);
         WPI_TalonSRX thirdMotor = new WPI_TalonSRX(Ports.Elevator.THIRD);
@@ -70,23 +81,31 @@ public class Elevator extends SubsystemBase {
         motors = new MotorControllerGroup(firstMotor, secondMotor, thirdMotor);
         addChild("Motor Controller", motors);
 
+        /** CONTROL */
         controller = new PIDController(kP, kI, kD)
-                            .add(new Feedforward.Elevator(kG, kS, kV, kA).position());
+                .add(new Feedforward.Elevator(kG, kS, kV, kA).position());
 
         lowerLimitSwitch = new DigitalInput(Ports.Elevator.LOWER);
         addChild("Lower Limit Switch", lowerLimitSwitch);
         upperLimitSwitch = new DigitalInput(Ports.Elevator.UPPER);
         addChild("Upper Limit Switch", upperLimitSwitch);
+
         grayhill = new Encoder(Ports.Elevator.A, Ports.Elevator.B);
         addChild("Encoder", grayhill);
 
         targetDistance = new SmartNumber("Elevator/Target Distance", 0.0);
-        
-        elevator = new Mechanism2d(WIDTH, HEIGHT);
 
-        MechanismRoot2d root = elevator.getRoot("Elevator", ROOT_WIDTH, HEIGHT);
-        
-        
+        /** SIMULATION */
+        elevatorSim = new ElevatorSim(LinearSystemId.identifyPositionSystem(kV.get(), kA.get()), DCMotor.getFalcon500(3), GEARING, DRUM_RADIUS, MIN_ELEVATOR_HEIGHT, MAX_ELEVATOR_HEIGHT);
+        encoderSim = new EncoderSim(grayhill);
+
+        Mechanism2d mech = new Mechanism2d(WIDTH, HEIGHT);
+        MechanismRoot2d root = mech.getRoot("Elevator Root", ROOT_WIDTH, HEIGHT);
+        elevatorSimArm = root.append(
+                new MechanismLigament2d(
+                        "Arm",
+                        ARM_WIDTH, 0));
+        addChild("Elevator Mechanism", mech);
     }
 
     private void setPosition(double distance) {
@@ -111,8 +130,16 @@ public class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
-        motors.setVoltage(controller.update(targetDistance.get(), 
-                        grayhill.getDistance()));
+        motors.setVoltage(controller.update(targetDistance.get(),
+                grayhill.getDistance()));
+    }
 
+    @Override
+    public void simulationPeriodic() {
+        elevatorSim.setInput(motors.get() * RoboRioSim.getVInVoltage());
+        elevatorSim.update(0.02);
+        encoderSim.setDistance(elevatorSim.getOutput(0));
+        RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(elevatorSim.getCurrentDrawAmps()));
+        elevatorSimArm.setLength(encoderSim.getDistance());
     }
 }
