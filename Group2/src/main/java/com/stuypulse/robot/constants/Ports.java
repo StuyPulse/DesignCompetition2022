@@ -12,4 +12,10 @@ public interface Ports {
         int OPERATOR = 1;
         int DEBUGGER = 2;
     }
+
+    public interface Intake {
+        int DRIVER_A = -1;
+        int DRIVER_B = -1;
+        int DEPLOY = -1;
+    }
 }
