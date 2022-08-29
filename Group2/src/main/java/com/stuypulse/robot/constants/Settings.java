@@ -8,6 +8,8 @@ package com.stuypulse.robot.constants;
 import com.stuypulse.stuylib.network.SmartBoolean;
 import com.stuypulse.stuylib.network.SmartNumber;
 
+import edu.wpi.first.math.util.Units;
+
 /*-
  * File containing tunable settings for every subsystem on the robot.
  *
@@ -15,5 +17,10 @@ import com.stuypulse.stuylib.network.SmartNumber;
  * values that we can edit on Shuffleboard.
  */
 public interface Settings {
-    SmartBoolean DEBUG_MODE = new SmartBoolean("Debug Mode", true);
+    double DT = 0.02;
+
+    public interface Elevator {
+        double GEARING = 1.0 / 9.0;
+        double TOP_HEIGHT = Units.feetToMeters(6.2);
+    }
 }
