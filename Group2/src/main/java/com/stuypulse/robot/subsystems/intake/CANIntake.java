@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.stuypulse.robot.constants.Ports;
+import com.stuypulse.robot.subsystems.Intake;
 import com.stuypulse.stuylib.math.Angle;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -26,12 +27,12 @@ public class CANIntake extends Intake {
     }
 
     @Override
-    protected void set(double speed) {
+    public void set(double speed) {
         driveMotors.set(speed);
     }
 
     @Override
-    protected double get() {
+    public double get() {
         return driveMotors.get();
     }
 
@@ -46,7 +47,7 @@ public class CANIntake extends Intake {
     }
 
     @Override
-    protected void setDeploy(double speed) {
+    public void setDeploy(double speed) {
         deployMotor.set(speed);
     }
     

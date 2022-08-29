@@ -1,6 +1,7 @@
 package com.stuypulse.robot.subsystems.intake;
 
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.subsystems.Intake;
 import com.stuypulse.robot.util.EncoderSim;
 import com.stuypulse.robot.util.MotorSim;
 import com.stuypulse.robot.util.MotorSim.MotorType;
@@ -21,12 +22,12 @@ public class SimIntake extends Intake {
     }
 
     @Override
-    protected void set(double speed) {
+    public void set(double speed) {
         driveMotor.set(speed);
     }
 
     @Override
-    protected double get() {
+    public double get() {
         return driveMotor.get();
     }
 
@@ -36,7 +37,7 @@ public class SimIntake extends Intake {
     }
 
     @Override
-    protected void setDeploy(double speed) {
+    public void setDeploy(double speed) {
         deployMotor.set(speed);
     }
 

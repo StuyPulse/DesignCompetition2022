@@ -1,4 +1,4 @@
-package com.stuypulse.robot.subsystems.intake;
+package com.stuypulse.robot.subsystems;
 
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Intake.Control;
@@ -38,7 +38,7 @@ public abstract class Intake extends SubsystemBase {
 
     /*** Drive Motors ***/
 
-    protected abstract void set(double speed);
+    public abstract void set(double speed);
 
     protected abstract double get();
 
@@ -54,7 +54,7 @@ public abstract class Intake extends SubsystemBase {
 
     /*** Deploy Motor ***/
 
-    protected abstract void setDeploy(double speed);
+    public abstract void setDeploy(double speed);
 
     public abstract Angle getAngle();
 
