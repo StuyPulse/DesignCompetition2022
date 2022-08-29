@@ -1,136 +1,143 @@
 package com.stuypulse.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.stuypulse.stuylib.control.Controller;
+import com.stuypulse.stuylib.control.feedforward.PositionFeedforwardController;
+import com.stuypulse.stuylib.streams.booleans.BStream;
+import static com.stuypulse.robot.constants.Motors.Elevator.*;
 import static com.stuypulse.robot.constants.Ports.Elevator.*;
 import static com.stuypulse.robot.constants.Settings.Elevator.*;
 
-import com.stuypulse.stuylib.control.Controller;
-
 import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-/** 
- * Fields
- * - leader motor
- * - follower motors
- * - Feedback Controller
- * - encoder
- * - digital inputs
- * - targetState : height from the ground
- * - feedforward
- * - gamepad (IStream)
- * - stalling (BStream)
- * - velocity Feedback Controller
- * - maximum voltage
+
+/**
+ * Fields: 
+ * - 2 Talons (leader follower)
+ * - 2 Limit switches : top and bottom limit
+ * - TargetState (State)
+ * - Position & Velocity feedback
+ * - Elevator feedforward
+ * - Stalling
  * 
  * Methods:
- * - Follower-leader method
- * - calculating voltage for motors 
- * - periodic
+ * - get limit switches
+ * - get position
+ * - get velocity
+ * - get is stalling
+ * - set target state
+ * - run motors
+ * - stop
+ * - reset
  */
 public class Elevator extends SubsystemBase {
 
-    // Components
-    private final CANSparkMax leader;
-    private final CANSparkMax followerOne;
-    private final CANSparkMax followerTwo;
+    private final TalonFX leader, follower; 
+    private final DigitalInput upperSwitch, lowerSwitch;
 
-    private final RelativeEncoder encoder;
-
-    private final DigitalInput lowerLimit;
-    private final DigitalInput upperLimit;
-
-    // Controllers
-    private final ElevatorFeedforward elevatorFeedforward;
-    private final Controller positionFeedback, velocityFeedback;
-
+    private final Controller velocityFeedback, positionFeedback;
+    private final PositionFeedforwardController feedforward;
+    
+    private final BStream stalling; 
     private State targetState;
 
     public Elevator() {
-        leader = new CANSparkMax(LEADER, MotorType.kBrushless);
-        followerOne = new CANSparkMax(FIRST_FOLLOWER, MotorType.kBrushless);
-        followerTwo = new CANSparkMax(SECOND_FOLLOWER, MotorType.kBrushless);
-        
-        encoder = leader.getEncoder();
-        encoder.setPositionConversionFactor(ENCODER_MULTIPLIER);
-        encoder.setVelocityConversionFactor(ENCODER_MULTIPLIER);
+        leader = new TalonFX(LEFT_MOTOR);
+        follower = new TalonFX(RIGHT_MOTOR);
 
-        lowerLimit = new DigitalInput(LOWER_SWITCH);
-        upperLimit = new DigitalInput(UPPER_SWITCH);
+        follower.follow(leader);
 
-        elevatorFeedforward = Feedforward.getFeedForward();
-        positionFeedback = PositionFeedback.getController();
+        LEADER_CONFIG.configure(leader);
+        FOLLOWER_CONFIG.configure(follower);
+
+        upperSwitch = new DigitalInput(UPPER_SWITCH);
+        lowerSwitch = new DigitalInput(LOWER_SWITCH);
+
         velocityFeedback = VelocityFeedback.getController();
-
+        positionFeedback = PositionFeedback.getController();
+        feedforward = ElevatorFeedForward.getController();
+        
+        stalling = BStream.create(() -> isStalling());
+        // stalling = BStream.create(() -> isStalling()).filtered(new Debouncer(0.1));
         targetState = new State(0, 0);
     }
 
-    public double getVelocity() {
-        return encoder.getVelocity();
-    }
-
-    public double getPosition() {
-        return encoder.getPosition();
-    }
-
     public boolean atTop() {
-        return !upperLimit.get();
+        return upperSwitch.get();
     }
- 
+    
     public boolean atBottom() {
-        return !lowerLimit.get();
+        return lowerSwitch.get();
+    }
+
+    public double getVelocity() {
+        return (leader.getSelectedSensorVelocity() + follower.getSelectedSensorVelocity()) / 2;
+    }
+
+    public double getHeight() {
+        return (leader.getSelectedSensorPosition() + follower.getSelectedSensorPosition()) / 2;
+    }
+
+    public double getAmps() {
+        return (leader.getSupplyCurrent() + follower.getSupplyCurrent()) / 2;
+    }
+
+    public boolean isStalling() {
+        if(getAmps() > 40 && getVelocity() < 0.02){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public void setState(State state) {
-        targetState = state;
+        this.targetState = state;
+    }
+
+    public void stop() {
+        leader.set(TalonFXControlMode.PercentOutput, 0);
     }
 
     public void reset() {
-        setState(new State(0, 0));
-        encoder.setPosition(0);
+        leader.setSelectedSensorPosition(0);
+        follower.setSelectedSensorPosition(0);
     }
 
-    public void set(double voltage) {
-        if (atBottom() && voltage < 0) {
-            voltage = 0;
-            DriverStation.reportWarning("Trying to lower elevator below bottom", false);
+    public void run(double velocity) {
+        if (atTop() || atBottom() && !stalling.get()) {
+            stop();
+        } else {
+            leader.set(TalonFXControlMode.Velocity, velocity);
+            follower.follow(leader);
         }
-        if (atTop() && voltage > 0) {
-            voltage = 0;
-            DriverStation.reportWarning("Trying to raise elevator above top", false);
-        }
-
-        System.out.println("Output: " + voltage);
+    }
         
-        leader.set(voltage);
-        followerOne.set(voltage);
-        followerTwo.set(voltage);
-    }
-
     @Override
     public void periodic() {
+        
+        // double velocity = velocityFeedback.calculate(targetState.velocity, getVelocity());
+        // double position = positionFeedback.calculate(targetState.position, getHeight());
+        // double ff = feedforward.calculate(targetState.velocity, getVelocity());
 
-        double feedforward = elevatorFeedforward.calculate(targetState.velocity);
-        double position = positionFeedback.update(targetState.position, getPosition());
-        double velocity = velocityFeedback.update(targetState.velocity, getVelocity());
+        // run(velocity + position + ff);
 
-        set(feedforward + position + velocity);
-
-        SmartDashboard.putNumber("Elevator/Position", getPosition());
+        // logging
         SmartDashboard.putNumber("Elevator/Velocity", getVelocity());
+        SmartDashboard.putNumber("Elevator/Height", getHeight());
+        SmartDashboard.putNumber("Elevator/Current Amps", getAmps());
 
-        SmartDashboard.putNumber("Elevator/Target Position", targetState.position);
         SmartDashboard.putNumber("Elevator/Target Velocity", targetState.velocity);
+        SmartDashboard.putNumber("Elevator/Target Height", targetState.position);
 
-        SmartDashboard.putNumber("Elevator/Position Error", targetState.position - getPosition());
-        SmartDashboard.putNumber("Elevator/Velocity Error", targetState.velocity - getVelocity());
+        SmartDashboard.putBoolean("Elevator/At Top", atTop());
+        SmartDashboard.putBoolean("Elevator/At Bottom", atBottom());
 
-        SmartDashboard.putBoolean("Elevator/AtBottom", atBottom());
-        SmartDashboard.putBoolean("Elevator/AtTop", atTop());
+        SmartDashboard.putBoolean("Elevator/Is Stalling", stalling.get());
     }
 }

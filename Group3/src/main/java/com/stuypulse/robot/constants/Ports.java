@@ -14,9 +14,8 @@ public interface Ports {
     }
 
     public interface Elevator {
-        int LEADER = 20;
-        int FIRST_FOLLOWER = 21;
-        int SECOND_FOLLOWER = 22;
+        int LEFT_MOTOR = 20;
+        int RIGHT_MOTOR = 21;
 
         int LOWER_SWITCH = 23;
         int UPPER_SWITCH = 24;

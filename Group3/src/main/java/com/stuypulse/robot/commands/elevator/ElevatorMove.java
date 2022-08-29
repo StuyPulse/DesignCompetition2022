@@ -41,6 +41,6 @@ public class ElevatorMove extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        elevator.setState(new State(elevator.getPosition(), 0));
+        elevator.setState(new State(elevator.getHeight(), 0));
     }
 }
