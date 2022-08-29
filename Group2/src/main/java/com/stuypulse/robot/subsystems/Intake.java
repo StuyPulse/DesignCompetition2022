@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * @author Yuchen Pan
  * @author Zixi Feng
  * @author Maximillian Zeng
+ * @author Tracey Lin
 */
 
 public class Intake extends SubsystemBase {
