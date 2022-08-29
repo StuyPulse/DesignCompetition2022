@@ -26,6 +26,11 @@ public class SimIntake extends Intake {
     }
 
     @Override
+    protected double get() {
+        return driveMotor.get();
+    }
+
+    @Override
     public void stop() {
         driveMotor.stopMotor();
     }
@@ -37,7 +42,7 @@ public class SimIntake extends Intake {
 
     @Override
     public Angle getAngle() {
-        return Angle.fromRotations(deployEncoder.getDistance());
+        return Angle.fromRadians(deployEncoder.getDistance());
     }
 
     @Override

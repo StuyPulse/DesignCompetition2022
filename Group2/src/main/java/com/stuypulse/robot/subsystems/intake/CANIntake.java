@@ -31,6 +31,11 @@ public class CANIntake extends Intake {
     }
 
     @Override
+    protected double get() {
+        return driveMotors.get();
+    }
+
+    @Override
     public void stop() {
         driveMotors.stopMotor();
     }
