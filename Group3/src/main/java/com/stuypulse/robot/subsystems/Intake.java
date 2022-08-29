@@ -11,14 +11,14 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.network.SmartNumber;
 
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /** 
  * Fields: 
- * - Driver motor
+ * - Driver motors
  * - Deployment motor
- * - Deployment encoder
  * - Controller
  * - Target Angle
  * 
@@ -37,38 +37,36 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * @author Jennifer Ye
  */
 public class Intake extends SubsystemBase {
-    private CANSparkMax leftDriverMotor, rightDriverMotor;
-    private TalonFX deploymentMotor;
+    private MotorControllerGroup drivers;
+    private TalonFX deployer;
 
     private Controller controller;
     private SmartNumber targetAngle;
 
     public Intake() {
-        leftDriverMotor = new CANSparkMax(LEFT_DRIVER, MotorType.kBrushless);
-        rightDriverMotor = new CANSparkMax(RIGHT_DRIVER, MotorType.kBrushless);
-        deploymentMotor = new TalonFX(DEPLOYMENT);
+        final CANSparkMax leftDriverMotor = new CANSparkMax(LEFT_DRIVER, MotorType.kBrushless);
+        final CANSparkMax rightDriverMotor = new CANSparkMax(RIGHT_DRIVER, MotorType.kBrushless);
+        drivers = new MotorControllerGroup(leftDriverMotor, rightDriverMotor);
+        deployer = new TalonFX(DEPLOYMENT);
 
         LEFT_DRIVER_CONFIG.configure(leftDriverMotor);
         RIGHT_DRIVER_CONFIG.configure(rightDriverMotor);
-        DEPLOYMENT_CONFIG.configure(deploymentMotor);
+        DEPLOYMENT_CONFIG.configure(deployer);
 
         controller = Deployment.FB.getPIDController().add(Deployment.FF.getFeedforward());
         targetAngle = new SmartNumber("Intake/Target Angle", 0.0);
     }
 
     public void acquire() {
-        leftDriverMotor.set(ACQUIRE_SPEED.get());
-        rightDriverMotor.set(ACQUIRE_SPEED.get());
+        drivers.set(ACQUIRE_SPEED.get());
     }
 
     public void deacquire() {
-        leftDriverMotor.set(DEACQUIRE_SPEED.get());
-        rightDriverMotor.set(DEACQUIRE_SPEED.get());
+        drivers.set(DEACQUIRE_SPEED.get());
     }
     
     public void stop() {
-        leftDriverMotor.stopMotor();
-        rightDriverMotor.stopMotor();
+        drivers.stopMotor();
     }
 
     public void setTargetAngle(double angle) {
@@ -84,27 +82,26 @@ public class Intake extends SubsystemBase {
     }
 
     public void reset(double position) {
-        deploymentMotor.setSelectedSensorPosition(position);
+        deployer.setSelectedSensorPosition(position);
         this.targetAngle.set(position);
     }
 
     public double getAngle() {
-        return deploymentMotor.getSelectedSensorPosition();
+        return deployer.getSelectedSensorPosition();
     }
     
     public double getVelocity() {
-        return deploymentMotor.getSelectedSensorVelocity();
+        return deployer.getSelectedSensorVelocity();
     }
 
     @Override
     public void periodic() {
-        deploymentMotor.set(
+        deployer.set(
             TalonFXControlMode.Position,
             controller.update(targetAngle.get(), getAngle())
         );
         
-        SmartDashboard.putNumber("Intake/Left Driver Speed", leftDriverMotor.get());
-        SmartDashboard.putNumber("Intake/Right Driver Speed", rightDriverMotor.get());
+        SmartDashboard.putNumber("Intake/Driver Speed", drivers.get());
         SmartDashboard.putNumber("Intake/Deployment Angle", getAngle());
         SmartDashboard.putNumber("Intake/Deployment Speed", getVelocity());
     }   
