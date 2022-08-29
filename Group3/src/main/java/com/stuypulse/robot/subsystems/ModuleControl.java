@@ -1,10 +1,9 @@
 package com.stuypulse.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import static com.stuypulse.robot.constants.Settings.Swerve.*;
 
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.angle.AngleController;
 import com.stuypulse.stuylib.math.Angle;
@@ -38,8 +37,7 @@ public class ModuleControl extends SubsystemBase {
     
     /** DRIVE */
     
-    private final CANSparkMax driveMotor;
-    private final RelativeEncoder driveEncoder;
+    private final TalonFX driveMotor;
     private final Controller driveController;
     private final SimpleMotorFeedforward driveFeedforward;
 
@@ -49,7 +47,7 @@ public class ModuleControl extends SubsystemBase {
 
      /** TURN */
 
-    private final CANSparkMax turnMotor;
+    private final TalonFX turnMotor;
     private final DutyCycleEncoder turnEncoder;
     private final AngleController turnController;
 
@@ -60,8 +58,7 @@ public class ModuleControl extends SubsystemBase {
         
         /** DRIVE */
 
-        driveMotor = new CANSparkMax(drivePort, MotorType.kBrushless);
-        driveEncoder = driveMotor.getEncoder();
+        driveMotor = new TalonFX(drivePort);
         driveController = Drive.Feedback.getFeedbackController();
         driveFeedforward = Drive.Feedforward.getFeedforwardController();
 
@@ -71,7 +68,7 @@ public class ModuleControl extends SubsystemBase {
 
         /** TURN */
 
-        turnMotor = new CANSparkMax(turnPort, MotorType.kBrushless);
+        turnMotor = new TalonFX(turnPort);
         this.turnEncoder = new DutyCycleEncoder(turnEncoder);
         this.turnController = Turn.Feedback.getFeedbackController();
         
@@ -82,7 +79,7 @@ public class ModuleControl extends SubsystemBase {
     /** DRIVE */
 
     public double getVelocity() {
-        return driveEncoder.getVelocity();
+        return driveMotor.getSelectedSensorVelocity();
     }
 
     public void setTargetVelocity(double target) {
@@ -114,10 +111,11 @@ public class ModuleControl extends SubsystemBase {
     public void periodic() {
         double driveAcceleration = (targetVelocity - previousTargetVelocity) / velocityTimer.reset();
 
-        driveMotor.set(driveFeedforward.calculate(targetVelocity, driveAcceleration) 
+        driveMotor.set(TalonFXControlMode.Velocity, 
+                        driveFeedforward.calculate(targetVelocity, driveAcceleration) 
                         + driveController.update(targetVelocity, getVelocity()));
 
-        turnMotor.set(turnController.update(targetAngle, getAngle()));
+        turnMotor.set(TalonFXControlMode.Position, turnController.update(targetAngle, getAngle()));
 
         previousTargetVelocity = targetVelocity;
     }
