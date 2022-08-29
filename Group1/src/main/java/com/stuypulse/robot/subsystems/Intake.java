@@ -1,6 +1,7 @@
 package com.stuypulse.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
@@ -12,9 +13,13 @@ import com.stuypulse.stuylib.network.SmartAngle;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static com.stuypulse.robot.constants.Settings.Intake.PID.*;
+
+import com.ctre.phoenix.sensors.CANCoder;
+
 import static com.stuypulse.robot.constants.Settings.Intake.FF.*;
 
 import com.stuypulse.robot.constants.Motors;
@@ -38,7 +43,7 @@ import com.stuypulse.robot.constants.Motors;
 public class Intake extends SubsystemBase {
     private final MotorControllerGroup driver;
     private final CANSparkMax deploy;
-    private final Encoder encoder;
+    private final RelativeEncoder encoder;
 
     private final Controller controller;
 
@@ -54,8 +59,7 @@ public class Intake extends SubsystemBase {
         
         deploy = new CANSparkMax(Ports.Intake.DEPLOY, MotorType.kBrushless);
         Motors.Intake.deploy.configure(deploy);
-        encoder = new Encoder(Ports.Intake.DEPLOYER_A, Ports.Intake.DEPLOYER_B);
-        addChild("Deploy Encoder", encoder);
+        encoder = deploy.getEncoder();
         controller = new PIDController(kP, kI, kD).add(new Feedforward.Motor(kS, kV, kA).position());
 
         targetAngle = new SmartAngle("Intake/Target Angle", Angle.fromDegrees(0));
@@ -87,6 +91,8 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        deploy.setVoltage(controller.update(targetAngle.get().toDegrees(), encoder.getDistance()));
+        deploy.setVoltage(controller.update(targetAngle.get().toDegrees(), encoder.getPosition()));
+    
+        SmartDashboard.putNumber("Intake/Encoder Position", encoder.getPosition());
     }
 } 
