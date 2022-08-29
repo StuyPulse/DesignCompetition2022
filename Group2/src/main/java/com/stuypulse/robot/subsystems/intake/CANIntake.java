@@ -31,7 +31,7 @@ public class CANIntake extends Intake {
     }
 
     @Override
-    protected void stop() {
+    public void stop() {
         driveMotors.stopMotor();
     }
 

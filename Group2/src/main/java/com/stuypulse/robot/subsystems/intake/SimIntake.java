@@ -26,7 +26,7 @@ public class SimIntake extends Intake {
     }
 
     @Override
-    protected void stop() {
+    public void stop() {
         driveMotor.stopMotor();
     }
 
