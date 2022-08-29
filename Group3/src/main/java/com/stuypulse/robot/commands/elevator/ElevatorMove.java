@@ -30,7 +30,7 @@ public class ElevatorMove extends CommandBase {
 
     @Override
     public void execute() {
-        elevator.setState(new State(0, input.get() * 3)); 
+        elevator.setState(new State(0, input.get())); 
         SmartDashboard.putNumber("Elevator/Input", input.get());
     }
 

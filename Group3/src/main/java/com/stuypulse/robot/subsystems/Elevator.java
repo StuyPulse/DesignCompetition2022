@@ -3,14 +3,14 @@ package com.stuypulse.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.stuypulse.stuylib.control.Controller;
-import com.stuypulse.stuylib.control.feedforward.PositionFeedforwardController;
+import com.stuypulse.stuylib.control.feedforward.VelocityFeedforwardController;
 import com.stuypulse.stuylib.streams.booleans.BStream;
+import com.stuypulse.stuylib.streams.booleans.filters.BDebounceRC;
+
 import static com.stuypulse.robot.constants.Motors.Elevator.*;
 import static com.stuypulse.robot.constants.Ports.Elevator.*;
 import static com.stuypulse.robot.constants.Settings.Elevator.*;
 
-import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -41,7 +41,7 @@ public class Elevator extends SubsystemBase {
     private final DigitalInput upperSwitch, lowerSwitch;
 
     private final Controller velocityFeedback, positionFeedback;
-    private final PositionFeedforwardController feedforward;
+    private final VelocityFeedforwardController feedforward;
     
     private final BStream stalling; 
     private State targetState;
@@ -62,8 +62,7 @@ public class Elevator extends SubsystemBase {
         positionFeedback = PositionFeedback.getController();
         feedforward = ElevatorFeedForward.getController();
         
-        stalling = BStream.create(() -> isStalling());
-        // stalling = BStream.create(() -> isStalling()).filtered(new Debouncer(0.1));
+        stalling = BStream.create(() -> isStalling()).filtered(new BDebounceRC.Falling(0.2));
         targetState = new State(0, 0);
     }
 
@@ -110,22 +109,24 @@ public class Elevator extends SubsystemBase {
     }
 
     public void run(double velocity) {
-        if (atTop() || atBottom() && !stalling.get()) {
+        if (atTop() && velocity > 0 || atBottom() && velocity < 0 || stalling.get()) {
             stop();
+        }
+        if (atBottom()) {
+            reset();
         } else {
             leader.set(TalonFXControlMode.Velocity, velocity);
-            follower.follow(leader);
         }
     }
         
     @Override
     public void periodic() {
         
-        // double velocity = velocityFeedback.calculate(targetState.velocity, getVelocity());
-        // double position = positionFeedback.calculate(targetState.position, getHeight());
-        // double ff = feedforward.calculate(targetState.velocity, getVelocity());
+        double velocity = velocityFeedback.update(targetState.velocity, getVelocity());
+        double position = positionFeedback.update(targetState.position, getHeight());
+        double ff = feedforward.update(targetState.velocity, getVelocity());
 
-        // run(velocity + position + ff);
+        run(velocity + position + ff);
 
         // logging
         SmartDashboard.putNumber("Elevator/Velocity", getVelocity());

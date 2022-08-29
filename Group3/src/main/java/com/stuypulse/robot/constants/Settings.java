@@ -8,6 +8,7 @@ package com.stuypulse.robot.constants;
 import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.control.feedforward.Feedforward;
 import com.stuypulse.stuylib.control.feedforward.PositionFeedforwardController;
+import com.stuypulse.stuylib.control.feedforward.VelocityFeedforwardController;
 import com.stuypulse.stuylib.network.SmartBoolean;
 import com.stuypulse.stuylib.network.SmartNumber;
 
@@ -62,8 +63,8 @@ public interface Settings {
             SmartNumber V = new SmartNumber("Elevator/ElevatorFeedForward/V", 0.02);
             SmartNumber A = new SmartNumber("Elevator/ElevatorFeedForward/A", 0.03);
             
-            public static PositionFeedforwardController getController() {
-                return new Feedforward.Elevator(G, S, V, A).position();
+            public static VelocityFeedforwardController getController() {
+                return new Feedforward.Elevator(G, S, V, A).velocity();
             }
         }
 
