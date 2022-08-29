@@ -7,7 +7,6 @@ import static com.stuypulse.robot.constants.Settings.Intake.*;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.network.SmartNumber;
@@ -38,8 +37,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * @author Jennifer Ye
  */
 public class Intake extends SubsystemBase {
-    private CANSparkMax leftDriverMotor;
-    private CANSparkMax rightDriverMotor;
+    private CANSparkMax leftDriverMotor, rightDriverMotor;
     private TalonFX deploymentMotor;
 
     private Controller controller;
@@ -47,14 +45,14 @@ public class Intake extends SubsystemBase {
 
     public Intake() {
         leftDriverMotor = new CANSparkMax(LEFT_DRIVER, MotorType.kBrushless);
-        leftDriverMotor = new CANSparkMax(RIGHT_DRIVER, MotorType.kBrushless);
+        rightDriverMotor = new CANSparkMax(RIGHT_DRIVER, MotorType.kBrushless);
         deploymentMotor = new TalonFX(DEPLOYMENT);
 
         LEFT_DRIVER_CONFIG.configure(leftDriverMotor);
         RIGHT_DRIVER_CONFIG.configure(rightDriverMotor);
         DEPLOYMENT_CONFIG.configure(deploymentMotor);
 
-        controller = Deployment.FB.getController().add(Deployment.FF.getFeedforward());
+        controller = Deployment.FB.getPIDController().add(Deployment.FF.getFeedforward());
         targetAngle = new SmartNumber("Intake/Target Angle", 0.0);
     }
 
@@ -106,7 +104,7 @@ public class Intake extends SubsystemBase {
                 controller.update(targetAngle.get(), getAngle())
             );
         } else {
-            deploymentMotor.set(TalonFXControlMode.Current, 0);;
+            deploymentMotor.set(TalonFXControlMode.Current, 0);
         }
         
         SmartDashboard.putNumber("Intake/Left Driver Speed", leftDriverMotor.get());

@@ -39,7 +39,7 @@ public interface Settings {
                 SmartNumber I = new SmartNumber("Intake/Deployment/I", 0.0);
                 SmartNumber D = new SmartNumber("Intake/Deployment/D", 0.0);
 
-                static PIDController getController() {
+                static PIDController getPIDController() {
                     return new PIDController(P, I, D);
                 }
             }
@@ -54,7 +54,5 @@ public interface Settings {
                 }
             }
         }
-
     }
-
 }
