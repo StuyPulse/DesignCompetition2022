@@ -5,6 +5,8 @@
 
 package com.stuypulse.robot.constants;
 
+import com.stuypulse.stuylib.math.Angle;
+import com.stuypulse.stuylib.network.SmartAngle;
 import com.stuypulse.stuylib.network.SmartNumber;
 
 /*-
@@ -41,6 +43,21 @@ public interface Settings {
         }
     }
 
+    public interface Intake {
+        SmartAngle RETRACT_ANGLE = new SmartAngle("Intake/Retract Angle", Angle.fromDegrees(0));
+        SmartAngle EXTEND_ANGLE = new SmartAngle("Intake/Extend Angle", Angle.fromDegrees(90));
+        
+        interface PID {
+            SmartNumber kP = new SmartNumber("Intake/kP", 0);
+            SmartNumber kI = new SmartNumber("Intake/kI", 0);
+            SmartNumber kD = new SmartNumber("Intake/kD", 0);
+        }
+
+        interface FF {
+            SmartNumber kS = new SmartNumber("Intake/kS", 0);
+            SmartNumber kV = new SmartNumber("Intake/kV", 0);
+            SmartNumber kA = new SmartNumber("Intake/kA", 0);
+        }
     public interface Elevator {
         double TRACK_WIDTH = 0.5;
 

@@ -29,6 +29,11 @@ public interface Motors {
         TalonSRXConfig elevator = new TalonSRXConfig(false, NeutralMode.Brake, 30, 0);
     }
 
+    public interface Intake{
+        CANSparkMaxConfig driver = new CANSparkMaxConfig(true, IdleMode.kCoast, 40, 0);
+        CANSparkMaxConfig deploy = new CANSparkMaxConfig(false, IdleMode.kCoast, 40, 0);
+    }
+
     public static class CANSparkMaxConfig {
         boolean inverted;
         IdleMode idleMode;

@@ -29,6 +29,15 @@ public interface Ports {
         }
     }
 
+    public interface Intake {
+        int LEFT_DRIVER = -1;
+        int RIGHT_DRIVER = -1;
+
+        int DEPLOYER_A = -1;
+        int DEPLOYER_B = -1;
+
+        int DEPLOY = -1;
+    }
     public interface Elevator {
         int FIRST = -1;
         int SECOND = -1;
