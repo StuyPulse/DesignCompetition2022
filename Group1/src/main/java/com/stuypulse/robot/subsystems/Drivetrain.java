@@ -46,6 +46,13 @@ import static com.stuypulse.robot.constants.Settings.Drivetrain.FF.*;
  * - tankDrive()
  * - reset()
  * - getAngle()
+ * 
+ * 
+ * @author Kelvin Zhao
+ * @author Vincent Wang
+ * @author Samuel Chen
+ * @author Amber Shen
+ * @author Carmin Vuong
  */
 
 public class Drivetrain extends SubsystemBase {
@@ -67,7 +74,7 @@ public class Drivetrain extends SubsystemBase {
     private final AHRS navx;
 
     /** ODOMETRY */
-    private final DifferentialDriveOdometry odometry;
+    public final DifferentialDriveOdometry odometry;
 
     private final Field2d field;
 
@@ -85,16 +92,16 @@ public class Drivetrain extends SubsystemBase {
         /** MOTORS */
         CANSparkMax leftFront = new CANSparkMax(Ports.Drivetrain.LEFT_FRONT, MotorType.kBrushed);
         CANSparkMax leftMiddle = new CANSparkMax(Ports.Drivetrain.LEFT_MIDDLE, MotorType.kBrushless);
-        CANSparkMax leftBottom = new CANSparkMax(Ports.Drivetrain.LEFT_BOTTOM, MotorType.kBrushless);
-        Motors.Drivetrain.left.configure(leftFront, leftMiddle, leftBottom);
-        left = new MotorControllerGroup(leftFront, leftMiddle, leftBottom);
+        CANSparkMax leftBack = new CANSparkMax(Ports.Drivetrain.LEFT_BACK, MotorType.kBrushless);
+        Motors.Drivetrain.left.configure(leftFront, leftMiddle, leftBack);
+        left = new MotorControllerGroup(leftFront, leftMiddle, leftBack);
         addChild("Left Motor Controller Group", left);
 
         CANSparkMax rightFront = new CANSparkMax(Ports.Drivetrain.RIGHT_FRONT, MotorType.kBrushless);
         CANSparkMax rightMiddle = new CANSparkMax(Ports.Drivetrain.RIGHT_MIDDLE, MotorType.kBrushless);
-        CANSparkMax rightBottom = new CANSparkMax(Ports.Drivetrain.RIGHT_BOTTOM, MotorType.kBrushless);
-        Motors.Drivetrain.right.configure(rightFront, rightMiddle, rightBottom);
-        right = new MotorControllerGroup(rightFront, rightMiddle, rightBottom);
+        CANSparkMax rightBack = new CANSparkMax(Ports.Drivetrain.RIGHT_BACK, MotorType.kBrushless);
+        Motors.Drivetrain.right.configure(rightFront, rightMiddle, rightBack);
+        right = new MotorControllerGroup(rightFront, rightMiddle, rightBack);
         addChild("Right Motor Controller Group", right);
 
         /** ENCODERS */
@@ -118,6 +125,10 @@ public class Drivetrain extends SubsystemBase {
         return navx.getRotation2d();
     }
 
+    public Pose2d getPose() {
+        return odometry.getPoseMeters();
+    }
+
     public void reset(Pose2d location) {
         leftGrayhill.reset();
         rightGrayhill.reset();
@@ -136,6 +147,11 @@ public class Drivetrain extends SubsystemBase {
         rightTargetSpeed.set(speeds.rightMetersPerSecond);
     }
 
+    public DifferentialDriveWheelSpeeds getSpeed() {
+        return new DifferentialDriveWheelSpeeds(leftGrayhill.getRate(),
+                rightGrayhill.getRate());
+    }
+
     public void tankDrive(double left, double right) {
         setSpeed(left, right);
     }
@@ -143,6 +159,11 @@ public class Drivetrain extends SubsystemBase {
     public void arcadeDrive(double speed, double angle) {
         setSpeed(driveKinematics.toWheelSpeeds(
                 new ChassisSpeeds(speed, 0, angle)));
+    }
+
+    public void setSpeeds(double leftSpeed, double rightSpeed) {
+        left.setVoltage(leftController.update(leftSpeed, leftGrayhill.getRate()));
+        right.setVoltage(rightController.update(rightSpeed, rightGrayhill.getRate()));
     }
 
     @Override

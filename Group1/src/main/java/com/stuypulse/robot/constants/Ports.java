@@ -15,11 +15,11 @@ public interface Ports {
     public interface Drivetrain {
         int LEFT_FRONT = -1;
         int LEFT_MIDDLE = -1;
-        int LEFT_BOTTOM = -1;
+        int LEFT_BACK = -1;
 
         int RIGHT_FRONT = -1;
         int RIGHT_MIDDLE = -1;
-        int RIGHT_BOTTOM = -1;
+        int RIGHT_BACK = -1;
 
         public interface Grayhill {
             int LEFT_A = -1;
@@ -37,5 +37,16 @@ public interface Ports {
         int DEPLOYER_B = -1;
 
         int DEPLOY = -1;
+    }
+    public interface Elevator {
+        int FIRST = -1;
+        int SECOND = -1;
+        int THIRD = -1;
+
+        int LOWER = -1;
+        int UPPER = -1;
+
+        int A = -1;
+        int B = -1;
     }
 }

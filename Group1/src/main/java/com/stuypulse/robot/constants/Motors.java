@@ -5,6 +5,8 @@
 
 package com.stuypulse.robot.constants;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 
@@ -21,6 +23,10 @@ public interface Motors {
     public interface Drivetrain {
         CANSparkMaxConfig left = new CANSparkMaxConfig(true, IdleMode.kBrake, 60, 0);
         CANSparkMaxConfig right = new CANSparkMaxConfig(false, IdleMode.kBrake, 60, 0);
+    }
+    
+    public interface Elevator {
+        TalonSRXConfig elevator = new TalonSRXConfig(false, NeutralMode.Brake, 30, 0);
     }
 
     public interface Intake{
@@ -47,6 +53,31 @@ public interface Motors {
                 motor.setIdleMode(idleMode);
                 motor.setSmartCurrentLimit(currentLimit);
                 motor.setClosedLoopRampRate(rampRate);
+            }
+        }
+    }
+
+    public static class TalonSRXConfig {
+        boolean inverted;
+        NeutralMode neutralMode;
+        int currentLimit;
+        double rampRate;
+
+        public TalonSRXConfig(boolean inverted, NeutralMode neutralMode, int currentLimit, double rampRate) {
+            this.inverted = inverted;
+            this.neutralMode = neutralMode;
+            this.currentLimit = currentLimit;
+            this.rampRate = rampRate;
+        }
+
+        public void configure(WPI_TalonSRX... motors) {
+            for (WPI_TalonSRX motor : motors) {
+                motor.setInverted(inverted);
+                motor.setNeutralMode(neutralMode);
+                motor.configContinuousCurrentLimit(currentLimit - 10, 0);
+                motor.configPeakCurrentLimit(currentLimit, 0);
+                motor.configPeakCurrentDuration(100, 0);
+                motor.configOpenloopRamp(rampRate);
             }
         }
     }
