@@ -32,8 +32,6 @@ public interface Settings {
 
         public interface Deployment {
 
-            SmartNumber MAX_ERROR = new SmartNumber("Intake/Deployment/Max Error", 2);
-
             public interface FB {
                 SmartNumber P = new SmartNumber("Intake/Deployment/P", 0.005);
                 SmartNumber I = new SmartNumber("Intake/Deployment/I", 0.0);

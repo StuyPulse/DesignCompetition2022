@@ -61,7 +61,7 @@ public class Intake extends SubsystemBase {
         rightDriverMotor.set(ACQUIRE_SPEED.get());
     }
 
-    public void deaquire() {
+    public void deacquire() {
         leftDriverMotor.set(DEACQUIRE_SPEED.get());
         rightDriverMotor.set(DEACQUIRE_SPEED.get());
     }
@@ -98,14 +98,10 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (!controller.isDone(Deployment.MAX_ERROR.get())) {
-            deploymentMotor.set(
-                TalonFXControlMode.Position,
-                controller.update(targetAngle.get(), getAngle())
-            );
-        } else {
-            deploymentMotor.set(TalonFXControlMode.Current, 0);
-        }
+        deploymentMotor.set(
+            TalonFXControlMode.Position,
+            controller.update(targetAngle.get(), getAngle())
+        );
         
         SmartDashboard.putNumber("Intake/Left Driver Speed", leftDriverMotor.get());
         SmartDashboard.putNumber("Intake/Right Driver Speed", rightDriverMotor.get());
