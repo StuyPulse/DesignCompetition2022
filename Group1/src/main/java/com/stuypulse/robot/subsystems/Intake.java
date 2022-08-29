@@ -11,14 +11,12 @@ import com.stuypulse.stuylib.control.feedforward.Feedforward;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.network.SmartAngle;
 
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static com.stuypulse.robot.constants.Settings.Intake.PID.*;
 
-import com.ctre.phoenix.sensors.CANCoder;
 
 import static com.stuypulse.robot.constants.Settings.Intake.FF.*;
 
