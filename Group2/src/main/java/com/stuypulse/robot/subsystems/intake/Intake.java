@@ -50,7 +50,7 @@ public abstract class Intake extends SubsystemBase {
         set(Settings.Intake.DEACQUIRE_SPEED.get());
     }
     
-    protected abstract void stop();
+    public abstract void stop();
 
     /*** Deploy Motor ***/
 
