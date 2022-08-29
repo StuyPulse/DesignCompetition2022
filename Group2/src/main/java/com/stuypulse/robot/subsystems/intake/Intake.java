@@ -1,9 +1,5 @@
-package com.stuypulse.robot.subsystems;
+package com.stuypulse.robot.subsystems.intake;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Intake.Control;
 import com.stuypulse.stuylib.control.angle.AngleController;
@@ -28,13 +24,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * @author Maximillian Zeng
 */
 
-public class Intake extends SubsystemBase {
-
-    private CANSparkMax deploy;
-    private CANSparkMax driverMotorA;
-    private CANSparkMax driverMotorB;
-    
-    private RelativeEncoder encoder;
+public abstract class Intake extends SubsystemBase {
     
     private AngleController controller;
     private Angle targetAngle;
@@ -42,12 +32,6 @@ public class Intake extends SubsystemBase {
     private double speed;
 
     public Intake() {
-        driverMotorA = new CANSparkMax(Ports.Intake.DRIVER_A, MotorType.kBrushless);
-        driverMotorB = new CANSparkMax(Ports.Intake.DRIVER_B, MotorType.kBrushless);
-
-        deploy = new CANSparkMax(Ports.Intake.DEPLOY, MotorType.kBrushless);
-        encoder = deploy.getEncoder();
-
         controller = Control.getControl();
 
         targetAngle = Settings.Intake.RETRACT_ANGLE.get();
@@ -56,11 +40,7 @@ public class Intake extends SubsystemBase {
 
     /*** Drive Motors ***/
 
-    private void set(double speed) {
-        this.speed = speed;
-        driverMotorA.set(speed);
-        driverMotorB.set(speed);
-    }
+    protected abstract void set(double speed);
 
     public void acquire() {
         set(Settings.Intake.ACQUIRE_SPEED.get());
@@ -69,17 +49,14 @@ public class Intake extends SubsystemBase {
     public void deacquire() {
         set(Settings.Intake.DEACQUIRE_SPEED.get());
     }
-
-    public void stop() {
-        driverMotorA.stopMotor();
-        driverMotorB.stopMotor();
-    }
+    
+    protected abstract void stop();
 
     /*** Deploy Motor ***/
 
-    public Angle getAngle() {
-        return Angle.fromRotations(encoder.getPosition());
-    }
+    protected abstract void setDeploy(double speed);
+
+    public abstract Angle getAngle();
 
     private void setAngle(Angle angle) {
         targetAngle = angle;
@@ -96,7 +73,7 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        deploy.set(controller.update(targetAngle, getAngle()));
+        setDeploy(controller.update(targetAngle, getAngle()));
 
         SmartDashboard.putNumber("Intake/Angle", getAngle().toDegrees());
         SmartDashboard.putNumber("Intake/Speed", speed);
