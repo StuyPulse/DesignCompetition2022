@@ -40,6 +40,9 @@ public interface Settings {
             SmartNumber kS = new SmartNumber("Drivetrain/kS", 0);
             SmartNumber kV = new SmartNumber("Drivetrain/kV", 0);
             SmartNumber kA = new SmartNumber("Drivetrain/kA", 0);
+
+            SmartNumber kVA = new SmartNumber("Drivetrain/kVA", 0);
+            SmartNumber kAA = new SmartNumber("Drivetrain/kAA", 0);
         }
     }
 

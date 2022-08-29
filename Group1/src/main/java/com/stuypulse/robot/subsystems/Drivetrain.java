@@ -4,8 +4,6 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.MatBuilder;
-import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -25,7 +23,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.RobotContainer;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.feedback.PIDController;
@@ -34,8 +31,6 @@ import com.stuypulse.stuylib.network.SmartNumber;
 
 import static com.stuypulse.robot.constants.Ports.Drivetrain.Grayhill.*;
 import static com.stuypulse.robot.constants.Settings.Drivetrain.PID.*;
-
-import org.ejml.equation.MatrixConstructor;
 
 import static com.stuypulse.robot.constants.Settings.Drivetrain.FF.*;
 
@@ -137,7 +132,7 @@ public class Drivetrain extends SubsystemBase {
         addChild("Field", field);
 
         /** SIMULATION */
-        drivetrainSim = new DifferentialDrivetrainSim(LinearSystemId.createDrivetrainVelocitySystem(motor, massKg, rMeters, rbMeters, JKgMetersSquared, G),
+        drivetrainSim = new DifferentialDrivetrainSim(LinearSystemId.identifyDrivetrainSystem(kV.get(), kA.get(), kVA.get(), kAA.get(), Settings.Drivetrain.TRACK_WIDTH),
                                 DCMotor.getNEO(3), 5, 5, 5, 
                                 null);
         leftEncoderSim = new EncoderSim(leftGrayhill);
