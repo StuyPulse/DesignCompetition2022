@@ -17,7 +17,9 @@ import com.stuypulse.stuylib.streams.vectors.filters.VDeadZone;
 import com.stuypulse.stuylib.streams.vectors.filters.VFilter;
 import com.stuypulse.stuylib.streams.vectors.filters.VLowPassFilter;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 
 /*-
  * File containing tunable settings for every subsystem on the robot.
@@ -93,6 +95,41 @@ public interface Settings {
             public static IFilter getFilter() {
                 return IFilter.create(x -> SLMath.deadband(x, DEADBAND))
                         .then(new LowPassFilter(RC));
+            }
+        }
+        
+        public interface Motion {
+
+            public interface X {
+                double kP = 0.0;
+                double kI = 0.0;
+                double kD = 0.0;
+    
+                public static PIDController getController() {
+                    return new PIDController(kP, kI, kD);
+                }
+            }
+    
+            public interface Y {
+                double kP = 0.0;
+                double kI = 0.0;
+                double kD = 0.0;
+    
+                public static PIDController getController() {
+                    return new PIDController(kP, kI, kD);
+                }
+            }
+    
+            public interface Theta {
+                double kP = 0.0;
+                double kI = 0.0;
+                double kD = 0.0;
+    
+                public static ProfiledPIDController getController() {
+                    return new ProfiledPIDController(
+                            kP, kI, kD,
+                            new Constraints(Modules.MAX_ANGULAR_SPEED, Modules.MAX_ANGULAR_ACCEL));
+                }
             }
         }
     }
