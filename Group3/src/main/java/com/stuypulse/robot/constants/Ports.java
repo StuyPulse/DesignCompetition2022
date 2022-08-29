@@ -14,7 +14,8 @@ public interface Ports {
     }
 
     public interface Intake {
-        int DRIVER = 10;
-        int DEPLOYMENT = 11; 
+        int LEFT_DRIVER = 10;
+        int RIGHT_DRIVER = 11;
+        int DEPLOYMENT = 12; 
     }
 }

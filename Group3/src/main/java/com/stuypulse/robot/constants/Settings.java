@@ -5,8 +5,9 @@
 
 package com.stuypulse.robot.constants;
 
-import com.stuypulse.stuylib.control.Controller;
-import com.stuypulse.stuylib.control.PIDController;
+import com.stuypulse.stuylib.control.feedback.PIDController;
+import com.stuypulse.stuylib.control.feedforward.Feedforward;
+import com.stuypulse.stuylib.control.feedforward.PositionFeedforwardController;
 import com.stuypulse.stuylib.network.SmartBoolean;
 import com.stuypulse.stuylib.network.SmartNumber;
 
@@ -33,12 +34,24 @@ public interface Settings {
 
             SmartNumber MAX_ERROR = new SmartNumber("Intake/Deployment/Max Error", 2);
 
-            SmartNumber P = new SmartNumber("Intake/Deployment/P", 0.005);
-            SmartNumber I = new SmartNumber("Intake/Deployment/I", 0.0);
-            SmartNumber D = new SmartNumber("Intake/Deployment/D", 0.0);
+            public interface FB {
+                SmartNumber P = new SmartNumber("Intake/Deployment/P", 0.005);
+                SmartNumber I = new SmartNumber("Intake/Deployment/I", 0.0);
+                SmartNumber D = new SmartNumber("Intake/Deployment/D", 0.0);
 
-            static Controller getController() {
-                return new PIDController(P, I, D);
+                static PIDController getController() {
+                    return new PIDController(P, I, D);
+                }
+            }
+
+            public interface FF {
+                SmartNumber S = new SmartNumber("Intake/Deployment/S", 0.005);
+                SmartNumber V = new SmartNumber("Intake/Deployment/V", 0.0);
+                SmartNumber A = new SmartNumber("Intake/Deployment/A", 0.0);
+
+                static PositionFeedforwardController getFeedforward() {
+                    return new Feedforward.Motor(S, V, A).position();
+                }
             }
         }
 
