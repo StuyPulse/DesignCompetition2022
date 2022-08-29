@@ -58,6 +58,16 @@ public interface Settings {
             SmartNumber kV = new SmartNumber("Intake/kV", 0);
             SmartNumber kA = new SmartNumber("Intake/kA", 0);
         }
+
+        interface SIMULATION {
+            double WIDTH = 3;
+            double HEIGHT = 4;
+
+            double ROOT_WIDTH = 2;
+            double ROOT_HEIGHT = 0;
+
+            double ARM_WIDTH = 1;
+        }
     }
 
     public interface Elevator {
@@ -81,6 +91,13 @@ public interface Settings {
 
             double ROOT_WIDTH = 2;
             double ROOT_HEIGHT = 0;
+
+            double ARM_WIDTH = 1;
+            
+            double GEARING = 12;
+            double DRUM_RADIUS = 1;
+            double MIN_ELEVATOR_HEIGHT = 1;
+            double MAX_ELEVATOR_HEIGHT = 3;
         }
 
         interface FF {
