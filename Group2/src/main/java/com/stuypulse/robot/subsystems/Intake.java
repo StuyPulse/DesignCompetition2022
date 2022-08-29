@@ -20,10 +20,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  *   - 1 deploy motor (NEO)
  *   - 1 relative encoder
  * 
+ * @author Maximillian Zeng
  * @author Yuchen Pan
  * @author Zixi Feng
- * @author Maximillian Zeng
  * @author Tracey Lin
+ * @author Maximillian Zeng
 */
 
 public class Intake extends SubsystemBase {
