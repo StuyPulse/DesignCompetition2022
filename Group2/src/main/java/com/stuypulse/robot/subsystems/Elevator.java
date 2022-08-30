@@ -1,5 +1,8 @@
 package com.stuypulse.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -29,10 +32,28 @@ public abstract class Elevator extends SubsystemBase {
 
     private double setDistance;
 
+    // private final Intake intake;
+    private final Mechanism2d mech;
+    private final MechanismLigament2d elevatorMech;
+    // private final MechanismLigament2d intakeMech;
+
     public Elevator() {
         controller = Control.getControl();
         
         setDistance = 0;
+
+        mech = new Mechanism2d(3, 3);
+        
+        MechanismRoot2d root = mech.getRoot("elevator", 2, 0);
+        
+        elevatorMech = root.append(
+            new MechanismLigament2d("elevator", 1, 90.0));
+
+        // intakeMech = root.append(
+        //     new MechanismLigament2d(
+        //         "intake", 1, 90));
+
+        SmartDashboard.putData("Mech2d", mech);
     }
 
     /*** MOTOR CONTROL ***/
@@ -68,6 +89,9 @@ public abstract class Elevator extends SubsystemBase {
     @Override
     public void periodic() {
         move(controller.update(setDistance, getDistance()));
+
+        elevatorMech.setLength(getDistance() + 1);
+        // intakeMech.setAngle(intake.getAngle().getDegrees());
         
         SmartDashboard.putBoolean("Elevator/Top Limit Reached", getTopLimitReached());
         SmartDashboard.putBoolean("Elevator/Bottom Limit Reached", getBottomLimitReached());
@@ -76,7 +100,5 @@ public abstract class Elevator extends SubsystemBase {
 
         SmartDashboard.putNumber("Elevator/Distance", getDistance());
     }
-
-
 
 }
