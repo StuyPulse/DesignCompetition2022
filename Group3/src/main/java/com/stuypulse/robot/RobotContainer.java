@@ -6,6 +6,8 @@
 package com.stuypulse.robot;
 
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
+import com.stuypulse.robot.commands.swerve.SwerveDrive;
+import com.stuypulse.robot.subsystems.Swerve;
 import com.stuypulse.robot.commands.elevator.ElevatorMove;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.subsystems.Elevator;
@@ -23,38 +25,40 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class RobotContainer {
 
-    // Gamepads
-    public final Gamepad driver = new AutoGamepad(Ports.Gamepad.DRIVER);
-    public final Gamepad operator = new AutoGamepad(Ports.Gamepad.OPERATOR);
+  // Gamepads
+  public final Gamepad driver = new AutoGamepad(Ports.Gamepad.DRIVER);
+  public final Gamepad operator = new AutoGamepad(Ports.Gamepad.OPERATOR);
 
-    // Subsystem
-    public final Elevator elevator = new Elevator();
-    public final Intake intake = new Intake();
+  // Subsystem
+  public final Swerve swerve = new Swerve();
+  public final Intake intake = new Intake();
+  public final Elevator elevator = new Elevator();
 
-    // Autons
-    private static SendableChooser<Command> autonChooser = new SendableChooser<>();
+  // Autons
+  private static SendableChooser<Command> autonChooser = new SendableChooser<>();
 
-    // Robot container
+  // Robot container
 
-    public RobotContainer() {
+  public RobotContainer() {
       configureDefaultCommands();
       configureButtonBindings();
       configureAutons();
-    }
+  }
 
-    /****************/
-    /*** DEFAULTS ***/
-    /****************/
+  /****************/
+  /*** DEFAULTS ***/
+  /****************/
 
-    private void configureDefaultCommands() {
-        elevator.setDefaultCommand(new ElevatorMove(elevator, operator));
-    }
+  private void configureDefaultCommands() {
+      swerve.setDefaultCommand(new SwerveDrive(swerve, driver));
+      elevator.setDefaultCommand(new ElevatorMove(elevator, operator));
+  }
 
-    /***************/
-    /*** BUTTONS ***/
-    /***************/
+  /***************/
+  /*** BUTTONS ***/
+  /***************/
 
-    private void configureButtonBindings() {
+  private void configureButtonBindings() {
       /** INTAKE */
       operator.getLeftTriggerButton().whileHeld(new IntakeDeacquire(intake));
       operator.getRightTriggerButton().whileHeld(new IntakeAcquire(intake));
@@ -62,16 +66,17 @@ public class RobotContainer {
       operator.getRightBumper().whenPressed(new IntakeExtend(intake));
     }
 
-    /**************/
-    /*** AUTONS ***/
-    /**************/
+  /**************/
+  /*** AUTONS ***/
+  /**************/
 
-    public void configureAutons() {
-      autonChooser.setDefaultOption("Do Nothing", new DoNothingAuton());
-      SmartDashboard.putData("Autonomous", autonChooser);
-    }
+  public void configureAutons() {
+    autonChooser.setDefaultOption("Do Nothing", new DoNothingAuton());
 
-    public Command getAutonomousCommand() {
-      return autonChooser.getSelected();
-    }
+    SmartDashboard.putData("Autonomous", autonChooser);
+  }
+
+  public Command getAutonomousCommand() {
+    return autonChooser.getSelected();
+  }
 }
