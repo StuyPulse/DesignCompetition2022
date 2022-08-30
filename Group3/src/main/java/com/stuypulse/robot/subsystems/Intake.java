@@ -37,10 +37,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * @author Jennifer Ye
  */
 public class Intake extends SubsystemBase {
-    private MotorControllerGroup drivers;
-    private TalonFX deployer;
+    private final MotorControllerGroup drivers;
+    private final TalonFX deployer;
 
-    private Controller controller;
+    private final Controller controller;
     private SmartNumber targetAngle;
 
     public Intake() {
