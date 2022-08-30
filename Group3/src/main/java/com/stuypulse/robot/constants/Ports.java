@@ -18,4 +18,12 @@ public interface Ports {
         int RIGHT_DRIVER = 11;
         int DEPLOYMENT = 12; 
     }
+    
+    public interface Elevator {
+        int LEFT_MOTOR = 20;
+        int RIGHT_MOTOR = 21;
+
+        int LOWER_SWITCH = 23;
+        int UPPER_SWITCH = 24;
+    }
 }

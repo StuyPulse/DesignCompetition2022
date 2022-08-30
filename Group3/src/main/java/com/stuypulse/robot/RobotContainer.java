@@ -6,11 +6,13 @@
 package com.stuypulse.robot;
 
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
+import com.stuypulse.robot.commands.elevator.ElevatorMove;
+import com.stuypulse.robot.constants.Ports;
+import com.stuypulse.robot.subsystems.Elevator;
 import com.stuypulse.robot.commands.intake.IntakeAcquire;
 import com.stuypulse.robot.commands.intake.IntakeDeacquire;
 import com.stuypulse.robot.commands.intake.IntakeExtend;
 import com.stuypulse.robot.commands.intake.IntakeRetract;
-import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.subsystems.Intake;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
@@ -26,6 +28,7 @@ public class RobotContainer {
     public final Gamepad operator = new AutoGamepad(Ports.Gamepad.OPERATOR);
 
     // Subsystem
+    public final Elevator elevator = new Elevator();
     public final Intake intake = new Intake();
 
     // Autons
@@ -43,7 +46,9 @@ public class RobotContainer {
     /*** DEFAULTS ***/
     /****************/
 
-    private void configureDefaultCommands() {}
+    private void configureDefaultCommands() {
+        elevator.setDefaultCommand(new ElevatorMove(elevator, operator));
+    }
 
     /***************/
     /*** BUTTONS ***/
@@ -63,7 +68,6 @@ public class RobotContainer {
 
     public void configureAutons() {
       autonChooser.setDefaultOption("Do Nothing", new DoNothingAuton());
-
       SmartDashboard.putData("Autonomous", autonChooser);
     }
 

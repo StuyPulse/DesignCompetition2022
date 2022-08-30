@@ -23,6 +23,11 @@ import com.revrobotics.CANSparkMax.IdleMode;
  */
 public interface Motors {
 
+    public interface Elevator {
+        TFXConfig LEADER_CONFIG = new TFXConfig(TalonFXInvertType.Clockwise, NeutralMode.Brake, 40, 1 / 8);
+        TFXConfig FOLLOWER_CONFIG = new TFXConfig(TalonFXInvertType.Clockwise, NeutralMode.Brake, 40, 1 / 8);
+    }
+
     public interface Intake {
         SMConfig LEFT_DRIVER_CONFIG = new SMConfig(false, IdleMode.kCoast, 40, 1.0 / 5.0);
         SMConfig RIGHT_DRIVER_CONFIG = new SMConfig(false, IdleMode.kCoast, 40, 1.0 / 5.0);
