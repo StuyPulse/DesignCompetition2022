@@ -25,7 +25,10 @@ public interface Settings {
 
     public interface Elevator {
         double GEARING = 1.0 / 9.0;
+        
         double TOP_HEIGHT = Units.feetToMeters(6.2);
+
+        double OUTPUT_DIAMETER = Units.inchesToMeters(1.64);
 
         public interface Control {
             double kS = 0.01;

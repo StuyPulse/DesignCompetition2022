@@ -3,6 +3,7 @@ package com.stuypulse.robot.subsystems.elevator;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.stuypulse.robot.constants.Ports;
+import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -18,17 +19,17 @@ public class CANElevator extends Elevator {
     private final DigitalInput bottom;
 
     public CANElevator() {
-        // fix constants
         motors = new MotorControllerGroup(
             new CANSparkMax(Ports.Elevator.FIRST_MOTOR, MotorType.kBrushless), 
             new CANSparkMax(Ports.Elevator.SECOND_MOTOR, MotorType.kBrushless),
             new CANSparkMax(Ports.Elevator.THIRD_MOTOR, MotorType.kBrushless), 
             new CANSparkMax(Ports.Elevator.FOURTH_MOTOR, MotorType.kBrushless));
-        greyhill = new Encoder(-1, -1);
-        greyhill.setDistancePerPulse(distancePerPulse);
+
+        greyhill = new Encoder(Ports.Elevator.GREYHILL_A, Ports.Elevator.GREYHILL_B);
+        greyhill.setDistancePerPulse(Math.PI * Settings.Elevator.OUTPUT_DIAMETER / pulsesPerRotation);
         
-        top = new DigitalInput(-1);
-        bottom = new DigitalInput(-1);
+        top = new DigitalInput(Ports.Elevator.TOP_LIMIT);
+        bottom = new DigitalInput(Ports.Elevator.BOTTOM_LIMIT);
     }
 
     /*** MOTOR CONTROL ***/
