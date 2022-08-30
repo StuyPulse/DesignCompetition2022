@@ -13,6 +13,12 @@ public interface Ports {
         int DEBUGGER = 2;
     }
 
+    public interface Intake {
+        int LEFT_DRIVER = 10;
+        int RIGHT_DRIVER = 11;
+        int DEPLOYMENT = 12; 
+    }
+    
     public interface Elevator {
         int LEFT_MOTOR = 20;
         int RIGHT_MOTOR = 21;
