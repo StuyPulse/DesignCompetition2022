@@ -5,7 +5,15 @@
 
 package com.stuypulse.robot;
 
+import com.stuypulse.robot.commands.Intake.IntakeAcquireCommand;
+import com.stuypulse.robot.commands.Intake.IntakeDeacquireCommand;
+import com.stuypulse.robot.commands.Intake.IntakeExtendCommand;
+import com.stuypulse.robot.commands.Intake.IntakeRetractCommand;
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
+import com.stuypulse.robot.commands.drivetrain.DrivetrainDriveCommand;
+import com.stuypulse.robot.commands.elevator.ElevatorClimbCommand;
+import com.stuypulse.robot.commands.elevator.ElevatorPickupCommand;
+import com.stuypulse.robot.commands.elevator.ElevatorToSwitchCommand;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.subsystems.Drivetrain;
 import com.stuypulse.robot.subsystems.Elevator;
@@ -44,6 +52,7 @@ public class RobotContainer {
   /****************/
 
   private void configureDefaultCommands() {
+    drivetrain.setDefaultCommand(new DrivetrainDriveCommand(drivetrain, driver));
   }
 
   /***************/
@@ -51,6 +60,20 @@ public class RobotContainer {
   /***************/
 
   private void configureButtonBindings() {
+
+    //all intake commands
+    operator.getLeftButton().whenPressed(new IntakeExtendCommand(intake));
+    operator.getRightButton().whenPressed(new IntakeRetractCommand(intake));
+    operator.getTopButton().whenPressed(new IntakeAcquireCommand(intake));
+    operator.getBottomButton().whenPressed(new IntakeDeacquireCommand(intake));
+
+    //all elevator commands
+    operator.getDPadLeft().whenPressed(new ElevatorPickupCommand(elevator));
+    operator.getDPadUp().whenPressed(new ElevatorToSwitchCommand(elevator));
+    operator.getDPadRight().whenPressed(new ElevatorToSwitchCommand(elevator));
+    operator.getDPadDown().whenPressed(new ElevatorClimbCommand(elevator));
+
+
   }
 
   /**************/
