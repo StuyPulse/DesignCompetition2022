@@ -67,11 +67,11 @@ public class Elevator extends SubsystemBase {
     }
 
     public boolean atTop() {
-        return upperSwitch.get();
+        return !upperSwitch.get();
     }
     
     public boolean atBottom() {
-        return lowerSwitch.get();
+        return !lowerSwitch.get();
     }
 
     public double getVelocity() {
