@@ -4,10 +4,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.constants.Settings.Elevator.Control;
 import com.stuypulse.stuylib.control.Controller;
-import com.stuypulse.stuylib.control.feedback.PIDController;
-import com.stuypulse.stuylib.control.feedforward.Feedforward;
-import com.stuypulse.stuylib.streams.filters.MotionProfile;
 
 /**
  * Elevator Subsystem (pick up things)
@@ -27,14 +25,12 @@ import com.stuypulse.stuylib.streams.filters.MotionProfile;
  */
 public abstract class Elevator extends SubsystemBase {
 
-    private final Controller feedforward;
+    private final Controller controller;
 
     private double setDistance;
 
     public Elevator() {
-        // fix kG kS kV kA values
-        feedforward = new Feedforward.Elevator(-1, -1, -1, -1).position()
-            .add(new PIDController(-1, -1, -1)).setSetpointFilter(new MotionProfile(-1, -1));
+        controller = Control.getControl();
         
         setDistance = 0;
     }
@@ -71,7 +67,7 @@ public abstract class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
-        move(feedforward.update(setDistance, getDistance()));
+        move(controller.update(setDistance, getDistance()));
         
         SmartDashboard.putBoolean("Elevator/Top Limit Reached", getTopLimitReached());
         SmartDashboard.putBoolean("Elevator/Bottom Limit Reached", getBottomLimitReached());
