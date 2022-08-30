@@ -123,16 +123,18 @@ public interface Settings {
             }
             
             public interface Theta {
-                double kP = 4;
+                double kP = 1;
                 double kI = 0;
-                double kD = 1;
+                double kD = 0.1;
                 double MAX_ACCEL = 10;
                 double MAX_VEL = 10;
 
                 public static ProfiledPIDController getController() {
-                    return new ProfiledPIDController(
-                        kP,kI, kD,
+                    ProfiledPIDController a = new ProfiledPIDController(
+                        kP, kI, kD,
                         new Constraints(MAX_VEL, MAX_ACCEL));
+                    a.enableContinuousInput(-Math.PI, Math.PI);
+                    return a;
                 }
             }
         }

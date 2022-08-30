@@ -70,7 +70,7 @@ public class SwivelTrajectory extends SwerveControllerCommand {
     @Override
     public void initialize() {
         if (!fieldRelative) {
-            swivel.setPosition(trajectory.getInitialPose());
+            swivel.reset(trajectory.getInitialPose());
         }
 
         super.initialize();

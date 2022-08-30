@@ -95,9 +95,9 @@ public class Swivel extends SubsystemBase {
 
     public void setStates(Vector2D translation, double angularVelocity, boolean fieldRelative) {
         if (fieldRelative) {
-            setStates(ChassisSpeeds.fromFieldRelativeSpeeds(translation.y, -translation.x, angularVelocity, getRotation()));
+            setStates(ChassisSpeeds.fromFieldRelativeSpeeds(translation.y, -translation.x, -angularVelocity, getRotation()));
         } else {
-            setStates(new ChassisSpeeds(translation.y, -translation.x, angularVelocity));
+            setStates(new ChassisSpeeds(translation.y, -translation.x, -angularVelocity));
         }
     }
 
@@ -126,10 +126,6 @@ public class Swivel extends SubsystemBase {
     }
 
     // Odometry //
-
-    public void setPosition(Pose2d pos) {
-        odometry.resetPosition(pos, getGyroAngle());
-    }
     
     public Pose2d getPosition() {
         return odometry.getPoseMeters();
@@ -146,9 +142,13 @@ public class Swivel extends SubsystemBase {
     }
 
     // Reset //
+
     public void reset() {
-        setPosition(new Pose2d());
-        setStates(new ChassisSpeeds());
+        reset(new Pose2d());
+    }
+
+    public void reset(Pose2d pos) {
+        odometry.resetPosition(pos, getGyroAngle());
     }
 
     @Override
@@ -167,6 +167,6 @@ public class Swivel extends SubsystemBase {
     public void simulationPeriodic() {
         ChassisSpeeds speeds = kinematics.toChassisSpeeds(getStates());
 
-        gyro.setAngleAdjustment(gyro.getAngle() + Math.toDegrees(speeds.omegaRadiansPerSecond * Settings.DT));
+        gyro.setAngleAdjustment(gyro.getAngle() - Math.toDegrees(speeds.omegaRadiansPerSecond * Settings.DT));
     }
 }
