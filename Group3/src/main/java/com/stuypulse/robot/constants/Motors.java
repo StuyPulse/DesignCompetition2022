@@ -5,6 +5,13 @@
 
 package com.stuypulse.robot.constants;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+
 /*-
  * File containing all of the configurations that different motors require.
  *
@@ -14,4 +21,84 @@ package com.stuypulse.robot.constants;
  *  - The Current Limit
  *  - The Open Loop Ramp Rate
  */
-public interface Motors {}
+public interface Motors {
+
+    public interface Intake {
+        SMConfig LEFT_DRIVER_CONFIG = new SMConfig(false, IdleMode.kCoast, 40, 1.0 / 5.0);
+        SMConfig RIGHT_DRIVER_CONFIG = new SMConfig(false, IdleMode.kCoast, 40, 1.0 / 5.0);
+        TFXConfig DEPLOYMENT_CONFIG = new TFXConfig(TalonFXInvertType.Clockwise, NeutralMode.Brake, 40);
+    }
+
+    public static class SMConfig {
+        public final boolean INVERTED;
+        public final IdleMode IDLE_MODE;
+        public final int CURRENT_LIMIT_AMPS;
+        public final double OPEN_LOOP_RAMP_RATE;
+
+        public SMConfig(
+                boolean inverted,
+                IdleMode idleMode,
+                int currentLimitAmps,
+                double openLoopRampRate) {
+            this.INVERTED = inverted;
+            this.IDLE_MODE = idleMode;
+            this.CURRENT_LIMIT_AMPS = currentLimitAmps;
+            this.OPEN_LOOP_RAMP_RATE = openLoopRampRate;
+        }
+
+        public SMConfig(boolean inverted, IdleMode idleMode, int currentLimitAmps) {
+            this(inverted, idleMode, currentLimitAmps, 0.0);
+        }
+
+        public SMConfig(boolean inverted, IdleMode idleMode) {
+            this(inverted, idleMode, 80);
+        }
+
+        public void configure(CANSparkMax motor) {
+            motor.setInverted(INVERTED);
+            motor.setIdleMode(IDLE_MODE);
+            motor.setSmartCurrentLimit(CURRENT_LIMIT_AMPS);
+            motor.setOpenLoopRampRate(OPEN_LOOP_RAMP_RATE);
+            motor.burnFlash();
+        }
+    }
+
+    public static class TFXConfig {
+        public final TalonFXInvertType INVERTED;
+        public final NeutralMode IDLE_MODE;
+        public final int CURRENT_LIMIT_AMPS;
+        public final double OPEN_LOOP_RAMP_RATE;
+
+        public TFXConfig(
+                TalonFXInvertType inverted,
+                NeutralMode idleMode,
+                int currentLimitAmps,
+                double openLoopRampRate) {
+            this.INVERTED = inverted;
+            this.IDLE_MODE = idleMode;
+            this.CURRENT_LIMIT_AMPS = currentLimitAmps;
+            this.OPEN_LOOP_RAMP_RATE = openLoopRampRate;
+        }
+
+        public TFXConfig(TalonFXInvertType inverted, NeutralMode idleMode, int currentLimitAmps) {
+            this(inverted, idleMode, currentLimitAmps, 0.0);
+        }
+
+        public TFXConfig(TalonFXInvertType inverted, NeutralMode idleMode) {
+            this(inverted, idleMode, 80);
+        }
+
+        public void configure(TalonFX motor) {
+            motor.setInverted(INVERTED);
+            motor.setNeutralMode(IDLE_MODE);
+            motor.configSupplyCurrentLimit(
+                new SupplyCurrentLimitConfiguration(
+                    true, 
+                    CURRENT_LIMIT_AMPS - 10, 
+                    CURRENT_LIMIT_AMPS, 
+                    1
+                ));
+            motor.configOpenloopRamp(OPEN_LOOP_RAMP_RATE);
+        }
+    }
+}

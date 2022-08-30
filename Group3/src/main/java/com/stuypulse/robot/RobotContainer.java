@@ -6,7 +6,12 @@
 package com.stuypulse.robot;
 
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
+import com.stuypulse.robot.commands.intake.IntakeAcquire;
+import com.stuypulse.robot.commands.intake.IntakeDeacquire;
+import com.stuypulse.robot.commands.intake.IntakeExtend;
+import com.stuypulse.robot.commands.intake.IntakeRetract;
 import com.stuypulse.robot.constants.Ports;
+import com.stuypulse.robot.subsystems.Intake;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
@@ -16,46 +21,53 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class RobotContainer {
 
-  // Subsystem
+    // Gamepads
+    public final Gamepad driver = new AutoGamepad(Ports.Gamepad.DRIVER);
+    public final Gamepad operator = new AutoGamepad(Ports.Gamepad.OPERATOR);
 
-  // Gamepads
-  public final Gamepad driver = new AutoGamepad(Ports.Gamepad.DRIVER);
-  public final Gamepad operator = new AutoGamepad(Ports.Gamepad.OPERATOR);
+    // Subsystem
+    public final Intake intake = new Intake();
 
-  // Autons
-  private static SendableChooser<Command> autonChooser = new SendableChooser<>();
+    // Autons
+    private static SendableChooser<Command> autonChooser = new SendableChooser<>();
 
-  // Robot container
+    // Robot container
 
-  public RobotContainer() {
-    configureDefaultCommands();
-    configureButtonBindings();
-    configureAutons();
-  }
+    public RobotContainer() {
+      configureDefaultCommands();
+      configureButtonBindings();
+      configureAutons();
+    }
 
-  /****************/
-  /*** DEFAULTS ***/
-  /****************/
+    /****************/
+    /*** DEFAULTS ***/
+    /****************/
 
-  private void configureDefaultCommands() {}
+    private void configureDefaultCommands() {}
 
-  /***************/
-  /*** BUTTONS ***/
-  /***************/
+    /***************/
+    /*** BUTTONS ***/
+    /***************/
 
-  private void configureButtonBindings() {}
+    private void configureButtonBindings() {
+      /** INTAKE */
+      operator.getLeftTriggerButton().whileHeld(new IntakeDeacquire(intake));
+      operator.getRightTriggerButton().whileHeld(new IntakeAcquire(intake));
+      operator.getLeftBumper().whenPressed(new IntakeRetract(intake));
+      operator.getRightBumper().whenPressed(new IntakeExtend(intake));
+    }
 
-  /**************/
-  /*** AUTONS ***/
-  /**************/
+    /**************/
+    /*** AUTONS ***/
+    /**************/
 
-  public void configureAutons() {
-    autonChooser.setDefaultOption("Do Nothing", new DoNothingAuton());
+    public void configureAutons() {
+      autonChooser.setDefaultOption("Do Nothing", new DoNothingAuton());
 
-    SmartDashboard.putData("Autonomous", autonChooser);
-  }
+      SmartDashboard.putData("Autonomous", autonChooser);
+    }
 
-  public Command getAutonomousCommand() {
-    return autonChooser.getSelected();
-  }
+    public Command getAutonomousCommand() {
+      return autonChooser.getSelected();
+    }
 }
