@@ -38,4 +38,17 @@ public interface Ports {
             int ENCODER = 3;
         }
     }
+    public interface Intake {
+        int LEFT_DRIVER = 10;
+        int RIGHT_DRIVER = 11;
+        int DEPLOYMENT = 12; 
+    }
+    
+    public interface Elevator {
+        int LEFT_MOTOR = 20;
+        int RIGHT_MOTOR = 21;
+
+        int LOWER_SWITCH = 23;
+        int UPPER_SWITCH = 24;
+    }
 }

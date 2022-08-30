@@ -7,8 +7,15 @@ package com.stuypulse.robot;
 
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
 import com.stuypulse.robot.commands.swerve.SwerveDrive;
-import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.subsystems.Swerve;
+import com.stuypulse.robot.commands.elevator.ElevatorMove;
+import com.stuypulse.robot.constants.Ports;
+import com.stuypulse.robot.subsystems.Elevator;
+import com.stuypulse.robot.commands.intake.IntakeAcquire;
+import com.stuypulse.robot.commands.intake.IntakeDeacquire;
+import com.stuypulse.robot.commands.intake.IntakeExtend;
+import com.stuypulse.robot.commands.intake.IntakeRetract;
+import com.stuypulse.robot.subsystems.Intake;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
@@ -24,6 +31,8 @@ public class RobotContainer {
 
   // Subsystem
   public final Swerve swerve = new Swerve();
+  public final Intake intake = new Intake();
+  public final Elevator elevator = new Elevator();
 
   // Autons
   private static SendableChooser<Command> autonChooser = new SendableChooser<>();
@@ -31,9 +40,9 @@ public class RobotContainer {
   // Robot container
 
   public RobotContainer() {
-    configureDefaultCommands();
-    configureButtonBindings();
-    configureAutons();
+      configureDefaultCommands();
+      configureButtonBindings();
+      configureAutons();
   }
 
   /****************/
@@ -41,14 +50,21 @@ public class RobotContainer {
   /****************/
 
   private void configureDefaultCommands() {
-    swerve.setDefaultCommand(new SwerveDrive(swerve, driver));
+      swerve.setDefaultCommand(new SwerveDrive(swerve, driver));
+      elevator.setDefaultCommand(new ElevatorMove(elevator, operator));
   }
 
   /***************/
   /*** BUTTONS ***/
   /***************/
 
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+      /** INTAKE */
+      operator.getLeftTriggerButton().whileHeld(new IntakeDeacquire(intake));
+      operator.getRightTriggerButton().whileHeld(new IntakeAcquire(intake));
+      operator.getLeftBumper().whenPressed(new IntakeRetract(intake));
+      operator.getRightBumper().whenPressed(new IntakeExtend(intake));
+    }
 
   /**************/
   /*** AUTONS ***/
