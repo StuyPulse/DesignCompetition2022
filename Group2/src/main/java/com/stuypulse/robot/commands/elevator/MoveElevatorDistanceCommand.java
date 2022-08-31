@@ -1,4 +1,4 @@
-package com.stuypulse.robot.commands;
+package com.stuypulse.robot.commands.elevator;
 
 import com.stuypulse.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -19,4 +19,5 @@ public class MoveElevatorDistanceCommand extends CommandBase {
     public void initialize() {
         elevator.setDistance(distance);
     }
+    
 }
