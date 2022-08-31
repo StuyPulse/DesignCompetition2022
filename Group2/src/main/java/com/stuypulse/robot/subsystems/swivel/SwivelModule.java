@@ -8,6 +8,7 @@ import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.angle.AngleController;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.control.feedback.PIDController;
+import com.stuypulse.stuylib.control.feedforward.Feedforward;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.Vector2D;
 
@@ -20,8 +21,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public abstract class SwivelModule extends SubsystemBase {
     
-    private final SimpleMotorFeedforward driveFeedforward;
-    private final Controller driveFeedback;
+    private final Controller driveControl;
     private final AngleController turnControl;
 
     private SwerveModuleState targetState;
@@ -37,15 +37,14 @@ public abstract class SwivelModule extends SubsystemBase {
         this.offset = config.offset;
         this.id = config.id;
 
-        this.driveFeedforward = new SimpleMotorFeedforward(
-            Drive.Feedforward.kS,
-            Drive.Feedforward.kV,
-            Drive.Feedforward.kA);
-        
-        this.driveFeedback = new PIDController(
-            Drive.Feedback.kP,
-            Drive.Feedback.kI,
-            Drive.Feedback.kD);
+        this.driveControl = new Feedforward.Motor(
+                Drive.Feedforward.kS,
+                Drive.Feedforward.kV,
+                Drive.Feedforward.kA).position()
+            .add(new PIDController(
+                Drive.Feedback.kP,
+                Drive.Feedback.kI,
+                Drive.Feedback.kD));
         
         this.turnControl = new AnglePIDController(
             Turn.Feedback.kP,
@@ -79,20 +78,11 @@ public abstract class SwivelModule extends SubsystemBase {
         return id;
     }
 
-
-    private Translation2d prevTranslation = new Translation2d();
-
     @Override
     public void periodic() {
         // drive control
-        var translation = new Translation2d(getSpeed(), getAngle());
-        var accel = translation.minus(prevTranslation).div(Settings.DT);
-
-        setDriveVolts(
-            driveFeedforward.calculate(targetState.speedMetersPerSecond, accel.getNorm()) +
-            driveFeedback.update(targetState.speedMetersPerSecond, getSpeed()));
-
-        prevTranslation = translation;
+        setDriveVolts(driveControl.update(
+            targetState.speedMetersPerSecond, getSpeed()));
 
         // turn control
         setTurnVolts(
