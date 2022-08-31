@@ -18,7 +18,7 @@ public class AutonChooser {
 
     // i dunno how you wanna do this but you got this. 2am autons not it :D
 
-    public static SequentialCommandGroup getAuton(int position) {
+    public static SequentialCommandGroup getAuton(Integer position) {
         switch (position) {
             case 0:
                 switch (colors[0]) {
