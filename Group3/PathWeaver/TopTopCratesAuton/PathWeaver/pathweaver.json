@@ -1,0 +1,9 @@
+{
+  "lengthUnit": "Meter",
+  "exportUnit": "Always Meters",
+  "maxVelocity": 4.97,
+  "maxAcceleration": 1.28,
+  "trackWidth": 0.71,
+  "gameName": "FIRST Power Up",
+  "outputDir": "../../../src/main/deploy/TopTopCratesAuton"
+}
