@@ -26,7 +26,7 @@ public abstract class SwivelModule extends SubsystemBase {
 
     private SwerveModuleState targetState;
 
-    public final Vector2D position;
+    public final Vector2D offset;
 
     public final String id;
 
@@ -34,7 +34,7 @@ public abstract class SwivelModule extends SubsystemBase {
     public SwivelModule(ModuleConfig config) {
         targetState = new SwerveModuleState(0, new Rotation2d(0));
 
-        this.position = config.position;
+        this.offset = config.offset;
         this.id = config.id;
 
         this.driveFeedforward = new SimpleMotorFeedforward(
@@ -69,6 +69,14 @@ public abstract class SwivelModule extends SubsystemBase {
 
     public SwerveModuleState getState() {
         return new SwerveModuleState(getSpeed(), getAngle());
+    }
+
+    public Vector2D getOffset() {
+        return offset;
+    }
+
+    public String getID() {
+        return id;
     }
 
 

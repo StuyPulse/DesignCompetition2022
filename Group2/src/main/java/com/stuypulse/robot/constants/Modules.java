@@ -9,11 +9,11 @@ public interface Modules {
      * +y moves to the left of the robot
      */
     public class ModuleConfig {
-        public final Vector2D position;
+        public final Vector2D offset;
         public final String id;
 
         public ModuleConfig(Vector2D position, String id) {
-            this.position = position;
+            this.offset = position;
             this.id = id;
         }
     }

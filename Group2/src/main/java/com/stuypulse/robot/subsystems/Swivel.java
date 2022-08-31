@@ -6,6 +6,7 @@ import com.stuypulse.robot.constants.Settings.Swivel.Filtering.Drive;
 import com.stuypulse.robot.subsystems.swivel.CANModule;
 import com.stuypulse.robot.subsystems.swivel.SimModule;
 import com.stuypulse.robot.subsystems.swivel.SwivelModule;
+import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.Vector2D;
 
 import java.util.Arrays;
@@ -21,6 +22,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -60,6 +62,7 @@ public class Swivel extends SubsystemBase {
     private SwerveDriveOdometry odometry;
 
     private Field2d field;
+    private FieldObject2d[] fieldModules;
 
     public Swivel() {
         // modules = new CANModule[] {
@@ -82,6 +85,12 @@ public class Swivel extends SubsystemBase {
         odometry = new SwerveDriveOdometry(kinematics, getGyroAngle());
 
         field = new Field2d();
+        
+        fieldModules = new FieldObject2d[modules.length];
+        for (int i = 0; i < modules.length; i++) {
+            fieldModules[i] = field.getObject(modules[i].getID());
+        }
+
         SmartDashboard.putData(field);
 
         reset();
@@ -121,7 +130,7 @@ public class Swivel extends SubsystemBase {
 
     private Translation2d[] getModulePositions() {
         return Arrays.stream(modules)
-            .map(m -> m.position.getTranslation2d())
+            .map(m -> m.offset.getTranslation2d())
             .toArray(Translation2d[]::new);
     }
 
@@ -151,11 +160,27 @@ public class Swivel extends SubsystemBase {
         odometry.resetPosition(pos, getGyroAngle());
     }
 
+    // Field //
+
+    private void updateField() {
+        field.setRobotPose(getPosition());
+
+        Vector2D center = new Vector2D(getPosition().getTranslation());
+
+        for (int i = 0; i < modules.length; i++) {
+            Vector2D pos = modules[i].getOffset()
+                .rotate(Angle.fromRotation2d(getRotation()))
+                .add(center);
+
+            fieldModules[i].setPose(pos.x, pos.y, modules[i].getState().angle);
+        }
+    }
+
     @Override
     public void periodic() {
         odometry.update(getGyroAngle(), getStates());
 
-        field.setRobotPose(getPosition());
+        updateField();
 
         SmartDashboard.putNumber("Swivel/X Position", getPosition().getX());
         SmartDashboard.putNumber("Swivel/Y Position", getPosition().getY());
