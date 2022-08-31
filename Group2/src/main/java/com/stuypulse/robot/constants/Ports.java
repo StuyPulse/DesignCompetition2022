@@ -12,4 +12,11 @@ public interface Ports {
         int OPERATOR = 1;
         int DEBUGGER = 2;
     }
+
+    public interface Swivel {
+        int DRIVE_MOTOR = 10;
+        int TURN_MOTOR = 11;
+
+        int ABSOLUTE_ENCODER = 1;
+    }
 }
