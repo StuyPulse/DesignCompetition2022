@@ -16,6 +16,7 @@ import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.subsystems.Swivel;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
+import com.stuypulse.stuylib.network.SmartBoolean;
 import com.stuypulse.stuylib.network.SmartString;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -41,7 +42,8 @@ public class RobotContainer {
     configureButtonBindings();
     configureAutons();
 
-    SmartString fms = new SmartString("FMSinfo/Switch Color", "RRR");
+    new SmartString("FMSinfo/Switch Color", "RRR");
+    new SmartBoolean("FMSinfo/IsRedAlliance", true);
   }
 
   /****************/
@@ -74,6 +76,8 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // return autonChooser.getSelected();
-    return AutonChooser.getAuton(this, SmartDashboard.getString("FMSinfo/Switch Color", "RRR"));
+    return AutonChooser.getAuton(this,
+      SmartDashboard.getString("FMSinfo/Switch Color", "RRR"),
+      SmartDashboard.getBoolean("FMSinfo/IsRedAlliance", true));
   }
 }
