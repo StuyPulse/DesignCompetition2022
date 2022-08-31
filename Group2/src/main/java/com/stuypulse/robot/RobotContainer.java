@@ -5,12 +5,18 @@
 
 package com.stuypulse.robot;
 
+import com.stuypulse.robot.commands.auton.AutonChooser;
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
+import com.stuypulse.robot.commands.auton.TwoRightBlueBlue;
+import com.stuypulse.robot.commands.auton.TwoRightBlueRed;
+import com.stuypulse.robot.commands.auton.TwoRightRedBlue;
+import com.stuypulse.robot.commands.auton.TwoRightRedRed;
 import com.stuypulse.robot.commands.swivel.SwivelDrive;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.subsystems.Swivel;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
+import com.stuypulse.stuylib.network.SmartString;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,6 +40,8 @@ public class RobotContainer {
     configureDefaultCommands();
     configureButtonBindings();
     configureAutons();
+
+    SmartString fms = new SmartString("FMSinfo/Switch Color", "RRR");
   }
 
   /****************/
@@ -56,11 +64,16 @@ public class RobotContainer {
 
   public void configureAutons() {
     autonChooser.setDefaultOption("Do Nothing", new DoNothingAuton());
+    autonChooser.addOption("TwoRightRedRed", new TwoRightRedRed(this));
+    autonChooser.addOption("TwoRightBlueRed", new TwoRightBlueRed(this));
+    autonChooser.addOption("TwoRightRedBlue", new TwoRightRedBlue(this));
+    autonChooser.addOption("TwoRightBlueBlue", new TwoRightBlueBlue(this));
 
     SmartDashboard.putData("Autonomous", autonChooser);
   }
 
   public Command getAutonomousCommand() {
-    return autonChooser.getSelected();
+    // return autonChooser.getSelected();
+    return AutonChooser.getAuton(this, SmartDashboard.getString("FMSinfo/Switch Color", "RRR"));
   }
 }

@@ -13,6 +13,7 @@ import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.network.SmartBoolean;
 import com.stuypulse.stuylib.network.SmartNumber;
+import com.stuypulse.stuylib.network.SmartString;
 import com.stuypulse.stuylib.streams.filters.IFilter;
 import com.stuypulse.stuylib.streams.filters.LowPassFilter;
 import com.stuypulse.stuylib.streams.vectors.filters.VDeadZone;
@@ -34,6 +35,7 @@ import edu.wpi.first.wpilibj.Filesystem;
  */
 public interface Settings {
     Path DEPLOY_DIRECTORY = Filesystem.getDeployDirectory().toPath();
+
     double DT = 0.02;
 
     public interface Swivel {
@@ -123,7 +125,7 @@ public interface Settings {
             }
             
             public interface Theta {
-                double kP = 1;
+                double kP = 1.5;
                 double kI = 0;
                 double kD = 0.1;
                 double MAX_ACCEL = 10;
