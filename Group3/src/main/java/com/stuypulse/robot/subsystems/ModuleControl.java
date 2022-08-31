@@ -113,9 +113,14 @@ public class ModuleControl extends SubsystemBase {
 
         driveMotor.set(TalonFXControlMode.Velocity, 
                         driveFeedforward.calculate(targetVelocity, driveAcceleration) 
-                        + driveController.update(targetVelocity, getVelocity()));
+                        + driveController.update(targetVelocity, getVelocity())
+                        );
 
-        turnMotor.set(TalonFXControlMode.Position, turnController.update(targetAngle, getAngle()));
+        turnMotor.set(TalonFXControlMode.Position, 
+                        turnController.update(
+                            Angle.fromRotation2d(targetAngle), 
+                            Angle.fromRotation2d(getAngle())
+                        ));
 
         previousTargetVelocity = targetVelocity;
     }
