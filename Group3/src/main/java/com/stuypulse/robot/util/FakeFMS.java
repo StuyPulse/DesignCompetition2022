@@ -2,12 +2,8 @@ package com.stuypulse.robot.util;
 
 import java.util.Random;
 
-import edu.wpi.first.math.trajectory.Trajectory;
-
-/** This class is used to build our auton from segments or paths. 
- * It will use the FMS to determine what parts to be included. 
- * 
- * We will have 
+/** This class is used to act as a fake FMS, returning
+ *  a random color for each switch/scale segment.
  */
 public final class FakeFMS {
 
@@ -72,6 +68,5 @@ public final class FakeFMS {
             }
             System.out.println("-----");
         }
-        
     }
 }
