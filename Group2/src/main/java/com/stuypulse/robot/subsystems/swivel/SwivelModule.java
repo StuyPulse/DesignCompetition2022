@@ -1,14 +1,19 @@
 package com.stuypulse.robot.subsystems.swivel;
 
+import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Modules.ModuleConfig;
-import com.stuypulse.robot.constants.Settings.Swivel;
+import com.stuypulse.robot.constants.Settings.Swivel.Drive;
+import com.stuypulse.robot.constants.Settings.Swivel.Turn;
+import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.angle.AngleController;
+import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.Vector2D;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,9 +21,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public abstract class SwivelModule extends SubsystemBase {
     
     private final SimpleMotorFeedforward driveFeedforward;
-    
-    private final PIDController driveFeedback;
-    private final AngleController turnFeedback;
+    private final Controller driveFeedback;
+    private final AngleController turnControl;
 
     private SwerveModuleState targetState;
 
@@ -33,9 +37,20 @@ public abstract class SwivelModule extends SubsystemBase {
         this.position = config.position;
         this.id = config.id;
 
-        this.driveFeedforward = Swivel.Drive.Feedforward.getFeedforward();
-        this.driveFeedback = Swivel.Drive.Feedback.getFeedback();
-        this.turnFeedback = Swivel.Turn.Feedback.getFeedback();
+        this.driveFeedforward = new SimpleMotorFeedforward(
+            Drive.Feedforward.kS,
+            Drive.Feedforward.kV,
+            Drive.Feedforward.kA);
+        
+        this.driveFeedback = new PIDController(
+            Drive.Feedback.kP,
+            Drive.Feedback.kI,
+            Drive.Feedback.kD);
+        
+        this.turnControl = new AnglePIDController(
+            Turn.Feedback.kP,
+            Turn.Feedback.kI,
+            Turn.Feedback.kD);
     }
 
 
@@ -57,23 +72,23 @@ public abstract class SwivelModule extends SubsystemBase {
     }
 
 
-    private double prevSpeed = 0;
+    private Translation2d prevTranslation = new Translation2d();
 
     @Override
     public void periodic() {
         // drive control
-        double speed = getSpeed();
-        double accel = speed - prevSpeed;
+        var translation = new Translation2d(getSpeed(), getAngle());
+        var accel = translation.minus(prevTranslation).div(Settings.DT);
 
         setDriveVolts(
-            driveFeedforward.calculate(targetState.speedMetersPerSecond, accel) +
-            driveFeedback.update(targetState.speedMetersPerSecond, speed));
+            driveFeedforward.calculate(targetState.speedMetersPerSecond, accel.getNorm()) +
+            driveFeedback.update(targetState.speedMetersPerSecond, getSpeed()));
 
-        prevSpeed = speed;
+        prevTranslation = translation;
 
         // turn control
         setTurnVolts(
-            turnFeedback.update(
+            turnControl.update(
                 Angle.fromRotation2d(targetState.angle),
                 Angle.fromRotation2d(getAngle())));
 

@@ -48,20 +48,12 @@ public interface Settings {
                 double kS = 0.1;
                 double kA = 0.1;
                 double kV = 0.1;
-    
-                public static SimpleMotorFeedforward getFeedforward() {
-                    return new SimpleMotorFeedforward(kS, kV, kA);
-                }
             }
     
             public interface Feedback {
                 double kP = 1;
                 double kI = 0;
                 double kD = 0.2;
-    
-                public static com.stuypulse.stuylib.control.feedback.PIDController getFeedback() {
-                    return new com.stuypulse.stuylib.control.feedback.PIDController(kP, kI, kD);
-                }
             }
         }
 
@@ -70,10 +62,6 @@ public interface Settings {
                 double kP = 6;
                 double kI = 0;
                 double kD = 1;
-    
-                public static AngleController getFeedback() {
-                    return new AnglePIDController(kP, kI, kD);
-                }
             }
         }
 
