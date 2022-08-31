@@ -2,7 +2,7 @@ package com.stuypulse.robot.commands.swerve;
 
 import java.util.function.Supplier;
 
-import com.stuypulse.robot.constants.Settings.Swerve.Motion;
+import com.stuypulse.robot.constants.Motion;
 import com.stuypulse.robot.subsystems.Swerve;
 import com.stuypulse.robot.util.TrajectoryLoader;
 import com.stuypulse.stuylib.network.SmartAngle;
@@ -24,6 +24,7 @@ public class SwerveTrajectoryFollower extends SwerveControllerCommand {
             Motion.X.getController(),
             Motion.Y.getController(),
             Motion.Theta.getController(),
+            swerve::getAngle,
             swerve::setStates,
             swerve
         );
