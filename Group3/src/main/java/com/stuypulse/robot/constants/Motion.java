@@ -2,6 +2,7 @@ package com.stuypulse.robot.constants;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 
 public interface Motion {
 
