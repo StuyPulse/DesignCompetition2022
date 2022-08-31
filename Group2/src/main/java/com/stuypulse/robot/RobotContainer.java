@@ -6,7 +6,6 @@
 package com.stuypulse.robot;
 
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
-import com.stuypulse.robot.commands.auton.TestAuton;
 import com.stuypulse.robot.commands.swivel.SwivelDrive;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.subsystems.Swivel;
@@ -57,7 +56,6 @@ public class RobotContainer {
 
   public void configureAutons() {
     autonChooser.setDefaultOption("Do Nothing", new DoNothingAuton());
-    autonChooser.addOption("Test Auton", new TestAuton(this));
 
     SmartDashboard.putData("Autonomous", autonChooser);
   }
