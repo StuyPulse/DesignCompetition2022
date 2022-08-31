@@ -30,6 +30,8 @@ public interface Settings {
 
         double OUTPUT_DIAMETER = Units.inchesToMeters(1.64);
 
+        double PULSES_PER_ROTATE = -1;
+
         public interface Control {
             double kS = 0.01;
             double kV = 0.5;

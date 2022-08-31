@@ -26,7 +26,7 @@ public class CANElevator extends Elevator {
             new CANSparkMax(Ports.Elevator.FOURTH_MOTOR, MotorType.kBrushless));
 
         greyhill = new Encoder(Ports.Elevator.GREYHILL_A, Ports.Elevator.GREYHILL_B);
-        greyhill.setDistancePerPulse(Math.PI * Settings.Elevator.OUTPUT_DIAMETER / pulsesPerRotation);
+        greyhill.setDistancePerPulse(Math.PI * Settings.Elevator.OUTPUT_DIAMETER / Settings.Elevator.PULSES_PER_ROTATE);
         
         top = new DigitalInput(Ports.Elevator.TOP_LIMIT);
         bottom = new DigitalInput(Ports.Elevator.BOTTOM_LIMIT);
