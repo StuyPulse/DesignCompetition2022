@@ -26,4 +26,13 @@ public interface Ports {
         int TOP_LIMIT = 11;
         int BOTTOM_LIMIT = 12;
     }
+
+    public interface BuddyClimb {
+        //Motor
+        int MOTOR = -1;
+        
+        //Sensor
+        int GREYHILL_A = -1;
+        int GREYHILL_B = -1;
+    }
 }

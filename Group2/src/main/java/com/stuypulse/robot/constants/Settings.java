@@ -50,4 +50,18 @@ public interface Settings {
             }
         }
     }
+
+    public interface BuddyClimb {
+        double GEARING = 1.0 / 3.0;
+
+        double OUTPUT_DIAMETER = Units.inchesToMeters(1.64);
+
+        double DEBOUNCE_TIME = 1.0;
+
+        double SET_SPEED_THRESHOLD = 0.1;
+
+        double CURRENT_THRESHOLD = -1;
+
+        SmartNumber DEPLOY_SPEED = new SmartNumber("BuddyClimb/Deploy Speed", 0.3);
+    }
 }
