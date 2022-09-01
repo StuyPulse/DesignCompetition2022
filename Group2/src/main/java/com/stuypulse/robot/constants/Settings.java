@@ -10,7 +10,9 @@ import com.stuypulse.stuylib.control.angle.AngleController;
 import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.control.feedforward.Feedforward;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
+import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.network.SmartAngle;
 import com.stuypulse.stuylib.network.SmartBoolean;
 import com.stuypulse.stuylib.network.SmartNumber;
 import com.stuypulse.stuylib.streams.filters.MotionProfile;
@@ -31,6 +33,24 @@ import edu.wpi.first.math.util.Units;
  */
 public interface Settings {
     double DT = 0.02;
+
+    public interface Intake {
+        SmartAngle RETRACT_ANGLE = new SmartAngle("Intake/Retract Angle", Angle.fromDegrees(0));
+        SmartAngle EXTEND_ANGLE = new SmartAngle("Intake/Extend Angle", Angle.fromDegrees(45));
+
+        SmartNumber ACQUIRE_SPEED = new SmartNumber("Intake/Acquire Speed", 1.0);
+        SmartNumber DEACQUIRE_SPEED = new SmartNumber("Intake/Deacquire Speed", -0.5);
+
+        public interface Control {
+            double kP = 2.0;
+            double kI = 0.0;
+            double kD = 1.0;
+
+            public static AngleController getControl() {
+                return new AnglePIDController(kP, kI, kD);
+            }
+        }
+    }
 
     public interface Elevator {
         double GEARING = 1.0 / 9.0;

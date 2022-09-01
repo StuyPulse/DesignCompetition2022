@@ -13,6 +13,13 @@ public interface Ports {
         int DEBUGGER = 2;
     }
 
+    public interface Intake {
+        // Motors
+        int DRIVER_A = 0;
+        int DRIVER_B = 1;
+        int DEPLOY = 2;
+    }
+    
     public interface Elevator {
         // Motors
         int FIRST_MOTOR =  21;
