@@ -13,7 +13,7 @@ import com.stuypulse.robot.commands.auton.TwoRightRedBlue;
 import com.stuypulse.robot.commands.auton.TwoRightRedRed;
 import com.stuypulse.robot.commands.swivel.SwivelDrive;
 import com.stuypulse.robot.constants.Ports;
-import com.stuypulse.robot.subsystems.intake.Intake;
+import com.stuypulse.robot.subsystems.Intake;
 import com.stuypulse.robot.subsystems.intake.SimIntake;
 import com.stuypulse.robot.subsystems.Swivel;
 import com.stuypulse.stuylib.input.Gamepad;

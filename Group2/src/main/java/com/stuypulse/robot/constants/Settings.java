@@ -51,9 +51,9 @@ public interface Settings {
         SmartNumber DEACQUIRE_SPEED = new SmartNumber("Intake/Deacquire Speed", -0.5);
 
         public interface Control {
-            double kP = 2.0;
+            double kP = 1;
             double kI = 0.0;
-            double kD = 1.0;
+            double kD = 0.1;
 
             public static AngleController getControl() {
                 return new AnglePIDController(kP, kI, kD);

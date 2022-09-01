@@ -29,8 +29,6 @@ public abstract class Intake extends SubsystemBase {
     private AngleController controller;
     private Angle targetAngle;
 
-    private double speed;
-
     public Intake() {
         controller = Control.getControl();
 
@@ -41,6 +39,8 @@ public abstract class Intake extends SubsystemBase {
     /*** Drive Motors ***/
 
     public abstract void set(double speed);
+
+    protected abstract double get();
 
     public void acquire() {
         set(Settings.Intake.ACQUIRE_SPEED.get());
@@ -75,8 +75,9 @@ public abstract class Intake extends SubsystemBase {
     public void periodic() {
         setDeploy(controller.update(targetAngle, getAngle()));
 
+        SmartDashboard.putNumber("Intake/Target Angle", targetAngle.toDegrees());
         SmartDashboard.putNumber("Intake/Angle", getAngle().toDegrees());
-        SmartDashboard.putNumber("Intake/Speed", speed);
+        SmartDashboard.putNumber("Intake/Speed", get());
     }
 
 }
