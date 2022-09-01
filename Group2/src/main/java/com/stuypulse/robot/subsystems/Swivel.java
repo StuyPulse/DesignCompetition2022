@@ -192,6 +192,8 @@ public class Swivel extends SubsystemBase {
     public void simulationPeriodic() {
         ChassisSpeeds speeds = kinematics.toChassisSpeeds(getStates());
 
+        // hack to simulate gyro angle changing in simulation
+        // NOTE: gyro angle increase counterclockwise, which is why we subtract instead of add angle
         gyro.setAngleAdjustment(gyro.getAngle() - Math.toDegrees(speeds.omegaRadiansPerSecond * Settings.DT));
     }
 }
