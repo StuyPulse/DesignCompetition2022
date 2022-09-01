@@ -31,6 +31,8 @@ public interface Settings {
     double DT = 0.02;
 
     public interface Intake {
+        double DEPLOY_GEARING = 3.0 / 1.0;
+
         SmartAngle RETRACT_ANGLE = new SmartAngle("Intake/Retract Angle", Angle.fromDegrees(0));
         SmartAngle EXTEND_ANGLE = new SmartAngle("Intake/Extend Angle", Angle.fromDegrees(45));
 
