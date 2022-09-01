@@ -29,7 +29,7 @@ public class RobotContainer {
 
   // Subsystem
   public final Intake intake = new SimIntake();
-  private final Swivel swivel = new Swivel();
+  public final Swivel swivel = new Swivel();
 
   // Gamepads
   public final Gamepad driver = new AutoGamepad(Ports.Gamepad.DRIVER);
