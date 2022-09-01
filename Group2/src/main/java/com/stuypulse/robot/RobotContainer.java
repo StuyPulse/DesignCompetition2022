@@ -13,6 +13,8 @@ import com.stuypulse.robot.commands.auton.TwoRightRedBlue;
 import com.stuypulse.robot.commands.auton.TwoRightRedRed;
 import com.stuypulse.robot.commands.swivel.SwivelDrive;
 import com.stuypulse.robot.constants.Ports;
+import com.stuypulse.robot.subsystems.intake.Intake;
+import com.stuypulse.robot.subsystems.intake.SimIntake;
 import com.stuypulse.robot.subsystems.Swivel;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
@@ -26,7 +28,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
 
   // Subsystem
-  public final Swivel swivel = new Swivel();
+  public final Intake intake = new SimIntake();
+  private final Swivel swivel = new Swivel();
 
   // Gamepads
   public final Gamepad driver = new AutoGamepad(Ports.Gamepad.DRIVER);
