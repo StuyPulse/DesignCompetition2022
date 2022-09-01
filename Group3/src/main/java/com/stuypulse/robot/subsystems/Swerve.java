@@ -16,6 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -30,6 +31,8 @@ public class Swerve extends SubsystemBase {
     private final SwerveDriveKinematics kinematics;
     private final SwerveDriveOdometry odometry;
 
+    private final Field2d field;
+
     public Swerve() {
         modules = MODULES;
         gyroscope = new AHRS(SPI.Port.kMXP);
@@ -41,6 +44,9 @@ public class Swerve extends SubsystemBase {
         );
 
         odometry = new SwerveDriveOdometry(kinematics, getGyroscopeAngle());
+
+        field = new Field2d();
+        SmartDashboard.putData("Field", field);
     }
 
     /** MODULES */
@@ -61,6 +67,12 @@ public class Swerve extends SubsystemBase {
 
     public Stream<SwerveModule> getModuleStream() {
         return Arrays.stream(getModules());
+    }
+
+    public SwerveModuleState[] getStates() {
+        return Arrays.stream(modules)
+            .map(x -> x.getState())
+            .toArray(SwerveModuleState[]::new);
     }
 
     public void reset(Pose2d pose) {
@@ -118,9 +130,7 @@ public class Swerve extends SubsystemBase {
     private void update() {
         odometry.update(
             getGyroscopeAngle(), 
-            getModuleStream()
-                .map(x -> x.getState())
-                .toArray(SwerveModuleState[]::new)
+            getStates()
         );
     }
 
@@ -145,11 +155,20 @@ public class Swerve extends SubsystemBase {
     @Override 
     public void periodic() {
         update();
+        
+        field.setRobotPose(getPose());
 
         // logging
         SmartDashboard.putNumber("Swerve/Gyroscope Angle", gyroscope.getRotation2d().getDegrees());
         SmartDashboard.putNumber("Swerve/Pose Angle", getAngle().getDegrees());
         SmartDashboard.putNumber("Swerve/Pose X", getPose().getTranslation().getX());
         SmartDashboard.putNumber("Swerve/Pose Y", getPose().getTranslation().getY());
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        ChassisSpeeds speeds = kinematics.toChassisSpeeds(getStates());
+        System.out.println(getStates()[0]);
+        gyroscope.setAngleAdjustment(gyroscope.getAngle() + Math.toDegrees(speeds.omegaRadiansPerSecond * 0.2));
     }
 }

@@ -1,6 +1,6 @@
 package com.stuypulse.robot.constants;
 
-import com.stuypulse.robot.subsystems.ModuleControl;
+import com.stuypulse.robot.subsystems.SimModule;
 import com.stuypulse.robot.subsystems.SwerveModule;
 import com.stuypulse.stuylib.math.Angle;
 
@@ -28,15 +28,13 @@ public interface Modules {
 
         int ABS_ENCODER = 0;
 
-        SwerveModule MODULE = new SwerveModule(
+        SimModule MODULE = new SimModule(
             ID,
             MODULE_OFFSET,
-            new ModuleControl(
-                DRIVE_MOTOR,
-                TURN_MOTOR,
-                ABS_ENCODER,
-                ENCODER_OFFSET
-            )
+            DRIVE_MOTOR,
+            TURN_MOTOR,
+            ABS_ENCODER,
+            ENCODER_OFFSET
         );
     }
 
@@ -50,15 +48,13 @@ public interface Modules {
 
         int ABS_ENCODER = 1;
 
-        SwerveModule MODULE = new SwerveModule(
+        SimModule MODULE = new SimModule(
             ID,
             MODULE_OFFSET,
-            new ModuleControl(
-                DRIVE_MOTOR,
-                TURN_MOTOR,
-                ABS_ENCODER,
-                ENCODER_OFFSET
-            )
+            DRIVE_MOTOR,
+            TURN_MOTOR,
+            ABS_ENCODER,
+            ENCODER_OFFSET
         );
     }
 
@@ -72,15 +68,13 @@ public interface Modules {
 
         int ABS_ENCODER = 2;
 
-        SwerveModule MODULE = new SwerveModule(
+        SimModule MODULE = new SimModule(
             ID,
             MODULE_OFFSET,
-            new ModuleControl(
-                DRIVE_MOTOR,
-                TURN_MOTOR,
-                ABS_ENCODER,
-                ENCODER_OFFSET
-            )
+            DRIVE_MOTOR,
+            TURN_MOTOR,
+            ABS_ENCODER,
+            ENCODER_OFFSET
         );
     }
 
@@ -94,19 +88,17 @@ public interface Modules {
 
         int ABS_ENCODER = 3;
 
-        SwerveModule MODULE = new SwerveModule(
+        SimModule MODULE = new SimModule(
             ID,
             MODULE_OFFSET,
-            new ModuleControl(
-                DRIVE_MOTOR,
-                TURN_MOTOR,
-                ABS_ENCODER,
-                ENCODER_OFFSET
-            )
+            DRIVE_MOTOR,
+            TURN_MOTOR,
+            ABS_ENCODER,
+            ENCODER_OFFSET
         );
     }
 
-    SwerveModule[] MODULES = {
+    SimModule[] MODULES = {
         TopRight.MODULE,
         TopLeft.MODULE,
         BottomLeft.MODULE,
