@@ -6,11 +6,7 @@
 package com.stuypulse.robot;
 
 import com.stuypulse.robot.commands.auton.AutonChooser;
-import com.stuypulse.robot.commands.auton.DoNothingAuton;
-import com.stuypulse.robot.commands.auton.TwoRightBlueBlue;
-import com.stuypulse.robot.commands.auton.TwoRightBlueRed;
-import com.stuypulse.robot.commands.auton.TwoRightRedBlue;
-import com.stuypulse.robot.commands.auton.TwoRightRedRed;
+import com.stuypulse.robot.commands.auton.AutonChooser.StartPosition;
 import com.stuypulse.robot.commands.swivel.SwivelDrive;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.subsystems.Intake;
@@ -36,7 +32,7 @@ public class RobotContainer {
   public final Gamepad operator = new AutoGamepad(Ports.Gamepad.OPERATOR);
 
   // Autons
-  private static SendableChooser<Command> autonChooser = new SendableChooser<>();
+  private static SendableChooser<StartPosition> startPosChooser = new SendableChooser<>();
 
   // Robot container
 
@@ -68,19 +64,16 @@ public class RobotContainer {
   /**************/
 
   public void configureAutons() {
-    autonChooser.setDefaultOption("Do Nothing", new DoNothingAuton());
-    autonChooser.addOption("TwoRightRedRed", new TwoRightRedRed(this));
-    autonChooser.addOption("TwoRightBlueRed", new TwoRightBlueRed(this));
-    autonChooser.addOption("TwoRightRedBlue", new TwoRightRedBlue(this));
-    autonChooser.addOption("TwoRightBlueBlue", new TwoRightBlueBlue(this));
+    startPosChooser.setDefaultOption("Right", StartPosition.RIGHT);
+    startPosChooser.addOption("Left", StartPosition.LEFT);
 
-    SmartDashboard.putData("Autonomous", autonChooser);
+    SmartDashboard.putData("Autonomous", startPosChooser);
   }
 
   public Command getAutonomousCommand() {
-    // return autonChooser.getSelected();
     return AutonChooser.getAuton(this,
       SmartDashboard.getString("FMSinfo/Switch Color", "RRR"),
-      SmartDashboard.getBoolean("FMSinfo/IsRedAlliance", true));
+      SmartDashboard.getBoolean("FMSinfo/IsRedAlliance", true),
+      startPosChooser.getSelected());
   }
 }

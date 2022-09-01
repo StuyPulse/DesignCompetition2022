@@ -137,7 +137,7 @@ public interface Settings {
                 double kI = 0;
                 double kD = 0.1;
                 double MAX_ACCEL = 10;
-                double MAX_VEL = 10;
+                double MAX_VEL = 15;
 
                 public static ProfiledPIDController getController() {
                     ProfiledPIDController a = new ProfiledPIDController(
