@@ -39,6 +39,10 @@ public class EncoderSim implements Sendable {
         this.positionConversion = conversion;
     }
 
+    public void reset() {
+        position = 0;
+    }
+    
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Encoder");
