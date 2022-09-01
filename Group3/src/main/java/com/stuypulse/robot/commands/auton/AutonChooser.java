@@ -20,20 +20,47 @@ public class AutonChooser {
 
     public static SequentialCommandGroup getAuton(Integer position) {
         switch (position) {
-            case 0:
+            case 1:
                 switch (colors[0]) {
                     case RED:
                         switch (colors[1]) {
-                            case RED: return new TopTopCratesAuton(robot);
-                            case BLUE: return new TopBottomCratesAuton(robot);
+                            case RED: return new S1TopTopCratesAuton(robot);
+                            case BLUE: return new S1TopBottomCratesAuton(robot);
                         }
                     case BLUE:
                         switch (colors[1]) {
-                            case RED: return new BottomTopCratesAuton(robot);
-                            case BLUE: return new BottomBottomCratesAuton(robot);
+                            case RED: return new S1BottomTopCratesAuton(robot);
+                            case BLUE: return new S1BottomBottomCratesAuton(robot);
                         }
                 }
-            case 1: 
+            case 2:
+                switch (colors[0]) {
+                    case RED:
+                        switch (colors[1]) {
+                            case RED: return new S2TopTopCratesAuton(robot);
+                            case BLUE: return new S2TopBottomCratesAuton(robot);
+                        }
+                    case BLUE:
+                        switch (colors[1]) {
+                            case RED: return new S2BottomTopCratesAuton(robot);
+                            case BLUE: return new S2BottomBottomCratesAuton(robot);
+                        }
+                }
+            case 3:
+                switch (colors[0]) {
+                    case RED:
+                        switch (colors[1]) {
+                            case RED: return new S3TopTopCratesAuton(robot);
+                            case BLUE: return new S3TopBottomCratesAuton(robot);
+                        }
+                    case BLUE:
+                        switch (colors[1]) {
+                            case RED: return new S3BottomTopCratesAuton(robot);
+                            case BLUE: return new S3BottomBottomCratesAuton(robot);
+                        }
+                }
+            default:
+                return new DoNothingAuton();
         }
         
     }
