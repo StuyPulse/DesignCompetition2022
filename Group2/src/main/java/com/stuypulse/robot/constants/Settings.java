@@ -43,10 +43,6 @@ public interface Settings {
             double kP = 1;
             double kI = 0.0;
             double kD = 0.1;
-
-            public static AngleController getControl() {
-                return new AnglePIDController(kP, kI, kD);
-            }
         }
     }
 

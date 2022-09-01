@@ -3,6 +3,7 @@ package com.stuypulse.robot.subsystems;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Intake.Control;
 import com.stuypulse.stuylib.control.angle.AngleController;
+import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.math.Angle;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,7 +31,7 @@ public abstract class Intake extends SubsystemBase {
     private Angle targetAngle;
 
     public Intake() {
-        controller = Control.getControl();
+        controller = new AnglePIDController(Control.kP, Control.kI, Control.kD);
 
         targetAngle = Settings.Intake.RETRACT_ANGLE.get();
     }
