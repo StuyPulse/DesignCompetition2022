@@ -7,27 +7,14 @@ package com.stuypulse.robot.constants;
 
 import java.nio.file.Path;
 
-import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.angle.AngleController;
-import com.stuypulse.stuylib.control.feedback.PIDController;
-import com.stuypulse.stuylib.control.feedforward.Feedforward;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.math.Angle;
-import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.network.SmartAngle;
-import com.stuypulse.stuylib.network.SmartBoolean;
 import com.stuypulse.stuylib.network.SmartNumber;
-import com.stuypulse.stuylib.network.SmartString;
-import com.stuypulse.stuylib.streams.filters.IFilter;
-import com.stuypulse.stuylib.streams.filters.MotionProfile;
-import com.stuypulse.stuylib.streams.filters.LowPassFilter;
-import com.stuypulse.stuylib.streams.vectors.filters.VDeadZone;
-import com.stuypulse.stuylib.streams.vectors.filters.VFilter;
-import com.stuypulse.stuylib.streams.vectors.filters.VLowPassFilter;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -82,12 +69,6 @@ public interface Settings {
 
             double MAX_ACCEL = 1;
             double MAX_VEL = 2;
-
-            public static Controller getControl() {
-                return new Feedforward.Elevator(kG, kS, kV, kA).position()
-                    .add(new PIDController(kP, kI, kD))
-                    .setSetpointFilter(new MotionProfile(MAX_VEL, MAX_ACCEL));
-            }
         }
     }
     
