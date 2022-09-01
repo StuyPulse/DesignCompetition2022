@@ -31,11 +31,22 @@ public interface Ports {
         int TOP_LIMIT = 11;
         int BOTTOM_LIMIT = 12;
     }
+
+
+    public interface BuddyClimb {
+        //Motor
+        int MOTOR = -1;
+        
+        //Sensor
+        int GREYHILL_A = -1;
+        int GREYHILL_B = -1;
+
     
     public interface Swivel {
         int DRIVE_MOTOR = 10;
         int TURN_MOTOR = 11;
 
         int ABSOLUTE_ENCODER = 1;
+
     }
 }
