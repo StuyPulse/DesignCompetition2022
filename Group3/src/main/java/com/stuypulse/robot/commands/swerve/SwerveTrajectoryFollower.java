@@ -1,13 +1,10 @@
 package com.stuypulse.robot.commands.swerve;
 
-import java.util.function.Supplier;
-
 import com.stuypulse.robot.constants.Motion;
 import com.stuypulse.robot.subsystems.Swerve;
 import com.stuypulse.robot.util.TrajectoryLoader;
 import com.stuypulse.stuylib.network.SmartAngle;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
@@ -49,7 +46,7 @@ public class SwerveTrajectoryFollower extends SwerveControllerCommand {
         return this;
     }
 
-    public void initialze() {
+    public void initialize() {
         if (robotRelative) {
             swerve.reset(trajectory.getInitialPose());
         }
