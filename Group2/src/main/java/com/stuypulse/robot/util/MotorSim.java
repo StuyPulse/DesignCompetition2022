@@ -13,6 +13,15 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.simulation.LinearSystemSim;
 
+/**
+ * A simulated motor intended to be a simple replacement for
+ * real motors. Internally uses a LinearSystemSim constructed
+ * based on the given motor type. Must be updated every tick.
+ * Holds a reference to an EncoderSim which can be accessed
+ * through .getEncoder().
+ * 
+ * @author Ben Goldfisher
+ */
 public class MotorSim implements MotorController, Sendable {
 
     public enum MotorType {
@@ -40,15 +49,19 @@ public class MotorSim implements MotorController, Sendable {
     private boolean disabled;
     private boolean inverted;
 
-    public MotorSim(MotorType motor, int num, double gearing) {
+    public MotorSim(MotorType motor, int motorCount, double gearing) {
         // TODO: make moment of inertia not constant
         sim = new LinearSystemSim<>(
             LinearSystemId.createDCMotorSystem(
-                motor.getMotor(num),
+                motor.getMotor(motorCount),
                 0.00032,
                 gearing));
 
         encoder = new EncoderSim();
+    }
+
+    public MotorSim(MotorType motor, double gearing) {
+        this(motor, 1, gearing);
     }
 
     @Override

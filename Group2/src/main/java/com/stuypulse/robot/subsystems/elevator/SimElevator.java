@@ -12,7 +12,7 @@ public class SimElevator extends Elevator {
     private final EncoderSim encoder;
 
     public SimElevator() {
-        motors = new MotorSim(MotorType.NEO550, 4, Settings.Elevator.GEARING);
+        motors = new MotorSim(MotorType.NEO550, 2, Settings.Elevator.GEARING);
         
         encoder = motors.getEncoder();
         encoder.setPositionConversion(Math.PI * Settings.Elevator.OUTPUT_DIAMETER);

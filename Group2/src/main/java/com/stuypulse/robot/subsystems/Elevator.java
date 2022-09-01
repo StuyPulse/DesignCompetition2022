@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Elevator.Control;
 import com.stuypulse.stuylib.control.Controller;
+import com.stuypulse.stuylib.control.feedback.PIDController;
+import com.stuypulse.stuylib.control.feedforward.Feedforward;
+import com.stuypulse.stuylib.streams.filters.MotionProfile;
 
 /**
  * Elevator Subsystem (pick up things)
@@ -38,7 +41,10 @@ public abstract class Elevator extends SubsystemBase {
     // private final MechanismLigament2d intakeMech;
 
     public Elevator() {
-        controller = Control.getControl();
+        controller = new Feedforward.Elevator(
+                Control.kG, Control.kS, Control.kV, Control.kA).position()
+            .add(new PIDController(Control.kP, Control.kI, Control.kD))
+            .setSetpointFilter(new MotionProfile(Control.MAX_VEL, Control.MAX_ACCEL));
         
         setDistance = 0;
 

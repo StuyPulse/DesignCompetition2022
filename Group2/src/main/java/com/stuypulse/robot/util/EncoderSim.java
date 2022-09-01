@@ -3,6 +3,14 @@ package com.stuypulse.robot.util;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 
+/**
+ * Wrapper for a simulated motor that provides an encoder API.
+ * Constructed through a MotorSim.
+ * 
+ * Default distance units are in radians.
+ * 
+ * @author Ben Goldfisher
+ */
 public class EncoderSim implements Sendable {
     private double position;
 
@@ -10,7 +18,7 @@ public class EncoderSim implements Sendable {
 
     private boolean inverted;
 
-    public EncoderSim() {
+    protected EncoderSim() {
         position = 0;
         positionConversion = 1;
     }
@@ -42,7 +50,7 @@ public class EncoderSim implements Sendable {
     public void reset() {
         position = 0;
     }
-
+    
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Encoder");
