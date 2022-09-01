@@ -15,7 +15,7 @@ public class SimIntake extends Intake {
     private final EncoderSim deployEncoder;
 
     public SimIntake() {
-        deployMotor = new MotorSim(MotorType.NEO550, 1, Settings.Intake.DEPLOY_GEARING);
+        deployMotor = new MotorSim(MotorType.NEO550, Settings.Intake.DEPLOY_GEARING);
         driveMotor = new MotorSim(MotorType.NEO550, 2, 1);
 
         deployEncoder = deployMotor.getEncoder();

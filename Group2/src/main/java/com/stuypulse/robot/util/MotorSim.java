@@ -49,15 +49,19 @@ public class MotorSim implements MotorController, Sendable {
     private boolean disabled;
     private boolean inverted;
 
-    public MotorSim(MotorType motor, int num, double gearing) {
+    public MotorSim(MotorType motor, int motorCount, double gearing) {
         // TODO: make moment of inertia not constant
         sim = new LinearSystemSim<>(
             LinearSystemId.createDCMotorSystem(
-                motor.getMotor(num),
+                motor.getMotor(motorCount),
                 0.00032,
                 gearing));
 
         encoder = new EncoderSim();
+    }
+
+    public MotorSim(MotorType motor, double gearing) {
+        this(motor, 1, gearing);
     }
 
     @Override

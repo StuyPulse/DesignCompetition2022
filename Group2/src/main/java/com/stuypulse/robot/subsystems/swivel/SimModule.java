@@ -20,8 +20,8 @@ public class SimModule extends SwivelModule {
     public SimModule(ModuleConfig config) {
         super(config);
 
-        driveMotor = new MotorSim(MotorSim.MotorType.NEO550, 1, 1);
-        turnMotor = new MotorSim(MotorSim.MotorType.NEO550, 1, 1);
+        driveMotor = new MotorSim(MotorSim.MotorType.NEO550, 1);
+        turnMotor = new MotorSim(MotorSim.MotorType.NEO550, 1);
 
         driveEncoder = driveMotor.getEncoder();
         turnEncoder = turnMotor.getEncoder();
