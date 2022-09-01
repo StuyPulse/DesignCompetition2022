@@ -13,6 +13,15 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.simulation.LinearSystemSim;
 
+/**
+ * A simulated motor intended to be a simple replacement for
+ * real motors. Internally uses a LinearSystemSim constructed
+ * based on the given motor type. Must be updated every tick.
+ * Holds a reference to an EncoderSim which can be accessed
+ * through .getEncoder().
+ * 
+ * @author Ben Goldfisher
+ */
 public class MotorSim implements MotorController, Sendable {
 
     public enum MotorType {
