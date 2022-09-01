@@ -42,7 +42,7 @@ public class EncoderSim implements Sendable {
     public void reset() {
         position = 0;
     }
-
+    
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Encoder");
