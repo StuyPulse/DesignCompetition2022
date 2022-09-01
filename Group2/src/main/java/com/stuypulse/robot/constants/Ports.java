@@ -24,8 +24,6 @@ public interface Ports {
         // Motors
         int FIRST_MOTOR =  21;
         int SECOND_MOTOR = 22;
-        int THIRD_MOTOR =  23;
-        int FOURTH_MOTOR = 24;
 
         // Sensors
         int GREYHILL_A = 9;

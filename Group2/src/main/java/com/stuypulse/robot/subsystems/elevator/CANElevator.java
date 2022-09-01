@@ -21,9 +21,7 @@ public class CANElevator extends Elevator {
     public CANElevator() {
         motors = new MotorControllerGroup(
             new CANSparkMax(Ports.Elevator.FIRST_MOTOR, MotorType.kBrushless), 
-            new CANSparkMax(Ports.Elevator.SECOND_MOTOR, MotorType.kBrushless),
-            new CANSparkMax(Ports.Elevator.THIRD_MOTOR, MotorType.kBrushless), 
-            new CANSparkMax(Ports.Elevator.FOURTH_MOTOR, MotorType.kBrushless));
+            new CANSparkMax(Ports.Elevator.SECOND_MOTOR, MotorType.kBrushless));
 
         greyhill = new Encoder(Ports.Elevator.GREYHILL_A, Ports.Elevator.GREYHILL_B);
         greyhill.setDistancePerPulse(Math.PI * Settings.Elevator.OUTPUT_DIAMETER / Settings.Elevator.PULSES_PER_ROTATE);
