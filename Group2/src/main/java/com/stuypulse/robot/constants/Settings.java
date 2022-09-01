@@ -70,24 +70,12 @@ public interface Settings {
                 SmartNumber DEADZONE = new SmartNumber("Filtering/Drive/Deadzone", 0.05);
                 SmartNumber RC = new SmartNumber("Filtering/Drive/RC", 0.2);
                 SmartNumber MAX_SPEED = new SmartNumber("Filtering/Drive/Max Speed", 10);
-
-                public static VFilter getFilter() {
-                    return new VDeadZone(DEADZONE)
-                        .then(new VLowPassFilter(RC))
-                        .then(x -> x.mul(MAX_SPEED.get()));
-                }
             }
 
             public interface Turn {
                 SmartNumber DEADZONE = new SmartNumber("Filtering/Turn/Deadzone", 0.05);
                 SmartNumber RC = new SmartNumber("Filtering/Turn/RC", 0.2);
                 SmartNumber MAX_TURN = new SmartNumber("Filtering/Turn/Max Turn", 10);
-                
-                public static IFilter getFilter() {
-                    return IFilter.create(x -> SLMath.deadband(x, DEADZONE.get()))
-                        .then(new LowPassFilter(RC))
-                        .then(x -> x * MAX_TURN.get());
-                }
             }
         }
 
