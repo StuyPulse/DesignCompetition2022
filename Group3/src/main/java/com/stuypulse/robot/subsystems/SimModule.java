@@ -22,8 +22,8 @@ public class SimModule extends SwerveModule {
     public SimModule(String id, Translation2d moduleOffset, int drivePort, int turnPort, int turnEncoderPort, Angle turnOffset) {
         super(id, moduleOffset);
 
-        drive = new MotorSim(MotorType.FALCON, drivePort, 1);
-        turn = new MotorSim(MotorType.FALCON, turnPort, 1);
+        drive = new MotorSim(MotorType.FALCON, 1, 1);
+        turn = new MotorSim(MotorType.FALCON, 1, 1);
 
         driveEncoder = drive.getEncoder();
         turnEncoder = new DutyCycleEncoder(turnEncoderPort);

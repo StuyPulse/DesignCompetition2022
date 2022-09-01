@@ -21,15 +21,9 @@ public class SwerveDrive extends CommandBase {
 
         this.swerve = swerve;
         speed = VStream.create(driver::getLeftStick)
-                        .filtered(
-                            x -> new Vector2D(x.x*3, x.y*3),
-                            Drive.getFilter()
-                            );
+                        .filtered(Drive.getFilter());
         turn = IStream.create(driver::getRightX)
-                        .filtered(
-                            x -> x * 3,
-                            Turn.getFilter()
-                            );
+                        .filtered(Turn.getFilter());
 
         addRequirements(swerve);
     }

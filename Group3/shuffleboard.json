@@ -1508,10 +1508,38 @@
           }
         }
       }
+    },
+    {
+      "title": "Field",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "1,1": {
+            "size": [
+              9,
+              5
+            ],
+            "content": {
+              "_type": "Field",
+              "_source0": "network_table:///SmartDashboard/Field",
+              "_title": "/SmartDashboard/Field",
+              "Game/Game": "A2022_Rapid_React",
+              "Visuals/Robot Icon Size": 50.0,
+              "Visuals/Show Outside Circles": false
+            }
+          }
+        }
+      }
     }
   ],
   "windowGeometry": {
-    "x": 47.0,
+    "x": 101.0,
     "y": 25.0,
     "width": 1633.0,
     "height": 1025.0

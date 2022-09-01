@@ -40,6 +40,11 @@ public class MotorSim implements MotorController, Sendable {
     private boolean disabled;
     private boolean inverted;
 
+    /**
+     * @param motor type of motor
+     * @param num number of motors
+     * @param gearing motor gear ratio
+     */
     public MotorSim(MotorType motor, int num, int gearing) {
         // TODO: make moment of inertia not constant
         sim = new LinearSystemSim<>(

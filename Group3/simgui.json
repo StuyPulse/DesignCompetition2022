@@ -5,6 +5,7 @@
       "/LiveWindow/Elevator": "Subsystem",
       "/LiveWindow/Intake": "Subsystem",
       "/LiveWindow/ModuleControl": "Subsystem",
+      "/LiveWindow/SimModule": "Subsystem",
       "/LiveWindow/Swerve": "Subsystem",
       "/LiveWindow/SwerveModule": "Subsystem",
       "/LiveWindow/Ungrouped/DigitalInput[0]": "Digital Input",
