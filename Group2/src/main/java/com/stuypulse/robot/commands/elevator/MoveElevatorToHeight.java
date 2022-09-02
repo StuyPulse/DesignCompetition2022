@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class MoveElevatorToHeight extends CommandBase {
     
-    private static final double EPSILON = 0.01;
+    private static final double EPSILON = 0.1;
 
     private final Elevator elevator;
     private final Controller controller;
@@ -21,7 +21,7 @@ public class MoveElevatorToHeight extends CommandBase {
     public MoveElevatorToHeight(double distance, Elevator elevator) {
         this.elevator = elevator;
         this.distance = distance;
-        
+
         controller = new Feedforward.Elevator(
                 Control.kG, Control.kS, Control.kV, Control.kA).position()
             .add(new PIDController(Control.kP, Control.kI, Control.kD))
@@ -39,6 +39,11 @@ public class MoveElevatorToHeight extends CommandBase {
     @Override
     public boolean isFinished() {
         return Math.abs(elevator.getDistance() - distance) < EPSILON;
+    }
+
+    @Override
+    public void end(boolean wasInterrupted) {
+        elevator.move(Control.kG);
     }
     
 }
