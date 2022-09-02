@@ -5,6 +5,7 @@
 
 package com.stuypulse.robot;
 
+import com.stuypulse.robot.commands.auton.AutonChooser;
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
 import com.stuypulse.robot.commands.swerve.SwerveDrive;
 import com.stuypulse.robot.subsystems.Swerve;
@@ -35,7 +36,7 @@ public class RobotContainer {
   public final Elevator elevator = new Elevator();
 
   // Autons
-  private static SendableChooser<Command> autonChooser = new SendableChooser<>();
+  private static SendableChooser<Integer> positionChooser = new SendableChooser<>();
 
   // Robot container
 
@@ -71,12 +72,15 @@ public class RobotContainer {
   /**************/
 
   public void configureAutons() {
-    autonChooser.setDefaultOption("Do Nothing", new DoNothingAuton());
+    positionChooser.setDefaultOption("Position 1", 1); // S1
+    positionChooser.addOption("Position 2", 2); // S2
+    positionChooser.addOption("Position 3", 3); // S3
 
-    SmartDashboard.putData("Autonomous", autonChooser);
+    SmartDashboard.putData("Autonomous", positionChooser);
   }
 
   public Command getAutonomousCommand() {
-    return autonChooser.getSelected();
+    new AutonChooser(this);
+    return AutonChooser.getAuton(positionChooser.getSelected());
   }
 }

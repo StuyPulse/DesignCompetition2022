@@ -6,8 +6,8 @@
 package com.stuypulse.robot.constants;
 
 import com.stuypulse.stuylib.control.Controller;
-import com.stuypulse.stuylib.control.PIDController;
 import com.stuypulse.stuylib.control.angle.AngleController;
+import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.math.SLMath;
 
 import com.stuypulse.stuylib.control.feedback.PIDController;
@@ -97,48 +97,13 @@ public interface Settings {
                 SmartNumber D = new SmartNumber("Swerve/Turn/D", 0.0);
 
                 public static AngleController getFeedbackController() {
-                    return new PIDController(P, I, D).angle().useRadians();
+                    return new AnglePIDController(P, I, D);
                 }
             }
 
             public static IFilter getFilter() {
                 return IFilter.create(x -> SLMath.deadband(x, DEADBAND))
                         .then(new LowPassFilter(RC));
-            }
-        }
-        
-        public interface Motion {
-
-            public interface X {
-                double kP = 0.0;
-                double kI = 0.0;
-                double kD = 0.0;
-    
-                public static PIDController getController() {
-                    return new PIDController(kP, kI, kD);
-                }
-            }
-    
-            public interface Y {
-                double kP = 0.0;
-                double kI = 0.0;
-                double kD = 0.0;
-    
-                public static PIDController getController() {
-                    return new PIDController(kP, kI, kD);
-                }
-            }
-    
-            public interface Theta {
-                double kP = 0.0;
-                double kI = 0.0;
-                double kD = 0.0;
-    
-                public static ProfiledPIDController getController() {
-                    return new ProfiledPIDController(
-                            kP, kI, kD,
-                            new Constraints(Modules.MAX_ANGULAR_SPEED, Modules.MAX_ANGULAR_ACCEL));
-                }
             }
         }
     }
