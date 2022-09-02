@@ -56,17 +56,17 @@ public interface Settings {
         double PULSES_PER_ROTATE = -1;
 
         public interface Control {
-            double kS = 0.01;
-            double kV = 0.5;
-            double kA = 0.1;
-            double kG = 0.5;
+            double kS = 0;//0.01;
+            double kV = 0;//0.1;
+            double kA = 0;//0.05;
+            double kG = 0;//0.5;
 
             double kP = 1.0;
             double kI = 0.0;
-            double kD = 0.1;
+            double kD = 0.5;
 
-            double MAX_ACCEL = 1;
-            double MAX_VEL = 2;
+            double MAX_ACCEL = 0.75;
+            double MAX_VEL = 1;
         }
     }
     

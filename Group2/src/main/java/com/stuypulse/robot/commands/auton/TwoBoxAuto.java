@@ -2,19 +2,18 @@ package com.stuypulse.robot.commands.auton;
 
 import com.stuypulse.robot.RobotContainer;
 import com.stuypulse.robot.commands.elevator.MoveElevatorDistanceCommand;
-import com.stuypulse.robot.commands.elevator.MoveElevatorDownCommand;
-import com.stuypulse.robot.commands.elevator.MoveElevatorUpCommand;
 import com.stuypulse.robot.commands.intake.IntakeCommands;
 import com.stuypulse.robot.commands.swivel.SwivelStop;
 import com.stuypulse.robot.commands.swivel.SwivelTrajectory;
 import com.stuypulse.robot.constants.Settings;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class TwoBoxAuto extends SequentialCommandGroup {
 
-	private static final double SWITCH_DROP_HEIGHT = 4.0;
+	private static final double SWITCH_DROP_HEIGHT = Units.feetToMeters(4.0);
 
 	private static final double SWITCH_DROP_TIME = 1.0;
 	private static final double INTAKE_TIME = 1.5;
