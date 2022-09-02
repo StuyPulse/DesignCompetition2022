@@ -37,7 +37,7 @@ public abstract class SwivelModule extends SubsystemBase {
         this.driveControl = new Feedforward.Motor(
                 Drive.Feedforward.kS,
                 Drive.Feedforward.kV,
-                Drive.Feedforward.kA).position()
+                Drive.Feedforward.kA).velocity()
             .add(new PIDController(
                 Drive.Feedback.kP,
                 Drive.Feedback.kI,
@@ -81,7 +81,6 @@ public abstract class SwivelModule extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // drive control
         setDriveVolts(driveControl.update(
             targetState.speedMetersPerSecond, getSpeed()));
 

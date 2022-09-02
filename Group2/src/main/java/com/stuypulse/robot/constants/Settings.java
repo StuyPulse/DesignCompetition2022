@@ -7,8 +7,6 @@ package com.stuypulse.robot.constants;
 
 import java.nio.file.Path;
 
-import com.stuypulse.stuylib.control.angle.AngleController;
-import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.network.SmartAngle;
 import com.stuypulse.stuylib.network.SmartNumber;
@@ -77,8 +75,8 @@ public interface Settings {
         public interface Drive {
 
             public interface Feedforward {
-                double kS = 0.1;
-                double kA = 0.1;
+                double kS = 0.01;
+                double kA = 0.05;
                 double kV = 0.1;
             }
     
@@ -133,7 +131,7 @@ public interface Settings {
             }
             
             public interface Theta {
-                double kP = 1.5;
+                double kP = 2;
                 double kI = 0;
                 double kD = 0.1;
                 double MAX_ACCEL = 10;
