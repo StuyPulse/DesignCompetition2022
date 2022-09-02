@@ -23,12 +23,12 @@ public class AutonChooser {
             case 1:
                 switch (colors[0]) {
                     case RED:
-                        switch (colors[1]) {
+                        switch (colors[2]) {
                             case RED: return new S1TopTopCratesAuton(robot);
                             case BLUE: return new S1TopBottomCratesAuton(robot);
                         }
                     case BLUE:
-                        switch (colors[1]) {
+                        switch (colors[2]) {
                             case RED: return new S1BottomTopCratesAuton(robot);
                             case BLUE: return new S1BottomBottomCratesAuton(robot);
                         }
@@ -36,12 +36,12 @@ public class AutonChooser {
             case 2:
                 switch (colors[0]) {
                     case RED:
-                        switch (colors[1]) {
+                        switch (colors[2]) {
                             case RED: return new S2TopTopCratesAuton(robot);
                             case BLUE: return new S2TopBottomCratesAuton(robot);
                         }
                     case BLUE:
-                        switch (colors[1]) {
+                        switch (colors[2]) {
                             case RED: return new S2BottomTopCratesAuton(robot);
                             case BLUE: return new S2BottomBottomCratesAuton(robot);
                         }
@@ -49,12 +49,12 @@ public class AutonChooser {
             case 3:
                 switch (colors[0]) {
                     case RED:
-                        switch (colors[1]) {
+                        switch (colors[2]) {
                             case RED: return new S3TopTopCratesAuton(robot);
                             case BLUE: return new S3TopBottomCratesAuton(robot);
                         }
                     case BLUE:
-                        switch (colors[1]) {
+                        switch (colors[2]) {
                             case RED: return new S3BottomTopCratesAuton(robot);
                             case BLUE: return new S3BottomBottomCratesAuton(robot);
                         }

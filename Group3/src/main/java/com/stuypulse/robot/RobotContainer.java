@@ -72,8 +72,9 @@ public class RobotContainer {
   /**************/
 
   public void configureAutons() {
-    positionChooser.setDefaultOption("Position 0", 0); // S3
-    positionChooser.addOption("Position 1", 1); // S1
+    positionChooser.setDefaultOption("Position 1", 1); // S1
+    positionChooser.addOption("Position 2", 2); // S2
+    positionChooser.addOption("Position 3", 3); // S3
 
     SmartDashboard.putData("Autonomous", positionChooser);
   }
