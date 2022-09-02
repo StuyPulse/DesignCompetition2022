@@ -62,7 +62,7 @@ public abstract class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
-        elevatorMech.setLength(getDistance() * (5 / Settings.Elevator.TOP_HEIGHT) + 0.5);
+        elevatorMech.setLength(getDistance() * (5 / Settings.Elevator.MAX_DIST) + 0.5);
         // intakeMech.setAngle(intake.getAngle().getDegrees());
         
         SmartDashboard.putBoolean("Elevator/Top Limit Reached", getTopLimitReached());

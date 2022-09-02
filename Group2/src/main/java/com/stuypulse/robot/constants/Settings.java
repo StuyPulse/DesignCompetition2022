@@ -47,25 +47,30 @@ public interface Settings {
     public interface Elevator {
         double GEARING = 1.0 / 9.0;
         
-        double TOP_HEIGHT = Units.feetToMeters(6.2);
+        double MIN_INTAKE_HEIGHT = Units.inchesToMeters(10.219);
+        double MAX_INTAKE_HEIGHT = Units.inchesToMeters(85.023);
+
+        double MAX_DIST = MAX_INTAKE_HEIGHT - MIN_INTAKE_HEIGHT;
 
         double OUTPUT_DIAMETER = Units.inchesToMeters(1.64);
 
         double PULSES_PER_ROTATE = -1;
 
+        double WEIGHT = Units.lbsToKilograms(28.232);
+
         double DRIVE_SPEED = Units.feetToMeters(1);
 
         public interface Control {
-            double kS = 0;//0.01;
-            double kV = 0;//0.1;
-            double kA = 0;//0.05;
-            double kG = 0;//0.5;
+            double kS = 0.1;
+            double kV = 1;
+            double kA = 0.5;
+            double kG = 0.055;
 
-            double kP = 1.0;
+            double kP = 2;
             double kI = 0.0;
             double kD = 0.5;
 
-            double MAX_ACCEL = 0.75;
+            double MAX_ACCEL = 0.5;
             double MAX_VEL = 1;
         }
     }

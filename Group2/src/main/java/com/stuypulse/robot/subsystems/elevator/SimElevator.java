@@ -2,65 +2,65 @@ package com.stuypulse.robot.subsystems.elevator;
 
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.Elevator;
-import com.stuypulse.robot.util.EncoderSim;
-import com.stuypulse.robot.util.MotorSim;
-import com.stuypulse.robot.util.MotorSim.MotorType;
+import com.stuypulse.stuylib.math.SLMath;
+
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 
 public class SimElevator extends Elevator {
 
-    private final MotorSim motors;
-    private final EncoderSim encoder;
+    private final ElevatorSim sim;
+    private double distance;
 
     public SimElevator() {
-        motors = new MotorSim(MotorType.NEO550, 2, Settings.Elevator.GEARING);
-        
-        encoder = motors.getEncoder();
-        encoder.setPositionConversion(Math.PI * Settings.Elevator.OUTPUT_DIAMETER);
+        sim = new ElevatorSim(
+            DCMotor.getNEO(2),
+            1.0 / Settings.Elevator.GEARING,
+            Settings.Elevator.WEIGHT,
+            Settings.Elevator.OUTPUT_DIAMETER / 2.0,
+            Settings.Elevator.MIN_INTAKE_HEIGHT,
+            Settings.Elevator.MAX_INTAKE_HEIGHT);
     }
 
     @Override
     public void move(double speed) {
-        // speed -= Control.kG;
-
-        // if elevator should not physically be able to move
-        if (getBottomLimitReached() && speed < 0) {
-            motors.stopMotor();
-        } else if (getTopLimitReached() && speed > 0) {
-            motors.stopMotor();
-        } else {
-            motors.set(speed);
-        }
+        sim.setInput(SLMath.clamp(speed, -1, +1) * 12);
     }
 
     @Override
     public void setMotorStop() {
-        motors.stopMotor();
+        sim.setInput(0);
     }
 
     @Override
     public double getDistance() {
-        return encoder.getDistance();
+        return distance;
     }
 
     @Override
     public void resetEncoder() {
-        encoder.reset();
+        distance = 0;
         
     }
 
     @Override
     public boolean getTopLimitReached() {
-        return getDistance() >= Settings.Elevator.TOP_HEIGHT;
+        return getDistance() > Settings.Elevator.MAX_DIST;
     }
 
     @Override
     public boolean getBottomLimitReached() {
-        return getDistance() <= 0;
+        return getDistance() < 0;
     }
 
     @Override
     public void simulationPeriodic() {
-        motors.update(Settings.DT);
+        sim.update(Settings.DT);
+
+        if (getTopLimitReached() && sim.getVelocityMetersPerSecond() > 0) return;
+        if (getBottomLimitReached() && sim.getVelocityMetersPerSecond() < 0) return;
+
+        distance += sim.getVelocityMetersPerSecond() * Settings.DT;
     }
 
 }

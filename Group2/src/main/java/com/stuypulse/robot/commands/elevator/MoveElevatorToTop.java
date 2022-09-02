@@ -6,7 +6,7 @@ import com.stuypulse.robot.subsystems.Elevator;
 public class MoveElevatorToTop extends MoveElevatorToHeight {
 
 	public MoveElevatorToTop(Elevator elevator) {
-		super(Settings.Elevator.TOP_HEIGHT, elevator);
+		super(Settings.Elevator.MAX_DIST, elevator);
 	}
 
 }
