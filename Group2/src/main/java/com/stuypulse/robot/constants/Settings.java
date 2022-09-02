@@ -53,6 +53,8 @@ public interface Settings {
 
         double PULSES_PER_ROTATE = -1;
 
+        double DRIVE_SPEED = Units.feetToMeters(1);
+
         public interface Control {
             double kS = 0;//0.01;
             double kV = 0;//0.1;

@@ -58,12 +58,12 @@ public class CANElevator extends Elevator {
     
     @Override
     public boolean getTopLimitReached() {
-        return top.get();
+        return !top.get();
     }
 
     @Override
     public boolean getBottomLimitReached() {
-        return bottom.get();
+        return !bottom.get();
     }
 
 }
