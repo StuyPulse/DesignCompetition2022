@@ -9,6 +9,8 @@ import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.network.SmartAngle;
 import com.stuypulse.stuylib.network.SmartNumber;
 
+import edu.wpi.first.math.util.Units;
+
 /*-
  * File containing tunable settings for every subsystem on the robot.
  *
@@ -17,7 +19,12 @@ import com.stuypulse.stuylib.network.SmartNumber;
  */
 public interface Settings {
     public interface Drivetrain {
-        double TRACK_WIDTH = 0.5;
+        double TRACK_WIDTH = Units.inchesToMeters(30);
+        double WHEEL_DIAMETER = Units.inchesToMeters(2);
+
+        double GRAYHILL_TO_WHEEL = 0.22666;
+        double PULSES_PER_REVOLUTION = 256;
+        double DISTANCE_PER_PULSE = (WHEEL_DIAMETER * Math.PI) / 256 * GRAYHILL_TO_WHEEL;
 
         SmartNumber TURN_DEADBAND = new SmartNumber("Drivetrain/Turn Deadband", 0.0);
         SmartNumber DRIVE_DEADBAND = new SmartNumber("Drivetrain/Drive Deadband", 0.0);
@@ -31,24 +38,24 @@ public interface Settings {
         SmartNumber MAX_SPEED = new SmartNumber("Drivetrain/Max Speed", 15.0);
 
         interface PID {
-            SmartNumber kP = new SmartNumber("Drivetrain/kP", 0);
+            SmartNumber kP = new SmartNumber("Drivetrain/kP", 0.00337);
             SmartNumber kI = new SmartNumber("Drivetrain/kI", 0);
             SmartNumber kD = new SmartNumber("Drivetrain/kD", 0);
         }
 
         interface FF {
-            SmartNumber kS = new SmartNumber("Drivetrain/kS", 0);
-            SmartNumber kV = new SmartNumber("Drivetrain/kV", 0);
-            SmartNumber kA = new SmartNumber("Drivetrain/kA", 0);
+            SmartNumber kS = new SmartNumber("Drivetrain/kS", 0.367);
+            SmartNumber kV = new SmartNumber("Drivetrain/kV", 2.07);
+            SmartNumber kA = new SmartNumber("Drivetrain/kA", 0.47);
 
-            SmartNumber kVA = new SmartNumber("Drivetrain/kVA", 0);
-            SmartNumber kAA = new SmartNumber("Drivetrain/kAA", 0);
+            SmartNumber kVA = new SmartNumber("Drivetrain/kVA", 0.1);
+            SmartNumber kAA = new SmartNumber("Drivetrain/kAA", 0.1);
         }
     }
 
     public interface Intake {
         SmartAngle RETRACT_ANGLE = new SmartAngle("Intake/Retract Angle", Angle.fromDegrees(0));
-        SmartAngle EXTEND_ANGLE = new SmartAngle("Intake/Extend Angle", Angle.fromDegrees(90));
+        SmartAngle EXTEND_ANGLE = new SmartAngle("Intake/Extend Angle", Angle.fromDegrees(120));
 
         interface PID {
             SmartNumber kP = new SmartNumber("Intake/kP", 0);
@@ -57,9 +64,9 @@ public interface Settings {
         }
 
         interface FF {
-            SmartNumber kS = new SmartNumber("Intake/kS", 0);
-            SmartNumber kV = new SmartNumber("Intake/kV", 0);
-            SmartNumber kA = new SmartNumber("Intake/kA", 0);
+            SmartNumber kS = new SmartNumber("Intake/kS", 0.1);
+            SmartNumber kV = new SmartNumber("Intake/kV", 0.1);
+            SmartNumber kA = new SmartNumber("Intake/kA", 0.1);
         }
 
         interface SIMULATION {
@@ -74,13 +81,18 @@ public interface Settings {
     }
 
     public interface Elevator {
-        double TRACK_WIDTH = 0.5;
-
         double RUNG = 2.2;
         double SWITCH = 1.98;
         double SCALE = 0.45;
 
         double BOX = 0;
+
+        double MAX_ELEVATOR_HEIGHT = 10;
+
+        SmartNumber LIFT_DEADBAND = new SmartNumber("Elevator/Lift Deadband", 0.0);
+
+        SmartNumber LIFT_POWER = new SmartNumber("Elevator/Lift Power", 3);
+        SmartNumber LIFT_RC = new SmartNumber("Elevator/Lift RC", 0);
 
         interface PID {
             SmartNumber kP = new SmartNumber("Elevator/kP", 0);
@@ -104,10 +116,10 @@ public interface Settings {
         }
 
         interface FF {
-            SmartNumber kG = new SmartNumber("Elevator/kG", 0);
-            SmartNumber kS = new SmartNumber("Elevator/kS", 0);
-            SmartNumber kV = new SmartNumber("Elevator/kV", 0);
-            SmartNumber kA = new SmartNumber("Elevator/kA", 0);
+            SmartNumber kG = new SmartNumber("Elevator/kG", 0.1);
+            SmartNumber kS = new SmartNumber("Elevator/kS", 0.1);
+            SmartNumber kV = new SmartNumber("Elevator/kV", 0.1);
+            SmartNumber kA = new SmartNumber("Elevator/kA", 0.1);
         }
     }
 }

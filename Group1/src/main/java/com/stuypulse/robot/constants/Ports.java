@@ -14,41 +14,41 @@ public interface Ports {
     }
 
     public interface Drivetrain {
-        int LEFT_FRONT = -1;
-        int LEFT_MIDDLE = -1;
-        int LEFT_BACK = -1;
+        int LEFT_FRONT = 0;
+        int LEFT_MIDDLE = 1;
+        int LEFT_BACK = 2;
 
-        int RIGHT_FRONT = -1;
-        int RIGHT_MIDDLE = -1;
-        int RIGHT_BACK = -1;
+        int RIGHT_FRONT = 3;
+        int RIGHT_MIDDLE = 4;
+        int RIGHT_BACK = 5;
 
         public interface Grayhill {
-            int LEFT_A = -1;
-            int LEFT_B = -1;
-            int RIGHT_A = -1;
-            int RIGHT_B = -1;
+            int LEFT_A = 1;
+            int LEFT_B = 2;
+            int RIGHT_A = 3;
+            int RIGHT_B = 4;
         }
     }
 
     public interface Intake {
-        int LEFT_DRIVER = -1;
-        int RIGHT_DRIVER = -1;
+        int LEFT_DRIVER = 6;
+        int RIGHT_DRIVER = 7;
 
-        int DEPLOYER_A = -1;
-        int DEPLOYER_B = -1;
+        int DEPLOYER_A = 5;
+        int DEPLOYER_B = 6;
 
-        int DEPLOY = -1;
+        int DEPLOY = 8;
     }
 
     public interface Elevator {
-        int FIRST = -1;
-        int SECOND = -1;
-        int THIRD = -1;
+        int FIRST = 9;
+        int SECOND = 10;
+        int THIRD = 11;
 
-        int LOWER = -1;
-        int UPPER = -1;
+        int LOWER = 7;
+        int UPPER = 8;
 
-        int A = -1;
-        int B = -1;
+        int A = 9;
+        int B = 10;
     }
 }
