@@ -9,9 +9,9 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class BuddyClimb {
+public class BuddyClimb extends SubsystemBase {
     private final Encoder greyhill;
 
     private final CANSparkMax motor;
@@ -34,9 +34,11 @@ public class BuddyClimb {
         if (isStalling()) {
             DriverStation.reportError(
                     "[CRITICAL] Climber is stalling when attempting to move!", false);
-            stalling.calculate(true);
+            
             motor.set(0);
-        } else if (greyhill.getDistance() > +1.5 * Settings.BuddyClimb.OUTPUT_DIAMETER * Math.PI) motor.set(Settings.BuddyClimb.DEPLOY_SPEED.get());
+        } else if (greyhill.getDistance() > +1.5 * Settings.BuddyClimb.OUTPUT_DIAMETER * Math.PI) {
+            motor.set(Settings.BuddyClimb.DEPLOY_SPEED.get());
+        }
     
     }
 
@@ -44,9 +46,11 @@ public class BuddyClimb {
         if (isStalling()) {
             DriverStation.reportError(
                     "[CRITICAL] Climber is stalling when attempting to move!", false);
-            stalling.calculate(true);
+
             motor.set(0);
-        } if (greyhill.getDistance() <= 0) motor.set(-Settings.BuddyClimb.DEPLOY_SPEED.get());
+        } if (greyhill.getDistance() <= 0) {
+            motor.set(-Settings.BuddyClimb.DEPLOY_SPEED.get());
+        }
     }
 
     /*** STALLING PROTECTION ***/
@@ -63,5 +67,10 @@ public class BuddyClimb {
         boolean current = getCurrentAmps() > Settings.BuddyClimb.CURRENT_THRESHOLD;
         boolean output = Math.abs(getSetSpeed()) > Settings.BuddyClimb.SET_SPEED_THRESHOLD;
         return stalling.calculate(output && current);
+    }
+
+    @Override
+    public void periodic() {
+        isStalling();
     }
 }
