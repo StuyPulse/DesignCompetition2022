@@ -12,25 +12,25 @@ import com.stuypulse.robot.RobotContainer;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /*
- * @author Samuel Chen schen30@stuy.edu
- * @author Kelvin Zhao kzhao31@stuy.edu
- * @author Carmin Vuong carminvuong@gmail.com
+ * @author Samuel Chen
+ * @author Kelvin Zhao
+ * @author Carmin Vuong
  */
-public class TwoBoxAutonLeft extends SequentialCommandGroup{
+public class TwoBoxAutonLeftSwitch extends SequentialCommandGroup{
+    private final RobotContainer robot;
 
-    private double time = 15.0;
-    private static final String SwitchLeft = "deploy/TwoBoxAuton/output/switchLeft.wpilib.json";
-    private static final String LeftSwitchToCenter = "deploy/TwoBoxAuton/output/LeftSwitchToCenter.wpilib.json";
+    private double time = 1.0;
+    private static final String SwitchLeft = "TwoBoxAuton/output/switchLeft.wpilib.json";
+    private static final String LeftSwitchToCenter = "TwoBoxAuton/output/LeftSwitchToCenter.wpilib.json";
     
-    public TwoBoxAutonLeft(RobotContainer robot) {
-        //goes to left switch and drops it
+    public TwoBoxAutonLeftSwitch(RobotContainer robot) {
+        this.robot = robot;
         addCommands(
             new DrivetrainRamsetteCommand(robot.drivetrain, SwitchLeft),
             new ElevatorToSwitchCommand(robot.elevator),
             new IntakeDeacquireCommand(robot.intake),
             new IntakeRetractCommand(robot.intake),
-            new ElevatorPickupCommand(robot.elevator)
-                .withTimeout(time)
+            new ElevatorPickupCommand(robot.elevator).withTimeout(time)
         );
 
         addCommands(
@@ -38,9 +38,7 @@ public class TwoBoxAutonLeft extends SequentialCommandGroup{
             new IntakeExtendCommand(robot.intake),
             new IntakeAcquireForeverCommand(robot.intake),
             new ElevatorToSwitchCommand(robot.elevator),
-            new IntakeDeacquireCommand(robot.intake)
-                .withTimeout(time)
-                                       
+            new IntakeDeacquireCommand(robot.intake)                             
         );
     }
 }
