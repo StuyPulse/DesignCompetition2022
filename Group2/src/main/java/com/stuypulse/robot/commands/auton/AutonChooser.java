@@ -2,6 +2,7 @@ package com.stuypulse.robot.commands.auton;
 
 import com.stuypulse.robot.RobotContainer;
 
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class AutonChooser {
@@ -45,16 +46,21 @@ public class AutonChooser {
         }
     }
     
-    public static Command getAuton(RobotContainer robot, String fms, boolean red, StartPosition pos) {
+    public static Command getAuton(RobotContainer robot, String fms, Alliance alliance, StartPosition pos) {
         // if FMS string is not 3 letters or contains letters other than R and B
         if (fms.length() != 3 || !fms.matches("[RB]+")) {
             System.out.println("Error: invalid FMS color string: " + fms);
             System.exit(694);
         }
 
+        if (alliance == Alliance.Invalid) {
+            System.out.println("Error: invalid alliance type");
+            System.exit(694);
+        }
+
         SwitchState state = SwitchState.REDRED;
 
-        if (red) {
+        if (alliance == Alliance.Red) {
             fms = fms.substring(0, 2);
     
             if (fms.equals("RR"))      state = SwitchState.REDRED;
