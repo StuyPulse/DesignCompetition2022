@@ -35,7 +35,7 @@ public class TwoBoxAuto extends SequentialCommandGroup {
 			new WaitCommand(INTAKE_TIME),
 
 			// move to scale and drop cube
-			new MoveElevatorDistanceCommand(Settings.Elevator.TOP_HEIGHT, robot.elevator),
+			new MoveElevatorDistanceCommand(Settings.Elevator.MAX_DIST, robot.elevator),
 			new SwivelTrajectory(robot.swivel, pathC).fieldRelative(),
 			IntakeCommands.DeacquireForever(robot.intake)
 		);

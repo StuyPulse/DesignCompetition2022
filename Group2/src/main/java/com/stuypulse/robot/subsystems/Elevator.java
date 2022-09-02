@@ -77,7 +77,7 @@ public abstract class Elevator extends SubsystemBase {
     }
 
     public void setTop() {
-        this.setDistance = Settings.Elevator.TOP_HEIGHT;
+        this.setDistance = Settings.Elevator.MAX_DIST;
     }
 
     public void setBottom() {
@@ -96,7 +96,7 @@ public abstract class Elevator extends SubsystemBase {
     public void periodic() {
         move(controller.update(setDistance, getDistance()));
 
-        elevatorMech.setLength(getDistance() * (5 / Settings.Elevator.TOP_HEIGHT) + 0.5);
+        elevatorMech.setLength(getDistance() * (5 / Settings.Elevator.MAX_DIST) + 0.5);
         // intakeMech.setAngle(intake.getAngle().getDegrees());
         
         SmartDashboard.putBoolean("Elevator/Top Limit Reached", getTopLimitReached());
