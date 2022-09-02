@@ -37,4 +37,4 @@ public interface Motion {
                     new Constraints(Modules.MAX_ANGULAR_SPEED, Modules.MAX_ANGULAR_ACCEL));
         }
     }
-} 
+}

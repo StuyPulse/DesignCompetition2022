@@ -23,8 +23,6 @@ import com.stuypulse.stuylib.streams.vectors.filters.VDeadZone;
 import com.stuypulse.stuylib.streams.vectors.filters.VFilter;
 import com.stuypulse.stuylib.streams.vectors.filters.VLowPassFilter;
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-
 import edu.wpi.first.math.util.Units;
 
 /*-

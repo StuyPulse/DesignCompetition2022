@@ -20,6 +20,7 @@ public class SwerveTrajectoryFollower extends SwerveControllerCommand {
             Motion.X.getController(),
             Motion.Y.getController(),
             Motion.Theta.getController(),
+            swerve::getAngle,
             swerve::setStates,
             swerve
         );
@@ -44,7 +45,7 @@ public class SwerveTrajectoryFollower extends SwerveControllerCommand {
         return this;
     }
 
-    public void initialze() {
+    public void initialize() {
         if (robotRelative) {
             swerve.reset(trajectory.getInitialPose());
         }
