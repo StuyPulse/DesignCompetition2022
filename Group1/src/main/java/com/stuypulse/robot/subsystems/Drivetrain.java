@@ -1,8 +1,6 @@
 package com.stuypulse.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,13 +11,11 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
@@ -31,6 +27,8 @@ import com.stuypulse.stuylib.network.SmartNumber;
 
 import static com.stuypulse.robot.constants.Ports.Drivetrain.Grayhill.*;
 import static com.stuypulse.robot.constants.Settings.Drivetrain.PID.*;
+
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import static com.stuypulse.robot.constants.Settings.Drivetrain.FF.*;
 
@@ -61,14 +59,14 @@ import static com.stuypulse.robot.constants.Settings.Drivetrain.FF.*;
  * @author Carmin Vuong
  */
 
-public class Drivetrain extends SubsystemBase {
+public class Drivetrain extends IDrivetrain {
     /** CONTROLS */
     private final DifferentialDriveKinematics driveKinematics;
     private final Controller leftController;
     private final Controller rightController;
 
-    private SmartNumber leftTargetSpeed;
-    private SmartNumber rightTargetSpeed;
+    private final SmartNumber leftTargetSpeed;
+    private final SmartNumber rightTargetSpeed;
 
     /** HARDWARE */
     private final MotorControllerGroup left;
@@ -101,23 +99,25 @@ public class Drivetrain extends SubsystemBase {
         rightTargetSpeed = new SmartNumber("Drivetrain/Right Target Speed", 0.0);
 
         /** MOTORS */
-        CANSparkMax leftFront = new CANSparkMax(Ports.Drivetrain.LEFT_FRONT, MotorType.kBrushed);
-        CANSparkMax leftMiddle = new CANSparkMax(Ports.Drivetrain.LEFT_MIDDLE, MotorType.kBrushless);
-        CANSparkMax leftBack = new CANSparkMax(Ports.Drivetrain.LEFT_BACK, MotorType.kBrushless);
+        WPI_TalonSRX leftFront = new WPI_TalonSRX(Ports.Drivetrain.LEFT_FRONT);
+        WPI_TalonSRX leftMiddle = new WPI_TalonSRX(Ports.Drivetrain.LEFT_MIDDLE);
+        WPI_TalonSRX leftBack = new WPI_TalonSRX(Ports.Drivetrain.LEFT_BACK);
         Motors.Drivetrain.left.configure(leftFront, leftMiddle, leftBack);
         left = new MotorControllerGroup(leftFront, leftMiddle, leftBack);
         addChild("Left Motor Controller Group", left);
 
-        CANSparkMax rightFront = new CANSparkMax(Ports.Drivetrain.RIGHT_FRONT, MotorType.kBrushless);
-        CANSparkMax rightMiddle = new CANSparkMax(Ports.Drivetrain.RIGHT_MIDDLE, MotorType.kBrushless);
-        CANSparkMax rightBack = new CANSparkMax(Ports.Drivetrain.RIGHT_BACK, MotorType.kBrushless);
+        WPI_TalonSRX rightFront = new WPI_TalonSRX(Ports.Drivetrain.RIGHT_FRONT);
+        WPI_TalonSRX rightMiddle = new WPI_TalonSRX(Ports.Drivetrain.RIGHT_MIDDLE);
+        WPI_TalonSRX rightBack = new WPI_TalonSRX(Ports.Drivetrain.RIGHT_BACK);
         Motors.Drivetrain.right.configure(rightFront, rightMiddle, rightBack);
         right = new MotorControllerGroup(rightFront, rightMiddle, rightBack);
         addChild("Right Motor Controller Group", right);
 
         /** ENCODERS */
         leftGrayhill = new Encoder(LEFT_A, LEFT_B);
+        leftGrayhill.setDistancePerPulse(Settings.Drivetrain.DISTANCE_PER_PULSE);
         rightGrayhill = new Encoder(RIGHT_A, RIGHT_B);
+        rightGrayhill.setDistancePerPulse(Settings.Drivetrain.DISTANCE_PER_PULSE);
         addChild("Left Encoder", leftGrayhill);
         addChild("Right Encoder", rightGrayhill);
 
@@ -132,21 +132,26 @@ public class Drivetrain extends SubsystemBase {
         addChild("Field", field);
 
         /** SIMULATION */
-        drivetrainSim = new DifferentialDrivetrainSim(LinearSystemId.identifyDrivetrainSystem(kV.get(), kA.get(), kVA.get(), kAA.get(), Settings.Drivetrain.TRACK_WIDTH),
-                                DCMotor.getNEO(3), 5, 5, 5, 
-                                null);
+        drivetrainSim = new DifferentialDrivetrainSim(
+                LinearSystemId.identifyDrivetrainSystem(kV.get(), kA.get(), kVA.get(), kAA.get(),
+                        Settings.Drivetrain.TRACK_WIDTH),
+                DCMotor.getFalcon500(3), 8, Settings.Drivetrain.TRACK_WIDTH, Settings.Drivetrain.WHEEL_DIAMETER,
+                null);
         leftEncoderSim = new EncoderSim(leftGrayhill);
         rightEncoderSim = new EncoderSim(rightGrayhill);
     }
 
+    @Override
     public Rotation2d getAngle() {
         return navx.getRotation2d();
     }
 
+    @Override
     public Pose2d getPose() {
         return odometry.getPoseMeters();
     }
 
+    @Override
     public void reset(Pose2d location) {
         leftGrayhill.reset();
         rightGrayhill.reset();
@@ -155,33 +160,22 @@ public class Drivetrain extends SubsystemBase {
         odometry.resetPosition(location, getAngle());
     }
 
-    private void setSpeed(double left, double right) {
-        leftTargetSpeed.set(left);
-        rightTargetSpeed.set(right);
-    }
-
-    private void setSpeed(DifferentialDriveWheelSpeeds speeds) {
-        leftTargetSpeed.set(speeds.leftMetersPerSecond);
-        rightTargetSpeed.set(speeds.rightMetersPerSecond);
-    }
-
-    public DifferentialDriveWheelSpeeds getSpeed() {
+    @Override
+    public DifferentialDriveWheelSpeeds getSpeeds() {
         return new DifferentialDriveWheelSpeeds(leftGrayhill.getRate(),
                 rightGrayhill.getRate());
     }
 
+    @Override
     public void tankDrive(double left, double right) {
-        setSpeed(left, right);
+        leftTargetSpeed.set(left);
+        rightTargetSpeed.set(right);
     }
 
+    @Override
     public void arcadeDrive(double speed, double angle) {
-        setSpeed(driveKinematics.toWheelSpeeds(
-                new ChassisSpeeds(speed, 0, angle)));
-    }
-
-    public void setSpeeds(double leftSpeed, double rightSpeed) {
-        left.setVoltage(leftController.update(leftSpeed, leftGrayhill.getRate()));
-        right.setVoltage(rightController.update(rightSpeed, rightGrayhill.getRate()));
+        var wheelSpeeds = driveKinematics.toWheelSpeeds(new ChassisSpeeds(speed, 0, angle));
+        tankDrive(wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond);
     }
 
     @Override
@@ -193,18 +187,22 @@ public class Drivetrain extends SubsystemBase {
         right.setVoltage(rightController.update(rightTargetSpeed.get(),
                 rightGrayhill.getRate()));
 
-        field.setRobotPose(odometry.getPoseMeters());
+        field.setRobotPose(getPose());
     }
 
     @Override
     public void simulationPeriodic() {
-        drivetrainSim.setInputs(left.get() * RobotController.getInputVoltage(), 
-                                right.get() * RobotController.getInputVoltage());
+        var speeds = driveKinematics.toChassisSpeeds(getSpeeds());
+        navx.setAngleAdjustment(navx.getAngle() - Math.toDegrees(speeds.omegaRadiansPerSecond * 0.02));
+
+        drivetrainSim.setInputs(leftController.update(leftTargetSpeed.get(), leftEncoderSim.getRate()),
+                rightController.update(rightTargetSpeed.get(), rightEncoderSim.getRate()));
         drivetrainSim.update(0.02);
 
-        leftEncoderSim.setDistance(drivetrainSim.getLeftPositionMeters());
         leftEncoderSim.setRate(drivetrainSim.getLeftVelocityMetersPerSecond());
-        rightEncoderSim.setDistance(drivetrainSim.getRightPositionMeters());
         rightEncoderSim.setRate(drivetrainSim.getRightVelocityMetersPerSecond());
+
+        leftEncoderSim.setDistance(drivetrainSim.getLeftPositionMeters());
+        rightEncoderSim.setDistance(drivetrainSim.getRightPositionMeters());
     }
 }

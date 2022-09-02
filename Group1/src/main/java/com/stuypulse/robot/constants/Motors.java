@@ -21,15 +21,15 @@ import com.revrobotics.CANSparkMax.IdleMode;
  */
 public interface Motors {
     public interface Drivetrain {
-        CANSparkMaxConfig left = new CANSparkMaxConfig(true, IdleMode.kBrake, 60, 0);
-        CANSparkMaxConfig right = new CANSparkMaxConfig(false, IdleMode.kBrake, 60, 0);
+        TalonSRXConfig left = new TalonSRXConfig(true, NeutralMode.Brake, 60, 0);
+        TalonSRXConfig right = new TalonSRXConfig(false, NeutralMode.Brake, 60, 0);
     }
     
     public interface Elevator {
         TalonSRXConfig elevator = new TalonSRXConfig(false, NeutralMode.Brake, 30, 0);
     }
 
-    public interface Intake{
+    public interface Intake {
         CANSparkMaxConfig driver = new CANSparkMaxConfig(true, IdleMode.kCoast, 40, 0);
         CANSparkMaxConfig deploy = new CANSparkMaxConfig(false, IdleMode.kCoast, 40, 0);
     }

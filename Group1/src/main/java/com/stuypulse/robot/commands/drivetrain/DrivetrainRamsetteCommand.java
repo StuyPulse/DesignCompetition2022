@@ -1,6 +1,7 @@
 package com.stuypulse.robot.commands.drivetrain;
 
 import com.stuypulse.robot.subsystems.Drivetrain;
+import com.stuypulse.robot.subsystems.IDrivetrain;
 
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
@@ -25,14 +26,14 @@ public class DrivetrainRamsetteCommand extends RamseteCommand {
 
     private boolean resetPosition;
     private Trajectory trajectory;
-    private Drivetrain drivetrain;
+    private IDrivetrain drivetrain;
 
-    public DrivetrainRamsetteCommand(Drivetrain drivetrain, Trajectory trajectory) {
+    public DrivetrainRamsetteCommand(IDrivetrain drivetrain, Trajectory trajectory) {
         super(trajectory,
                 drivetrain::getPose,
                 new RamseteController(),
                 new DifferentialDriveKinematics(TRACK_WIDTH),
-                drivetrain::setSpeeds,
+                drivetrain::tankDrive,
                 drivetrain);
         this.drivetrain = drivetrain;
         this.trajectory = trajectory;
@@ -41,7 +42,7 @@ public class DrivetrainRamsetteCommand extends RamseteCommand {
         addRequirements(drivetrain);
     }
 
-    public DrivetrainRamsetteCommand(Drivetrain drivetrain, String path) {
+    public DrivetrainRamsetteCommand(IDrivetrain drivetrain, String path) {
         this(drivetrain, getTrajectory(path));
     }
 
