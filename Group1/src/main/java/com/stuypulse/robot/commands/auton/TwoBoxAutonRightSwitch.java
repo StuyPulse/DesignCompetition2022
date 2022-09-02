@@ -17,14 +17,11 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  * @author Carmin Vuong
  */
 public class TwoBoxAutonRightSwitch extends SequentialCommandGroup {
-    private final RobotContainer robot;
 
-    private double time = 1.0;
     private static final String SwitchRight = "TwoBoxAuton/output/switchRight.wpilib.json";
     private static final String RightSwitchToCenter = "TwoBoxAuton/output/RightSwitchToCenter.wpilib.json";
 
     public TwoBoxAutonRightSwitch(RobotContainer robot) {
-        this.robot = robot;
        addCommands(
                 new DrivetrainRamsetteCommand(robot.drivetrain, SwitchRight),
                 new ElevatorToSwitchCommand(robot.elevator),

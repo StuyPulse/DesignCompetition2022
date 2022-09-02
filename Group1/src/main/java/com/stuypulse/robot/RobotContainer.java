@@ -10,8 +10,6 @@ import com.stuypulse.robot.commands.Intake.IntakeDeacquireCommand;
 import com.stuypulse.robot.commands.Intake.IntakeExtendCommand;
 import com.stuypulse.robot.commands.Intake.IntakeRetractCommand;
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
-import com.stuypulse.robot.commands.auton.TwoBoxAutonLeftSwitch;
-import com.stuypulse.robot.commands.auton.TwoBoxAutonRightSwitch;
 import com.stuypulse.robot.commands.drivetrain.DrivetrainDriveCommand;
 import com.stuypulse.robot.commands.elevator.ElevatorClimbCommand;
 import com.stuypulse.robot.commands.elevator.ElevatorDefaultCommand;
@@ -20,17 +18,13 @@ import com.stuypulse.robot.commands.elevator.ElevatorToSwitchCommand;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.subsystems.Drivetrain;
 import com.stuypulse.robot.subsystems.Elevator;
-import com.stuypulse.robot.subsystems.IDrivetrain;
 import com.stuypulse.robot.subsystems.Intake;
-import com.stuypulse.robot.subsystems.SimDrivetrain;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 
 public class RobotContainer {
 

@@ -2,7 +2,6 @@ package com.stuypulse.robot.commands.drivetrain;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-import com.stuypulse.robot.subsystems.Drivetrain;
 import com.stuypulse.robot.subsystems.IDrivetrain;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.math.SLMath;
