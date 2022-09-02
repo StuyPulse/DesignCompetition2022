@@ -6,7 +6,6 @@ import com.stuypulse.stuylib.math.SLMath;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SimElevator extends Elevator {
 
@@ -57,6 +56,10 @@ public class SimElevator extends Elevator {
     @Override
     public void simulationPeriodic() {
         sim.update(Settings.DT);
+
+        if (getTopLimitReached() && sim.getVelocityMetersPerSecond() > 0) return;
+        if (getBottomLimitReached() && sim.getVelocityMetersPerSecond() < 0) return;
+
         distance += sim.getVelocityMetersPerSecond() * Settings.DT;
     }
 
