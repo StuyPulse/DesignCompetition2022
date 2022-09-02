@@ -57,6 +57,8 @@ public interface Settings {
         double PULSES_PER_ROTATE = -1;
 
         double WEIGHT = Units.lbsToKilograms(32.149);
+        
+        double DRIVE_SPEED = Units.feetToMeters(1);
 
         public interface Control {
             double kS = 0;//0.01;
