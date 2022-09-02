@@ -9,9 +9,11 @@ import com.stuypulse.robot.commands.auton.AutonChooser;
 import com.stuypulse.robot.commands.auton.AutonChooser.StartPosition;
 import com.stuypulse.robot.commands.swivel.SwivelDrive;
 import com.stuypulse.robot.constants.Ports;
+import com.stuypulse.robot.subsystems.Elevator;
 import com.stuypulse.robot.subsystems.Intake;
 import com.stuypulse.robot.subsystems.intake.SimIntake;
 import com.stuypulse.robot.subsystems.Swivel;
+import com.stuypulse.robot.subsystems.elevator.SimElevator;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 import com.stuypulse.stuylib.network.SmartBoolean;
@@ -26,6 +28,7 @@ public class RobotContainer {
   // Subsystem
   public final Intake intake = new SimIntake();
   public final Swivel swivel = new Swivel();
+  public final Elevator elevator = new SimElevator();
 
   // Gamepads
   public final Gamepad driver = new AutoGamepad(Ports.Gamepad.DRIVER);
