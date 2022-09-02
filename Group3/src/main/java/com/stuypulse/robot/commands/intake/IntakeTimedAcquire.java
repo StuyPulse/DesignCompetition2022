@@ -31,7 +31,7 @@ public class IntakeTimedAcquire extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return stopwatch.getTime() == time;
+        return stopwatch.getTime() > time;
     }
 
     @Override
