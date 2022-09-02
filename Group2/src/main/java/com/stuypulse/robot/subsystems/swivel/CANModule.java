@@ -54,4 +54,12 @@ public class CANModule extends SwivelModule {
         return driveEncoder.getVelocity();
     }
 
+    @Override
+    public void stop() {
+        super.stop();
+
+        turnMotor.stopMotor();
+        driveMotor.stopMotor();
+    }
+
 }

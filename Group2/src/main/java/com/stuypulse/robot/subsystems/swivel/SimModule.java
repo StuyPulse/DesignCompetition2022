@@ -49,6 +49,14 @@ public class SimModule extends SwivelModule {
     }
 
     @Override
+    public void stop() {
+        super.stop();
+
+        driveMotor.stopMotor();
+        turnMotor.stopMotor();
+    }
+
+    @Override
     public void simulationPeriodic() {
         driveMotor.update(Settings.DT);
         turnMotor.update(Settings.DT);
