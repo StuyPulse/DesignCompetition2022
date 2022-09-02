@@ -1,7 +1,6 @@
 package com.stuypulse.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
@@ -14,14 +13,15 @@ import com.stuypulse.stuylib.network.SmartAngle;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.LinearSystemSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static com.stuypulse.robot.constants.Settings.Intake.PID.*;
@@ -50,7 +50,7 @@ public class Intake extends SubsystemBase {
     /** HARDWARE */
     private final MotorControllerGroup driver;
     private final CANSparkMax deploy;
-    private final RelativeEncoder encoder;
+    private final Encoder grayhill;
 
     /** CONTROL */
     private final Controller controller;
@@ -58,6 +58,7 @@ public class Intake extends SubsystemBase {
     private final SmartAngle targetAngle;
 
     /** SIMULATION */
+    private EncoderSim encoderSim;
     private LinearSystemSim<N2, N1, N1> intakeSim;
     private MechanismLigament2d intakeArm;
     private MechanismLigament2d targetArm;
@@ -75,12 +76,13 @@ public class Intake extends SubsystemBase {
         Motors.Intake.deploy.configure(deploy);
 
         /** CONTROL */
-        encoder = deploy.getEncoder();
+        grayhill = new Encoder(Ports.Intake.DEPLOYER_A, Ports.Intake.DEPLOYER_B);
         controller = new PIDController(kP, kI, kD).add(new Feedforward.Motor(kS, kV, kA).position());
 
         targetAngle = new SmartAngle("Intake/Target Angle", Angle.fromDegrees(0));
 
         /** SIMULATION */
+        encoderSim = new EncoderSim(grayhill);
         intakeSim = new LinearSystemSim<>(LinearSystemId.identifyPositionSystem(kV.get(), kA.get()));
         Mechanism2d mech = new Mechanism2d(WIDTH, HEIGHT);
         MechanismRoot2d root = mech.getRoot("Intake Root", ROOT_WIDTH, ROOT_HEIGHT);
@@ -94,6 +96,7 @@ public class Intake extends SubsystemBase {
                     "Intake Target Arm",
                     ARM_WIDTH,
                     targetAngle.get().toDegrees()));
+        addChild("Intake Sim", mech);
     }
 
     private void setAngle(Angle angle) {
@@ -122,9 +125,7 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        deploy.setVoltage(controller.update(targetAngle.get().toDegrees(), encoder.getPosition()));
-
-        SmartDashboard.putNumber("Intake/Encoder Position", encoder.getPosition());
+        deploy.setVoltage(controller.update(targetAngle.get().toDegrees(), grayhill.getDistance()));
     }
 
     @Override
@@ -132,10 +133,10 @@ public class Intake extends SubsystemBase {
         intakeSim.setInput(deploy.get() * RoboRioSim.getVInVoltage());
 
         intakeSim.update(0.02);
-        encoder.setPosition(intakeSim.getOutput(0));
+        encoderSim.setDistance(intakeSim.getOutput(0));
         RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(
             intakeSim.getCurrentDrawAmps()));
-        intakeArm.setAngle(encoder.getPosition());
+        intakeArm.setAngle(encoderSim.getDistance());
         targetArm.setAngle(targetAngle.get().toDegrees());
     }
 }
