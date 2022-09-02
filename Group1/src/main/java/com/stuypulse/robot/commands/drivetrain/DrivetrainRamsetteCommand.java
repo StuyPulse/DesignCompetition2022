@@ -1,6 +1,5 @@
 package com.stuypulse.robot.commands.drivetrain;
 
-import com.stuypulse.robot.subsystems.Drivetrain;
 import com.stuypulse.robot.subsystems.IDrivetrain;
 
 import edu.wpi.first.math.controller.RamseteController;
