@@ -35,24 +35,24 @@ import static com.stuypulse.robot.constants.Settings.Elevator.SIMULATION.*;
  * @author Vincent Wang
  * @author Carmin Vong
  * 
- *         Elevator fields:
- *         - Motor Controller Group
- *         - Controller
- *         - Digital Input (Limit Switches)?
- *         - Encoder?
- *         - Target Distance
+ * Elevator fields:
+ * - Motor Controller Group
+ * - Controller
+ * - Digital Input (Limit Switches)?
+ * - Encoder?
+ * - Target Distance
  * 
- *         Elevator methods:
- *         - setPosition()
- *         - setBox()
- *         - setScale()
- *         - setSwitch()
- *         - setClimb()
+ * Elevator methods:
+ * - setPosition()
+ * - setBox()
+ * - setScale()
+ * - setSwitch()
+ * - setClimb()
  *
- *         Heights:
- *         rung 7ft
- *         scale 6ft 4in
- *         switch 15 in
+ * Heights:
+ * rung 7ft
+ * scale 6ft 4in
+ * switch 15 in
  */
 
 public class Elevator extends SubsystemBase {
@@ -105,10 +105,10 @@ public class Elevator extends SubsystemBase {
                 new MechanismLigament2d(
                         "Arm",
                         ARM_WIDTH, 0));
-        addChild("Elevator Mechanism", mech);
+        addChild("Elevator Sim", mech);
     }
 
-    private void setPosition(double distance) {
+    public void setPosition(double distance) {
         targetDistance.set(distance);
     }
 
@@ -128,10 +128,16 @@ public class Elevator extends SubsystemBase {
         setPosition(Settings.Elevator.RUNG);
     }
 
+    private void setVoltage(double volts) {
+        if (upperLimitSwitch.get() && volts > 0.0) volts = 0.0;
+        else if (lowerLimitSwitch.get() && volts < 0.0) volts = 0.0;
+        motors.setVoltage(volts);
+    }
+
     @Override
     public void periodic() {
-        motors.setVoltage(controller.update(targetDistance.get(),
-                grayhill.getDistance()));
+       setVoltage(controller.update(targetDistance.get(),
+       grayhill.getDistance()));
     }
 
     @Override
