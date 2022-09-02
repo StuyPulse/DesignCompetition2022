@@ -1,6 +1,5 @@
 package com.stuypulse.robot.subsystems.swivel;
 
-import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Modules.ModuleConfig;
 import com.stuypulse.robot.constants.Settings.Swivel.Drive;
 import com.stuypulse.robot.constants.Settings.Swivel.Turn;
@@ -12,9 +11,7 @@ import com.stuypulse.stuylib.control.feedforward.Feedforward;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.Vector2D;
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -40,7 +37,7 @@ public abstract class SwivelModule extends SubsystemBase {
         this.driveControl = new Feedforward.Motor(
                 Drive.Feedforward.kS,
                 Drive.Feedforward.kV,
-                Drive.Feedforward.kA).position()
+                Drive.Feedforward.kA).velocity()
             .add(new PIDController(
                 Drive.Feedback.kP,
                 Drive.Feedback.kI,
@@ -61,6 +58,10 @@ public abstract class SwivelModule extends SubsystemBase {
 
     protected abstract double getSpeed();
 
+    public void stop() {
+        targetState = new SwerveModuleState(0, getAngle());
+    }
+
 
     public void setState(SwerveModuleState state) {
         targetState = SwerveModuleState.optimize(state, getAngle());
@@ -80,7 +81,6 @@ public abstract class SwivelModule extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // drive control
         setDriveVolts(driveControl.update(
             targetState.speedMetersPerSecond, getSpeed()));
 

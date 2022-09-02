@@ -5,13 +5,14 @@ import com.stuypulse.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class MoveElevatorCommand extends CommandBase {
+    
     private final Elevator elevator;
-    private final Number number;
+    private final Number speed;
     private final boolean movingUp;
 
     public MoveElevatorCommand(Elevator elevator, Number speed, boolean movingUp) {
         this.elevator = elevator;
-        this.number = speed;
+        this.speed = speed;
         this.movingUp = movingUp;
 
         addRequirements(elevator);
@@ -23,9 +24,9 @@ public class MoveElevatorCommand extends CommandBase {
     @Override
     public void execute() {
         if (movingUp) {
-            elevator.move(+this.number.doubleValue());
+            elevator.move(+this.speed.doubleValue());
         } else {
-            elevator.move(-this.number.doubleValue());
+            elevator.move(-this.speed.doubleValue());
         }
     }
 

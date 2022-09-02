@@ -20,7 +20,16 @@ public class SimElevator extends Elevator {
 
     @Override
     public void move(double speed) {
-        motors.set(speed);
+        // speed -= Control.kG;
+
+        // if elevator should not physically be able to move
+        if (getBottomLimitReached() && speed < 0) {
+            motors.stopMotor();
+        } else if (getTopLimitReached() && speed > 0) {
+            motors.stopMotor();
+        } else {
+            motors.set(speed);
+        }
     }
 
     @Override

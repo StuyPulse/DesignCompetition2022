@@ -160,6 +160,12 @@ public class Swivel extends SubsystemBase {
         odometry.resetPosition(pos, getGyroAngle());
     }
 
+    public void stop() {
+        for (SwivelModule module : modules) {
+            module.stop();
+        }
+    }
+
     // Field //
 
     private void updateField() {

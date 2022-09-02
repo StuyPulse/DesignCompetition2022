@@ -48,9 +48,9 @@ public abstract class Elevator extends SubsystemBase {
         
         setDistance = 0;
 
-        mech = new Mechanism2d(3, 3);
+        mech = new Mechanism2d(2, 6);
         
-        MechanismRoot2d root = mech.getRoot("elevator", 2, 0);
+        MechanismRoot2d root = mech.getRoot("elevator", 1, 0);
         
         elevatorMech = root.append(
             new MechanismLigament2d("elevator", 1, 90.0));
@@ -96,7 +96,7 @@ public abstract class Elevator extends SubsystemBase {
     public void periodic() {
         move(controller.update(setDistance, getDistance()));
 
-        elevatorMech.setLength(getDistance() + 1);
+        elevatorMech.setLength(getDistance() * (5 / Settings.Elevator.TOP_HEIGHT) + 0.5);
         // intakeMech.setAngle(intake.getAngle().getDegrees());
         
         SmartDashboard.putBoolean("Elevator/Top Limit Reached", getTopLimitReached());
