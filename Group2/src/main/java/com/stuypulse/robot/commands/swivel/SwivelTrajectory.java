@@ -18,6 +18,7 @@ public class SwivelTrajectory extends SwerveControllerCommand {
     private final Trajectory trajectory;
 
     private boolean fieldRelative;
+    private boolean stop;
 
     public SwivelTrajectory(Swivel swivel, Trajectory trajectory) {
         super(
@@ -35,6 +36,7 @@ public class SwivelTrajectory extends SwerveControllerCommand {
         this.trajectory = trajectory;
 
         fieldRelative = true;
+        stop = false;
     }
 
     public SwivelTrajectory(Swivel swivel, String path) {
@@ -67,6 +69,12 @@ public class SwivelTrajectory extends SwerveControllerCommand {
         return this;
     }
 
+    public SwivelTrajectory withStop() {
+        stop = true;
+
+        return this;
+    }
+
     @Override
     public void initialize() {
         if (!fieldRelative) {
@@ -74,6 +82,15 @@ public class SwivelTrajectory extends SwerveControllerCommand {
         }
 
         super.initialize();
+    }
+
+    @Override
+    public void end(boolean wasInterrupted) {
+        super.end(wasInterrupted);
+
+        if (stop) {
+            swivel.stop();
+        }
     }
 
 }
