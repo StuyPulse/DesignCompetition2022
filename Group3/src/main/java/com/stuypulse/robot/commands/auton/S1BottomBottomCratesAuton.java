@@ -21,43 +21,45 @@ public class S1BottomBottomCratesAuton extends SequentialCommandGroup {
 
     public S1BottomBottomCratesAuton(RobotContainer robot){
         addCommands(
+            new IntakeExtend(robot.intake),
+            
             new ParallelCommandGroup(
                 new SwerveTrajectoryFollower(robot.swerve, S1toP2).robotRelative(),
                 new ElevatorToHeight(robot.elevator, 0.41)
             ),
-            new IntakeTimedDeacquire(robot.intake, 0.5),
+            new IntakeTimedDeacquire(robot.intake, 0.5).withTimeout(0.5),
 
             new ParallelCommandGroup(
                 new SwerveTrajectoryFollower(robot.swerve, P2toP10).fieldRelative(),
                 new ElevatorToBottom(robot.elevator)
             ),
-            new IntakeTimedAcquire(robot.intake, 0.5),
+            new IntakeTimedAcquire(robot.intake, 0.5).withTimeout(0.5),
 
             new ParallelCommandGroup(
                 new SwerveTrajectoryFollower(robot.swerve, P10ToP4).fieldRelative(),
                 new ElevatorToHeight(robot.elevator, 2.0)
             ),
-            new IntakeTimedDeacquire(robot.intake, 0.5),
+            new IntakeTimedDeacquire(robot.intake, 0.5).withTimeout(0.5),
 
             new ParallelCommandGroup(
                 new SwerveTrajectoryFollower(robot.swerve, P4ToP9).fieldRelative(),
                 new ElevatorToBottom(robot.elevator)
             ),
             
-            new IntakeTimedAcquire(robot.intake, 0.5), 
+            new IntakeTimedAcquire(robot.intake, 0.5).withTimeout(0.5), 
             
             new ParallelCommandGroup(
                 new SwerveTrajectoryFollower(robot.swerve, P9ToP4).fieldRelative(),
                 new ElevatorToHeight(robot.elevator, 2.0)
             ),
-            new IntakeTimedDeacquire(robot.intake, 0.5),
+            new IntakeTimedDeacquire(robot.intake, 0.5).withTimeout(0.5),
 
             new ParallelCommandGroup(
                 new SwerveTrajectoryFollower(robot.swerve, P4ToP8).fieldRelative(),
                 new ElevatorToBottom(robot.elevator)
             ),
             
-            new IntakeTimedAcquire(robot.intake, 0.5),
+            new IntakeTimedAcquire(robot.intake, 0.5).withTimeout(0.5),
 
             new ParallelCommandGroup(
                 new SwerveTrajectoryFollower(robot.swerve, P8ToP4).fieldRelative(),

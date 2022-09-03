@@ -6,6 +6,11 @@ import com.stuypulse.robot.util.FakeFMS.Color;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
+/**
+ * Uses the data from FakeFMS to determine which path to run.
+ * 
+ * @param position the starting position of the robot
+ */
 public class AutonChooser {
 
     private static RobotContainer robot;
@@ -15,8 +20,6 @@ public class AutonChooser {
         robot = container;
         colors = FakeFMS.getColors();
     }
-
-    // i dunno how you wanna do this but you got this. 2am autons not it :D
 
     public static SequentialCommandGroup getAuton(Integer position) {
         switch (position) {

@@ -3,6 +3,7 @@ package com.stuypulse.robot.commands.auton;
 import com.stuypulse.robot.RobotContainer;
 import com.stuypulse.robot.commands.elevator.ElevatorToBottom;
 import com.stuypulse.robot.commands.elevator.ElevatorToHeight;
+import com.stuypulse.robot.commands.intake.IntakeExtend;
 import com.stuypulse.robot.commands.intake.IntakeTimedAcquire;
 import com.stuypulse.robot.commands.intake.IntakeTimedDeacquire;
 import com.stuypulse.robot.commands.swerve.SwerveTrajectoryFollower;
@@ -22,47 +23,49 @@ public class S1TopBottomCratesAuton extends SequentialCommandGroup {
 
     public S1TopBottomCratesAuton(RobotContainer robot) {
         addCommands (
+            new IntakeExtend(robot.intake),
+
             new ParallelCommandGroup(
                 new SwerveTrajectoryFollower(robot.swerve, S1ToP1).robotRelative(),
                 new ElevatorToHeight(robot.elevator, 0.41)
             ),
-            new IntakeTimedDeacquire(robot.intake),
+            new IntakeTimedDeacquire(robot.intake).withTimeout(0.5),
 
             new ParallelCommandGroup(
                 new SwerveTrajectoryFollower(robot.swerve, P1ToP10).fieldRelative(),
                 new ElevatorToBottom(robot.elevator)
             ),
-            new IntakeTimedAcquire(robot.intake),
+            new IntakeTimedAcquire(robot.intake).withTimeout(0.5),
 
             new ParallelCommandGroup(
                 new SwerveTrajectoryFollower(robot.swerve, P10ToP4).fieldRelative(),
                 new ElevatorToHeight(robot.elevator, 2.0)
             ),
-            new IntakeTimedDeacquire(robot.intake),
+            new IntakeTimedDeacquire(robot.intake).withTimeout(0.5),
 
             new ParallelCommandGroup(
                 new SwerveTrajectoryFollower(robot.swerve, P4ToP9).fieldRelative(),
                 new ElevatorToBottom(robot.elevator)
             ),
-            new IntakeTimedAcquire(robot.intake),
+            new IntakeTimedAcquire(robot.intake).withTimeout(0.5),
 
             new ParallelCommandGroup(
                 new SwerveTrajectoryFollower(robot.swerve, P9ToP4).fieldRelative(),
                 new ElevatorToHeight(robot.elevator, 1.9)
             ),
-            new IntakeTimedDeacquire(robot.intake),
+            new IntakeTimedDeacquire(robot.intake).withTimeout(0.5),
 
             new ParallelCommandGroup(
                 new SwerveTrajectoryFollower(robot.swerve, P4ToP8).fieldRelative(),
                 new ElevatorToBottom(robot.elevator)
             ),
-            new IntakeTimedAcquire(robot.intake),
+            new IntakeTimedAcquire(robot.intake).withTimeout(0.5),
 
             new ParallelCommandGroup(
                 new SwerveTrajectoryFollower(robot.swerve, P8ToP4).fieldRelative(),
                 new ElevatorToHeight(robot.elevator, 1.9)
             ),
-            new IntakeTimedDeacquire(robot.intake)
+            new IntakeTimedDeacquire(robot.intake).withTimeout(0.5)
         );
     }
 }

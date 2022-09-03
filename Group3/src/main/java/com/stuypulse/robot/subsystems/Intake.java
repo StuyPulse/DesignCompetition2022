@@ -5,7 +5,8 @@ import static com.stuypulse.robot.constants.Motors.Intake.*;
 import static com.stuypulse.robot.constants.Settings.Intake.*;
 
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.stuypulse.stuylib.control.Controller;
@@ -38,7 +39,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Intake extends SubsystemBase {
     private final MotorControllerGroup drivers;
-    private final TalonFX deployer;
+    private final WPI_TalonFX deployer;
+    private final TalonFXSimCollection deployer_sim;
 
     private final Controller controller;
     private SmartNumber targetAngle;
@@ -47,7 +49,8 @@ public class Intake extends SubsystemBase {
         final CANSparkMax leftDriverMotor = new CANSparkMax(LEFT_DRIVER, MotorType.kBrushless);
         final CANSparkMax rightDriverMotor = new CANSparkMax(RIGHT_DRIVER, MotorType.kBrushless);
         drivers = new MotorControllerGroup(leftDriverMotor, rightDriverMotor);
-        deployer = new TalonFX(DEPLOYMENT);
+        deployer = new WPI_TalonFX(DEPLOYMENT);
+        deployer_sim = deployer.getSimCollection();
 
         LEFT_DRIVER_CONFIG.configure(leftDriverMotor);
         RIGHT_DRIVER_CONFIG.configure(rightDriverMotor);

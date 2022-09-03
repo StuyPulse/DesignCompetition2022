@@ -3,7 +3,6 @@ package com.stuypulse.robot.commands.swerve;
 import com.stuypulse.robot.constants.Motion;
 import com.stuypulse.robot.subsystems.Swerve;
 import com.stuypulse.robot.util.TrajectoryLoader;
-import com.stuypulse.stuylib.network.SmartAngle;
 
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;

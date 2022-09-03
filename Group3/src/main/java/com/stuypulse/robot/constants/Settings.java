@@ -23,11 +23,6 @@ import com.stuypulse.stuylib.streams.vectors.filters.VDeadZone;
 import com.stuypulse.stuylib.streams.vectors.filters.VFilter;
 import com.stuypulse.stuylib.streams.vectors.filters.VLowPassFilter;
 
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-
-import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.util.Units;
 
 /*-
@@ -49,24 +44,20 @@ public interface Settings {
 
             }
 
-            public interface Feedback {
+            public interface FB {
                 SmartNumber P = new SmartNumber("Swerve/Drive/P", 0.05);
                 SmartNumber I = new SmartNumber("Swerve/Drive/I", 0.0);
                 SmartNumber D = new SmartNumber("Swerve/Drive/D", 0.0);
 
-                public static Controller getFeedbackController() {
+                public static Controller getController() {
                     return new PIDController(P, I, D);
                 }
             }
 
-            public interface Feedforward {
+            public interface FF {
                 double V = 0.001;
                 double A = 0.001;
                 double S = 0.001;
-
-                public static SimpleMotorFeedforward getFeedforwardController() {
-                    return new SimpleMotorFeedforward(S, V, A);
-                }
             }
 
             public static VFilter getFilter() {
@@ -91,12 +82,12 @@ public interface Settings {
                 }
             }
 
-            public interface Feedback {
+            public interface FB {
                 SmartNumber P = new SmartNumber("Swerve/Turn/P", 0.05);
                 SmartNumber I = new SmartNumber("Swerve/Turn/I", 0.0);
                 SmartNumber D = new SmartNumber("Swerve/Turn/D", 0.0);
 
-                public static AngleController getFeedbackController() {
+                public static AngleController getController() {
                     return new AnglePIDController(P, I, D);
                 }
             }
