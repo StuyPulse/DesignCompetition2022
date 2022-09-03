@@ -1,43 +1,40 @@
-package com.stuypulse.robot.subsystems;
+package com.stuypulse.robot.subsystems.swerve;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.stuypulse.robot.constants.Settings.Swerve.Turn;
-import com.stuypulse.robot.util.EncoderSim;
-import com.stuypulse.robot.util.MotorSim;
-import com.stuypulse.robot.util.MotorSim.MotorType;
 import com.stuypulse.stuylib.math.Angle;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
-public class SimModule extends SwerveModule {
+public class FalconModule extends SwerveModule {
     
-    private final MotorSim drive;
-    private final MotorSim turn;
+    private final WPI_TalonFX drive;
+    private final WPI_TalonFX turn;
 
-    private final EncoderSim driveEncoder;
     private final DutyCycleEncoder turnEncoder;
     private final Angle offset;
 
-    public SimModule(String id, Translation2d moduleOffset, int drivePort, int turnPort, int turnEncoderPort, Angle turnOffset) {
+    public FalconModule(String id, Translation2d moduleOffset, int drivePort, int turnPort, int turnEncoderPort, Angle turnOffset) {
         super(id, moduleOffset);
 
-        drive = new MotorSim(MotorType.FALCON, 1, 1);
-        turn = new MotorSim(MotorType.FALCON, 1, 1);
+        drive = new WPI_TalonFX(drivePort);
+        turn = new WPI_TalonFX(turnPort);
 
-        driveEncoder = drive.getEncoder();
         turnEncoder = new DutyCycleEncoder(turnEncoderPort);
         this.offset = turnOffset;
     }
 
     @Override
     protected void setTargetVelocity(double velocity) {
-        drive.set(velocity);
+        drive.set(ControlMode.Velocity, velocity);
     }
 
     @Override
     protected void setTargetAngle(double angle) {
-        turn.set(angle);
+        turn.set(ControlMode.Position, angle);
     }
 
     @Override
@@ -51,12 +48,6 @@ public class SimModule extends SwerveModule {
 
     @Override
     protected double getVelocity() {
-        return driveEncoder.getVelocity();
-    }
-
-    @Override
-    public void simulationPeriodic() {
-        drive.update(0.2);
-        turn.update(0.2);
+        return drive.getSelectedSensorVelocity();
     }
 }

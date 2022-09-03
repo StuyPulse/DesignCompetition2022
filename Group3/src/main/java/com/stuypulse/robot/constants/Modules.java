@@ -1,7 +1,6 @@
 package com.stuypulse.robot.constants;
 
-import com.stuypulse.robot.subsystems.SimModule;
-import com.stuypulse.robot.subsystems.SwerveModule;
+import com.stuypulse.robot.subsystems.swerve.SimModule;
 import com.stuypulse.stuylib.math.Angle;
 
 import edu.wpi.first.math.geometry.Translation2d;

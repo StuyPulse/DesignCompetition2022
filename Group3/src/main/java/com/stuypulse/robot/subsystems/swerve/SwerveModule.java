@@ -1,4 +1,4 @@
-package com.stuypulse.robot.subsystems;
+package com.stuypulse.robot.subsystems.swerve;
 
 import static com.stuypulse.robot.constants.Settings.Swerve.*;
 import com.stuypulse.stuylib.control.Controller;

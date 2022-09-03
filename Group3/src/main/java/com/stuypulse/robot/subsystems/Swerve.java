@@ -1,6 +1,7 @@
 package com.stuypulse.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.stuypulse.robot.subsystems.swerve.SwerveModule;
 import com.stuypulse.stuylib.math.Vector2D;
 
 import static com.stuypulse.robot.constants.Modules.*;
@@ -169,6 +170,6 @@ public class Swerve extends SubsystemBase {
     public void simulationPeriodic() {
         ChassisSpeeds speeds = kinematics.toChassisSpeeds(getStates());
         System.out.println(getStates()[0]);
-        gyroscope.setAngleAdjustment(gyroscope.getAngle() + Math.toDegrees(speeds.omegaRadiansPerSecond * 0.2));
+        gyroscope.setAngleAdjustment(gyroscope.getAngle() + Math.toDegrees(speeds.omegaRadiansPerSecond * 0.02));
     }
 }
