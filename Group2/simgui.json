@@ -4,11 +4,17 @@
       "window": {
         "visible": false
       }
+    },
+    "Timing": {
+      "window": {
+        "visible": false
+      }
     }
   },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/LiveWindow/BuddyClimb": "Subsystem",
       "/LiveWindow/SimElevator": "Subsystem",
       "/LiveWindow/SimIntake": "Subsystem",
       "/LiveWindow/SimModule": "Subsystem",
@@ -89,6 +95,7 @@
         }
       },
       "/SmartDashboard/Field": {
+        "image": "C:\\Users\\bengo\\Documents\\Programming\\DesignCompetition2022\\Group2\\2018-field.jpg",
         "window": {
           "visible": true
         }
@@ -106,6 +113,9 @@
         "open": true
       },
       "FMSinfo": {
+        "open": true
+      },
+      "Intake": {
         "open": true
       },
       "Swivel": {
