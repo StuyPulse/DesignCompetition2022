@@ -138,7 +138,7 @@ public interface Settings {
             }
             
             public interface Theta {
-                double kP = 2;
+                double kP = 4;
                 double kI = 0;
                 double kD = 0.1;
                 double MAX_ACCEL = 10;
