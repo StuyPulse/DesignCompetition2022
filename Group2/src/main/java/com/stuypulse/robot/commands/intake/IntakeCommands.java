@@ -13,7 +13,7 @@ public class IntakeCommands {
     }
 
     public static CommandBase AcquireForever(Intake intake) {
-        return new InstantCommand(intake::acquire, intake).andThen(intake::stop);
+        return new InstantCommand(intake::acquire, intake);
     }
 
     public static CommandBase Deacquire(Intake intake) {
@@ -21,7 +21,7 @@ public class IntakeCommands {
     }
 
     public static CommandBase DeacquireForever(Intake intake) {
-        return new InstantCommand(intake::deacquire, intake).andThen(intake::stop);
+        return new InstantCommand(intake::deacquire, intake);
     }
 
     public static CommandBase Extend(Intake intake) {

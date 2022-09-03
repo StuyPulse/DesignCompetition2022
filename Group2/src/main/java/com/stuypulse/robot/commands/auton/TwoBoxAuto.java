@@ -21,6 +21,7 @@ public class TwoBoxAuto extends SequentialCommandGroup {
 	
 	public TwoBoxAuto(RobotContainer robot, String pathA, String pathB, String pathC) {
 		addCommands(
+			IntakeCommands.Extend(robot.intake),
 			// move to switch and drop cube
 			new ParallelCommandGroup(
 				new ElevatorToHeight(SWITCH_DROP_HEIGHT, robot.elevator),
