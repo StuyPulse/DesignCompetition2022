@@ -9,7 +9,9 @@ import com.stuypulse.robot.commands.auton.AutonChooser;
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
 import com.stuypulse.robot.commands.swerve.SwerveDrive;
 import com.stuypulse.robot.subsystems.Swerve;
+import com.stuypulse.robot.commands.elevator.ElevatorAutoClimb;
 import com.stuypulse.robot.commands.elevator.ElevatorMove;
+import com.stuypulse.robot.commands.elevator.ElevatorToBottom;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.subsystems.Elevator;
 import com.stuypulse.robot.commands.intake.IntakeAcquire;
@@ -65,6 +67,10 @@ public class RobotContainer {
       operator.getRightTriggerButton().whileHeld(new IntakeAcquire(intake));
       operator.getLeftBumper().whenPressed(new IntakeRetract(intake));
       operator.getRightBumper().whenPressed(new IntakeExtend(intake));
+
+      /** ELEVATOR */
+      operator.getBottomButton().whenPressed(new ElevatorToBottom(elevator));
+      operator.getTopButton().whenPressed(new ElevatorAutoClimb(elevator));
     }
 
   /**************/
