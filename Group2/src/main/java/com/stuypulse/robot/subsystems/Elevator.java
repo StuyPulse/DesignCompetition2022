@@ -28,6 +28,8 @@ import com.stuypulse.stuylib.streams.filters.MotionProfile;
  */
 public abstract class Elevator extends SubsystemBase {
 
+    private static final double EPSILON = 0.1;
+
     // private final Intake intake;
     private final Mechanism2d mech;
     private final MechanismLigament2d elevatorMech;
@@ -71,6 +73,10 @@ public abstract class Elevator extends SubsystemBase {
 
     public double getTargetHeight() {
         return target;
+    }
+
+    public boolean atHeight(double height) {
+        return Math.abs(getDistance() - height) < EPSILON;
     }
 
     /*** MOTOR CONTROL ***/

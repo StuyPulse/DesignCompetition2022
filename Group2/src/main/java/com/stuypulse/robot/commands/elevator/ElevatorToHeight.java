@@ -2,23 +2,28 @@ package com.stuypulse.robot.commands.elevator;
 
 import com.stuypulse.robot.subsystems.Elevator;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ElevatorToHeight extends InstantCommand {
+public class ElevatorToHeight extends CommandBase {
+	
+	private final Elevator elevator;
+	private final double height;
 
-    private final Elevator elevator;
-    private final double distance;
-    
-    public ElevatorToHeight(double distance, Elevator elevator) {
-        this.elevator = elevator;
-        this.distance = distance;
-        
-        addRequirements(elevator);
-    }
+	public ElevatorToHeight(double height, Elevator elevator) {
+		this.elevator = elevator;
+		this.height = height;
 
-    @Override
-    public void initialize() {
-        elevator.setHeight(distance);
-    }
-    
+		addRequirements(elevator);
+	}
+
+	@Override
+	public void initialize() {
+		elevator.setHeight(height);
+	}
+
+	@Override
+	public boolean isFinished() {
+		return elevator.atHeight(height);
+	}
+
 }

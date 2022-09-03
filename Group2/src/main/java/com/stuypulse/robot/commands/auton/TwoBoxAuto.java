@@ -8,6 +8,7 @@ import com.stuypulse.robot.commands.intake.IntakeCommands;
 import com.stuypulse.robot.commands.swivel.SwivelTrajectory;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
@@ -21,20 +22,23 @@ public class TwoBoxAuto extends SequentialCommandGroup {
 	public TwoBoxAuto(RobotContainer robot, String pathA, String pathB, String pathC) {
 		addCommands(
 			// move to switch and drop cube
-			new ElevatorToHeight(SWITCH_DROP_HEIGHT, robot.elevator),
-			new SwivelTrajectory(robot.swivel, pathA).robotRelative().withStop(),
+			new ParallelCommandGroup(
+				new ElevatorToHeight(SWITCH_DROP_HEIGHT, robot.elevator),
+				new SwivelTrajectory(robot.swivel, pathA).robotRelative().withStop()),
 			IntakeCommands.DeacquireForever(robot.intake),
 			new WaitCommand(SWITCH_DROP_TIME),
 			
 			// intake second cube
-			new ElevatorToBottom(robot.elevator),
-			new SwivelTrajectory(robot.swivel, pathB).fieldRelative().withStop(),
+			new ParallelCommandGroup(
+				new ElevatorToBottom(robot.elevator),
+				new SwivelTrajectory(robot.swivel, pathB).fieldRelative().withStop()),
 			IntakeCommands.AcquireForever(robot.intake),
 			new WaitCommand(INTAKE_TIME),
 
 			// move to scale and drop cube
-			new ElevatorToTop(robot.elevator),
-			new SwivelTrajectory(robot.swivel, pathC).fieldRelative().withStop(),
+			new ParallelCommandGroup(
+				new ElevatorToTop(robot.elevator),
+				new SwivelTrajectory(robot.swivel, pathC).fieldRelative().withStop()),
 			IntakeCommands.DeacquireForever(robot.intake)
 		);
 	}

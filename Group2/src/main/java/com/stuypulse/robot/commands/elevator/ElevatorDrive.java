@@ -1,5 +1,6 @@
 package com.stuypulse.robot.commands.elevator;
 
+import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.Elevator;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.streams.IStream;
@@ -17,7 +18,8 @@ public class ElevatorDrive extends CommandBase {
     public ElevatorDrive(Elevator elevator, Gamepad gamepad) {
         this.elevator = elevator;
 
-        stick = IStream.create(gamepad::getLeftY);
+        stick = IStream.create(gamepad::getLeftY)
+            .filtered(x -> x * Settings.Elevator.DRIVE_SPEED);
 
         timer = new StopWatch();
 
