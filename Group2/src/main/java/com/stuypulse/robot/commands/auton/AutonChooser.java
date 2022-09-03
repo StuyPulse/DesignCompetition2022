@@ -47,6 +47,9 @@ public class AutonChooser {
     }
     
     public static Command getAuton(RobotContainer robot, String fms, Alliance alliance, StartPosition pos) {
+        // default FMS to RRR
+        if (fms.length() == 0) fms = "RRR";
+        
         // if FMS string is not 3 letters or contains letters other than R and B
         if (fms.length() != 3 || !fms.matches("[RB]+")) {
             System.out.println("Error: invalid FMS color string: " + fms);

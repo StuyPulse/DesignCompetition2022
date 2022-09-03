@@ -7,6 +7,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.constants.Settings.Elevator.Control;
+import com.stuypulse.stuylib.control.Controller;
+import com.stuypulse.stuylib.control.feedback.PIDController;
+import com.stuypulse.stuylib.control.feedforward.Feedforward;
+import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.streams.filters.MotionProfile;
 
 /**
  * Elevator Subsystem (pick up things)
@@ -27,6 +33,10 @@ public abstract class Elevator extends SubsystemBase {
     private final MechanismLigament2d elevatorMech;
     // private final MechanismLigament2d intakeMech;
 
+    private final Controller controller;
+
+    private double target;
+
     public Elevator() {
         mech = new Mechanism2d(2, 6);
         
@@ -40,13 +50,34 @@ public abstract class Elevator extends SubsystemBase {
         //         "intake", 1, 90));
 
         SmartDashboard.putData("Mech2d", mech);
+
+        controller = new Feedforward.Elevator(
+                Control.kG, Control.kS, Control.kV, Control.kA).position()
+            .add(new PIDController(Control.kP, Control.kI, Control.kD))
+            .setSetpointFilter(new MotionProfile(Control.MAX_VEL, Control.MAX_ACCEL));
+
+        target = 0;
+    }
+
+    /** STATE CONTROL **/
+    
+    public void setHeight(double target) {
+        this.target = SLMath.clamp(target, 0, Settings.Elevator.MAX_DIST);
+    }
+
+    public void addHeight(double delta) {
+        setHeight(target + delta);
+    }
+
+    public double getTargetHeight() {
+        return target;
     }
 
     /*** MOTOR CONTROL ***/
 
-    public abstract void move(double speed);
+    protected abstract void move(double speed);
 
-    public abstract void setMotorStop();
+    protected abstract void setMotorStop();
 
     /*** ENCODER CONTROL ***/
 
@@ -62,6 +93,8 @@ public abstract class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
+        move(controller.update(target, getDistance()));
+
         elevatorMech.setLength(getDistance() * (5 / Settings.Elevator.MAX_DIST) + 0.5);
         // intakeMech.setAngle(intake.getAngle().getDegrees());
         
@@ -69,6 +102,7 @@ public abstract class Elevator extends SubsystemBase {
         SmartDashboard.putBoolean("Elevator/Bottom Limit Reached", getBottomLimitReached());
 
         SmartDashboard.putNumber("Elevator/Distance", getDistance());
+        SmartDashboard.putNumber("Elevator/Target Distance", target);
     }
 
 }
