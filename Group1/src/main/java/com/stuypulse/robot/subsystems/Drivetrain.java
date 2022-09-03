@@ -135,7 +135,7 @@ public class Drivetrain extends IDrivetrain {
         drivetrainSim = new DifferentialDrivetrainSim(
                 LinearSystemId.identifyDrivetrainSystem(kV.get(), kA.get(), kVA.get(), kAA.get(),
                         Settings.Drivetrain.TRACK_WIDTH),
-                DCMotor.getFalcon500(3), 8, Settings.Drivetrain.TRACK_WIDTH, Settings.Drivetrain.WHEEL_DIAMETER,
+                DCMotor.getFalcon500(3), 2.7, Settings.Drivetrain.TRACK_WIDTH, Settings.Drivetrain.WHEEL_DIAMETER,
                 null);
         leftEncoderSim = new EncoderSim(leftGrayhill);
         rightEncoderSim = new EncoderSim(rightGrayhill);

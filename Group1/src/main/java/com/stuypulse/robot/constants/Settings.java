@@ -19,10 +19,10 @@ import edu.wpi.first.math.util.Units;
  */
 public interface Settings {
     public interface Drivetrain {
-        double TRACK_WIDTH = Units.inchesToMeters(30);
-        double WHEEL_DIAMETER = Units.inchesToMeters(2);
+        double TRACK_WIDTH = Units.inchesToMeters(28);
+        double WHEEL_DIAMETER = Units.inchesToMeters(6);
 
-        double GRAYHILL_TO_WHEEL = 0.22666;
+        double GRAYHILL_TO_WHEEL = 0.0963;
         double PULSES_PER_REVOLUTION = 256;
         double DISTANCE_PER_PULSE = (WHEEL_DIAMETER * Math.PI) / 256 * GRAYHILL_TO_WHEEL;
 
@@ -34,8 +34,8 @@ public interface Settings {
         SmartNumber TURN_RC = new SmartNumber("Drivetrain/Turn RC", 0);
         SmartNumber DRIVE_RC = new SmartNumber("Drivetrain/Drive RC", 0);
 
-        SmartNumber MAX_TURN_SPEED = new SmartNumber("Drivetrain/Turn Max", 1);
-        SmartNumber MAX_SPEED = new SmartNumber("Drivetrain/Max Speed", 15.0);
+        SmartNumber MAX_TURN_SPEED = new SmartNumber("Drivetrain/Turn Max", Units.inchesToMeters(13.03));
+        SmartNumber MAX_SPEED = new SmartNumber("Drivetrain/Max Speed", Units.feetToMeters(13.03));
 
         interface PID {
             SmartNumber kP = new SmartNumber("Drivetrain/kP", 0.00337);
@@ -56,6 +56,10 @@ public interface Settings {
     public interface Intake {
         SmartAngle RETRACT_ANGLE = new SmartAngle("Intake/Retract Angle", Angle.fromDegrees(0));
         SmartAngle EXTEND_ANGLE = new SmartAngle("Intake/Extend Angle", Angle.fromDegrees(120));
+
+        double GEAR_RATIO = 1. / 3;
+        double PULSES_PER_REVOLUTION = 256;
+        double DISTANCE_PER_PULSE = 256 * GEAR_RATIO;
 
         interface PID {
             SmartNumber kP = new SmartNumber("Intake/kP", 0);
@@ -84,8 +88,10 @@ public interface Settings {
         double RUNG = 2.2;
         double SWITCH = 1.98;
         double SCALE = 0.45;
-
         double BOX = 0;
+
+        double PULSES_PER_REVOLUTION = 256;
+        double DISTANCE_PER_PULSE = 0.3;
 
         double MAX_ELEVATOR_HEIGHT = 10;
 

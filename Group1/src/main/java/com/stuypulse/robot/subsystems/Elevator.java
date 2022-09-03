@@ -91,6 +91,7 @@ public class Elevator extends SubsystemBase {
         addChild("Upper Limit Switch", upperLimitSwitch);
 
         grayhill = new Encoder(Ports.Elevator.A, Ports.Elevator.B);
+        grayhill.setDistancePerPulse(Settings.Elevator.DISTANCE_PER_PULSE);
         addChild("Encoder", grayhill);
 
         targetDistance = new SmartNumber("Elevator/Target Distance", 0.0);

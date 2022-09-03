@@ -75,8 +75,11 @@ public class Intake extends SubsystemBase {
         deploy = new CANSparkMax(Ports.Intake.DEPLOY, MotorType.kBrushless);
         Motors.Intake.deploy.configure(deploy);
 
-        /** CONTROL */
         grayhill = new Encoder(Ports.Intake.DEPLOYER_A, Ports.Intake.DEPLOYER_B);
+        grayhill.setDistancePerPulse(Settings.Intake.DISTANCE_PER_PULSE);
+        addChild("Grayhill", grayhill);
+
+        /** CONTROL */
         controller = new PIDController(kP, kI, kD).add(new Feedforward.Motor(kS, kV, kA).position());
 
         targetAngle = new SmartAngle("Intake/Target Angle", Angle.fromDegrees(0));
