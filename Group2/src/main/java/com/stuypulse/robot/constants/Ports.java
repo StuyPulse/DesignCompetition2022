@@ -22,31 +22,31 @@ public interface Ports {
     
     public interface Elevator {
         // Motors
-        int FIRST_MOTOR =  21;
-        int SECOND_MOTOR = 22;
+        int FIRST_MOTOR =  11;
+        int SECOND_MOTOR = 12;
 
         // Sensors
-        int GREYHILL_A = 9;
-        int GREYHILL_B = 10;
-        int TOP_LIMIT = 11;
-        int BOTTOM_LIMIT = 12;
+        int GREYHILL_A = 0;
+        int GREYHILL_B = 1;
+        int TOP_LIMIT = 2;
+        int BOTTOM_LIMIT = 3;
     }
 
 
     public interface BuddyClimb {
         //Motor
-        int MOTOR = -1;
+        int MOTOR = 21;
         
         //Sensor
-        int GREYHILL_A = -1;
-        int GREYHILL_B = -1;
+        int GREYHILL_A = 4;
+        int GREYHILL_B = 5;
     }
     
     public interface Swivel {
-        int DRIVE_MOTOR = 10;
-        int TURN_MOTOR = 11;
+        int DRIVE_MOTOR = 30;
+        int TURN_MOTOR = 31;
 
-        int ABSOLUTE_ENCODER = 1;
+        int ABSOLUTE_ENCODER = 6;
 
     }
 }
