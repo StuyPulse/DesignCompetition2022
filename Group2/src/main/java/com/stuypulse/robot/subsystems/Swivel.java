@@ -178,7 +178,7 @@ public class Swivel extends SubsystemBase {
                 .rotate(Angle.fromRotation2d(getRotation()))
                 .add(center);
 
-            fieldModules[i].setPose(pos.x, pos.y, modules[i].getState().angle);
+            fieldModules[i].setPose(pos.x, pos.y, modules[i].getState().angle.plus(getGyroAngle()));
         }
     }
 
