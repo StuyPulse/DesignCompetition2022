@@ -6,6 +6,14 @@ import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
+/**
+ * Wrapper class for a DutyCycleEncoder that takes in an
+ * angle offset, or the forward angle of the absolute
+ * encoder. The class also provides helper functions to read
+ * angle from the encoder.
+ * 
+ * @author Ben Goldfisher
+ */
 public class AbsoluteEncoder implements Sendable {
 	
 	private final DutyCycleEncoder encoder;

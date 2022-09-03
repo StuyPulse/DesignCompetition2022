@@ -16,9 +16,8 @@ import edu.wpi.first.wpilibj.simulation.LinearSystemSim;
 /**
  * A simulated motor intended to be a simple replacement for
  * real motors. Internally uses a LinearSystemSim constructed
- * based on the given motor type. Must be updated every tick.
- * Holds a reference to an EncoderSim which can be accessed
- * through .getEncoder().
+ * based on the given motor type. Holds a reference to an EncoderSim
+ * which can be accessed through .getEncoder().
  * 
  * @author Ben Goldfisher
  */

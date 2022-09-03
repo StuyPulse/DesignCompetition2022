@@ -9,6 +9,8 @@ import edu.wpi.first.util.sendable.SendableBuilder;
  * 
  * Default distance units are in radians.
  * 
+ * NOTE: motor speed is accessed through MotorSim
+ * 
  * @author Ben Goldfisher
  */
 public class EncoderSim implements Sendable {
