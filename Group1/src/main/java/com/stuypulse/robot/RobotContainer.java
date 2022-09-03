@@ -10,6 +10,8 @@ import com.stuypulse.robot.commands.Intake.IntakeDeacquireCommand;
 import com.stuypulse.robot.commands.Intake.IntakeExtendCommand;
 import com.stuypulse.robot.commands.Intake.IntakeRetractCommand;
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
+import com.stuypulse.robot.commands.auton.TwoBoxAutonLeftSwitch;
+import com.stuypulse.robot.commands.auton.TwoBoxAutonRightSwitch;
 import com.stuypulse.robot.commands.drivetrain.DrivetrainDriveCommand;
 import com.stuypulse.robot.commands.elevator.ElevatorClimbCommand;
 import com.stuypulse.robot.commands.elevator.ElevatorDefaultCommand;
@@ -22,9 +24,11 @@ import com.stuypulse.robot.subsystems.Intake;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 
 public class RobotContainer {
 
@@ -85,6 +89,7 @@ public class RobotContainer {
 
   public void configureAutons() {
     autonChooser.setDefaultOption("Do Nothing", new DoNothingAuton());
+    autonChooser.addOption("Two Box Auton", new ConditionalCommand(new TwoBoxAutonLeftSwitch(this), new TwoBoxAutonRightSwitch(this), () -> DriverStation.getGameSpecificMessage().charAt(0) == 'L'));
 
     SmartDashboard.putData("Autonomous", autonChooser);
   }
