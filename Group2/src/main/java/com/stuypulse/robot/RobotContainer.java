@@ -7,13 +7,18 @@ package com.stuypulse.robot;
 
 import com.stuypulse.robot.commands.auton.AutonChooser;
 import com.stuypulse.robot.commands.auton.AutonChooser.StartPosition;
+import com.stuypulse.robot.commands.buddyclimb.BuddyClimbCommands;
 import com.stuypulse.robot.commands.elevator.ElevatorDrive;
+import com.stuypulse.robot.commands.elevator.ElevatorToBottomInstant;
+import com.stuypulse.robot.commands.elevator.ElevatorToTopInstant;
+import com.stuypulse.robot.commands.intake.IntakeCommands;
 import com.stuypulse.robot.commands.swivel.SwivelDrive;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.subsystems.Elevator;
 import com.stuypulse.robot.subsystems.Intake;
 import com.stuypulse.robot.subsystems.intake.SimIntake;
 import com.stuypulse.robot.subsystems.Swivel;
+import com.stuypulse.robot.subsystems.buddyclimb.BuddyClimb;
 import com.stuypulse.robot.subsystems.elevator.SimElevator;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
@@ -29,6 +34,7 @@ public class RobotContainer {
   public final Intake intake = new SimIntake();
   public final Swivel swivel = new Swivel();
   public final Elevator elevator = new SimElevator();
+  public final BuddyClimb climb = new BuddyClimb();
 
   // Gamepads
   public final Gamepad driver = new AutoGamepad(Ports.Gamepad.DRIVER);
@@ -59,7 +65,23 @@ public class RobotContainer {
   /*** BUTTONS ***/
   /***************/
 
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    /** Buddy climb **/
+    operator.getBottomButton().whenPressed(BuddyClimbCommands.deploy(climb));
+    operator.getTopButton().whenPressed(BuddyClimbCommands.retract(climb));
+
+    /** Elevator **/
+    operator.getLeftBumper().whenPressed(new ElevatorToTopInstant(elevator));
+    operator.getRightBumper().whenPressed(new ElevatorToBottomInstant(elevator));
+
+    driver.getTopButton().whenPressed(new ElevatorToTopInstant(elevator));
+    driver.getBottomButton().whenPressed(new ElevatorToBottomInstant(elevator));
+
+    /** Intake **/
+    operator.getRightTriggerButton().whileHeld(IntakeCommands.Retract(intake));
+    
+    driver.getRightButton().whileHeld(IntakeCommands.Deacquire(intake));
+  }
 
   /**************/
   /*** AUTONS ***/
