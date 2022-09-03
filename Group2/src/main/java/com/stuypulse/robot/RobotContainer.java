@@ -22,6 +22,7 @@ import com.stuypulse.robot.subsystems.buddyclimb.BuddyClimb;
 import com.stuypulse.robot.subsystems.elevator.SimElevator;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
+import com.stuypulse.stuylib.input.gamepads.keyboard.SimKeyGamepad;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -37,7 +38,7 @@ public class RobotContainer {
   public final BuddyClimb climb = new BuddyClimb();
 
   // Gamepads
-  public final Gamepad driver = new AutoGamepad(Ports.Gamepad.DRIVER);
+  public final Gamepad driver = new SimKeyGamepad(); //new AutoGamepad(Ports.Gamepad.DRIVER);
   public final Gamepad operator = new AutoGamepad(Ports.Gamepad.OPERATOR);
 
   // Autons
