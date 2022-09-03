@@ -47,6 +47,8 @@ public class RobotContainer {
   // Robot container
 
   public RobotContainer() {
+    DriverStation.silenceJoystickConnectionWarning(true);
+
     configureDefaultCommands();
     configureButtonBindings();
     configureAutons();
