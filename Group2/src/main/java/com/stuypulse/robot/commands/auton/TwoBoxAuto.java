@@ -1,9 +1,9 @@
 package com.stuypulse.robot.commands.auton;
 
 import com.stuypulse.robot.RobotContainer;
-import com.stuypulse.robot.commands.elevator.MoveElevatorToBottom;
-import com.stuypulse.robot.commands.elevator.MoveElevatorToHeight;
-import com.stuypulse.robot.commands.elevator.MoveElevatorToTop;
+import com.stuypulse.robot.commands.elevator.ElevatorToBottom;
+import com.stuypulse.robot.commands.elevator.ElevatorToHeight;
+import com.stuypulse.robot.commands.elevator.ElevatorToTop;
 import com.stuypulse.robot.commands.intake.IntakeCommands;
 import com.stuypulse.robot.commands.swivel.SwivelTrajectory;
 
@@ -23,21 +23,21 @@ public class TwoBoxAuto extends SequentialCommandGroup {
 		addCommands(
 			// move to switch and drop cube
 			new ParallelCommandGroup(
-				new MoveElevatorToHeight(SWITCH_DROP_HEIGHT, robot.elevator),
+				new ElevatorToHeight(SWITCH_DROP_HEIGHT, robot.elevator),
 				new SwivelTrajectory(robot.swivel, pathA).robotRelative().withStop()),
 			IntakeCommands.DeacquireForever(robot.intake),
 			new WaitCommand(SWITCH_DROP_TIME),
 			
 			// intake second cube
 			new ParallelCommandGroup(
-				new MoveElevatorToBottom(robot.elevator),
+				new ElevatorToBottom(robot.elevator),
 				new SwivelTrajectory(robot.swivel, pathB).fieldRelative().withStop()),
 			IntakeCommands.AcquireForever(robot.intake),
 			new WaitCommand(INTAKE_TIME),
 
 			// move to scale and drop cube
 			new ParallelCommandGroup(
-				new MoveElevatorToTop(robot.elevator),
+				new ElevatorToTop(robot.elevator),
 				new SwivelTrajectory(robot.swivel, pathC).fieldRelative().withStop()),
 			IntakeCommands.DeacquireForever(robot.intake)
 		);

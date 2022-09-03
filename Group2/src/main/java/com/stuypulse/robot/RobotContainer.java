@@ -7,6 +7,7 @@ package com.stuypulse.robot;
 
 import com.stuypulse.robot.commands.auton.AutonChooser;
 import com.stuypulse.robot.commands.auton.AutonChooser.StartPosition;
+import com.stuypulse.robot.commands.elevator.ElevatorDrive;
 import com.stuypulse.robot.commands.swivel.SwivelDrive;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.subsystems.Elevator;
@@ -50,6 +51,8 @@ public class RobotContainer {
 
   private void configureDefaultCommands() {
     swivel.setDefaultCommand(new SwivelDrive(swivel, driver));
+
+    elevator.setDefaultCommand(new ElevatorDrive(elevator, operator));
   }
 
   /***************/
