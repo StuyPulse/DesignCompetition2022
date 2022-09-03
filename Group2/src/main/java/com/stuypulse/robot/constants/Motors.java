@@ -18,5 +18,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
  *  - The Open Loop Ramp Rate
  */
 public interface Motors {
-    
+    public interface BuddyClimb {
+		int CURRENT_LIMIT_AMPS = 80;
+	}
 }

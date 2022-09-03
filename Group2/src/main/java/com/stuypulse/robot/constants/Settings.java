@@ -54,7 +54,7 @@ public interface Settings {
 
         double OUTPUT_DIAMETER = Units.inchesToMeters(1.64);
 
-        double PULSES_PER_ROTATE = -1;
+        double PULSES_PER_ROTATE = 256;
 
         double WEIGHT = Units.lbsToKilograms(28.232);
 
@@ -164,7 +164,7 @@ public interface Settings {
 
         double SET_SPEED_THRESHOLD = 0.1;
 
-        double CURRENT_THRESHOLD = -1;
+        double CURRENT_THRESHOLD = Motors.BuddyClimb.CURRENT_LIMIT_AMPS - 10;
 
         SmartNumber DEPLOY_SPEED = new SmartNumber("BuddyClimb/Deploy Speed", 0.3);
     }
