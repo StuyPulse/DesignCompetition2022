@@ -3,6 +3,7 @@ package com.stuypulse.robot.commands.auton;
 import com.stuypulse.robot.RobotContainer;
 import com.stuypulse.robot.commands.elevator.ElevatorToBottom;
 import com.stuypulse.robot.commands.elevator.ElevatorToHeight;
+import com.stuypulse.robot.commands.intake.IntakeExtend;
 import com.stuypulse.robot.commands.intake.IntakeTimedAcquire;
 import com.stuypulse.robot.commands.intake.IntakeTimedDeacquire;
 import com.stuypulse.robot.commands.swerve.SwerveTrajectoryFollower;
@@ -22,6 +23,8 @@ public class S2TopTopCratesAuton extends SequentialCommandGroup {
 
     public S2TopTopCratesAuton(RobotContainer robot) {
         addCommands (
+            new IntakeExtend(robot.intake),
+
             new ParallelCommandGroup(
                 new SwerveTrajectoryFollower(robot.swerve, S2ToP1).robotRelative(),
                 new ElevatorToHeight(robot.elevator, 0.41)

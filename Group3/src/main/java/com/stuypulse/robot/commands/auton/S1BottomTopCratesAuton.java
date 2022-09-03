@@ -21,6 +21,8 @@ public class S1BottomTopCratesAuton extends SequentialCommandGroup {
 
     public S1BottomTopCratesAuton(RobotContainer robot){
         addCommands(
+            new IntakeExtend(robot.intake),
+            
             new ParallelCommandGroup(
                 new SwerveTrajectoryFollower(robot.swerve, S1toP2).robotRelative(),
                 new ElevatorToHeight(robot.elevator, 0.41)
