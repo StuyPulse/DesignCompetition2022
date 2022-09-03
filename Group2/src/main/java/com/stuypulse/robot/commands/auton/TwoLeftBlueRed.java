@@ -5,7 +5,7 @@ import com.stuypulse.robot.RobotContainer;
 public class TwoLeftBlueRed extends TwoBoxAuto {
 
     public TwoLeftBlueRed(RobotContainer robot) {
-        super(robot, "output/LeftStartToSwitchSame.wpilib.json", "output/LeftSwitchToBox.wpilib.json", "output/LeftSwitchToScaleDiff.wpilib.json");
+        super(robot, "output/LeftStartToSwitchSame.wpilib.json", "output/LeftSwitchToBox.wpilib.json", "output/RightSwitchToScaleDiff.wpilib.json");
     }
     
 }
