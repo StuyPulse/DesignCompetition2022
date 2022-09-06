@@ -1,0 +1,75 @@
+{
+  "HALProvider": {
+    "Encoders": {
+      "window": {
+        "visible": true
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/Drivetrain/Field": "Field2d",
+      "/LiveWindow/Drivetrain/Field2D": "Field2d",
+      "/LiveWindow/Drivetrain/Gyroscope": "Gyro",
+      "/LiveWindow/Drivetrain/Left Motor Controller Group": "Motor Controller",
+      "/LiveWindow/Drivetrain/Right Motor Controller Group": "Motor Controller",
+      "/LiveWindow/Drivetrain/SimDrivetrain": "Subsystem",
+      "/LiveWindow/Elevator": "Subsystem",
+      "/LiveWindow/Elevator/Elevator Mechanism": "Mechanism2d",
+      "/LiveWindow/Elevator/Elevator Sim": "Mechanism2d",
+      "/LiveWindow/Elevator/Lower Limit Switch": "Digital Input",
+      "/LiveWindow/Elevator/Motor Controller": "Motor Controller",
+      "/LiveWindow/Elevator/Upper Limit Switch": "Digital Input",
+      "/LiveWindow/Intake": "Subsystem",
+      "/LiveWindow/Intake/Driver Motors": "Motor Controller",
+      "/LiveWindow/Intake/Intake Sim": "Mechanism2d",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/SmartDashboard/Autonomous": "String Chooser"
+    },
+    "windows": {
+      "/LiveWindow/Drivetrain/Field": {
+        "image": "C:\\Users\\eplus\\DesignCompetition2022\\Group1\\images\\2018-field.jpg"
+      },
+      "/LiveWindow/Drivetrain/Field2D": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/LiveWindow/Drivetrain/Gyroscope": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/LiveWindow/Elevator/Elevator Sim": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/LiveWindow/Intake/Driver Motors": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/LiveWindow/Intake/Intake Sim": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "SmartDashboard": {
+      "Drivertrain": {
+        "open": true
+      },
+      "Drivetrain": {
+        "open": true
+      },
+      "Intake": {
+        "open": true
+      },
+      "open": true
+    }
+  }
+}

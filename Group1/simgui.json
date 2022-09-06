@@ -1,0 +1,35 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/Drivetrain/Field": "Field2d",
+      "/LiveWindow/Drivetrain/Gyroscope": "Gyro",
+      "/LiveWindow/Drivetrain/Left Motor Controller Group": "Motor Controller",
+      "/LiveWindow/Drivetrain/Right Motor Controller Group": "Motor Controller",
+      "/LiveWindow/Elevator/Elevator Sim": "Mechanism2d",
+      "/LiveWindow/Elevator/Lower Limit Switch": "Digital Input",
+      "/LiveWindow/Elevator/Motor Controller": "Motor Controller",
+      "/LiveWindow/Elevator/Upper Limit Switch": "Digital Input",
+      "/LiveWindow/Intake": "Subsystem",
+      "/LiveWindow/Intake/Driver Motors": "Motor Controller",
+      "/LiveWindow/Intake/Intake Sim": "Mechanism2d",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/SmartDashboard/Autonomous": "String Chooser"
+    },
+    "windows": {
+      "/LiveWindow/Drivetrain/Field": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "SmartDashboard": {
+      "Drivetrain": {
+        "open": true
+      },
+      "open": true
+    }
+  }
+}
